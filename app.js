@@ -23,35 +23,35 @@
   // ---------- data (all placeholder; marked on screen) ----------
   const SHIP_LINE = '冷藏宅配，付款後 3–5 個工作天出貨；運費 NT$ 200，滿 NT$ 3,000 免運。';
   const PRODUCTS = [
-    { slug: 'muscat', name: '麝香葡萄（綠）', mark: '價格示意・品種推測', variety: '推測為 Shine Muscat 類的綠色大粒葡萄', season: '8–10 月', desc: '翠綠大粒、皮薄，可以連皮吃。每串套上網套後裝盒出貨。',
+    { slug: 'muscat', name: '麝香葡萄（綠）', en: 'MUSCAT GRAPE', mark: '價格示意・品種推測', variety: '推測為 Shine Muscat 類的綠色大粒葡萄', season: '8–10 月', desc: '翠綠大粒、皮薄，可以連皮吃。每串套上網套後裝盒出貨。',
       specs: [{ id: '1', label: '單串禮盒', price: 1280 }, { id: '2', label: '雙串裝', price: 2380 }, { id: '6', label: '六串整箱', price: 6680 }],
       storage: '整串裝袋冷藏，約可放 5–7 天；吃之前再剪下沖洗。', eat: '冰涼後連皮直接吃；也可以對半切，放在優格或蛋糕上。',
       ripe: '果粒飽滿、梗還是綠的最新鮮。', cut: '用剪刀從梗剪下，保留一點小梗比較不會破皮。' },
-    { slug: 'apple', name: '蘋果', mark: '價格示意・品種推測', variety: '推測為富士系蘋果', season: '10 月–隔年 1 月', desc: '在樹上慢慢著色的蘋果，比拳頭還大一圈，清脆多汁。',
+    { slug: 'apple', name: '蘋果', en: 'APPLE', mark: '價格示意・品種推測', variety: '推測為富士系蘋果', season: '10 月–隔年 1 月', desc: '在樹上慢慢著色的蘋果，比拳頭還大一圈，清脆多汁。',
       specs: [{ id: '6', label: '6 入盒', price: 980 }, { id: '12', label: '12 入箱', price: 1780 }],
       storage: '每顆裝袋冷藏，可放 2–3 週；和其他水果分開放。', eat: '洗淨連皮切片最脆；也可以烤成蘋果派或煮成果醬。',
       ripe: '拿起來沉手、敲起來聲音清脆；底部轉黃代表成熟。', cut: '切成四瓣去芯，泡一下淡鹽水比較不會變色。' },
-    { slug: 'peach', name: '水蜜桃', mark: '價格示意・品種推測', variety: '推測為白肉水蜜桃系', season: '7–9 月', desc: '每顆都套著白色網套，軟嫩多汁，是夏天的味道。',
+    { slug: 'peach', name: '水蜜桃', en: 'WHITE PEACH', mark: '價格示意・品種推測', variety: '推測為白肉水蜜桃系', season: '7–9 月', desc: '每顆都套著白色網套，軟嫩多汁，是夏天的味道。',
       specs: [{ id: '6', label: '6 入禮盒', price: 1680 }, { id: '11', label: '11 入家庭箱', price: 2680 }, { id: '15', label: '15 入整箱', price: 3380 }],
       storage: '常溫放 1–2 天等果香出來，再冷藏 1–2 小時就能吃。', eat: '沿中線劃一圈、扭開去籽；冰過後切塊最好吃。',
       ripe: '果香明顯、輕捏果肩略有彈性就熟了；硬的先放常溫。', cut: '沿縫線劃一圈到籽，雙手反向扭開，再切瓣。' },
-    { slug: 'orange', name: '香甜柑橘', mark: '價格示意・品種待確認', variety: '品種待確認', season: '11 月–隔年 2 月', desc: '果皮薄、好剝，酸甜剛好，冬天放在桌上隨手一顆。',
+    { slug: 'orange', name: '香甜柑橘', en: 'MANDARIN', mark: '價格示意・品種待確認', variety: '品種待確認', season: '11 月–隔年 2 月', desc: '果皮薄、好剝，酸甜剛好，冬天放在桌上隨手一顆。',
       specs: [{ id: 'bag', label: '分享袋', price: 480 }, { id: 'box', label: '家庭箱', price: 980 }],
       storage: '通風陰涼處可放約一週；想放久一點就裝袋冷藏。', eat: '直接剝皮吃；果皮洗淨曬乾也能泡茶。',
       ripe: '果皮顏色均勻、拿起來沉手。', cut: '從蒂頭對面剝開，比較好剝。' },
-    { slug: 'cherry', name: '山形櫻桃', mark: '價格示意・產地依箱印推斷', variety: '推測為日系紅黃色櫻桃；「山形」依箱印推斷', season: '6–7 月', desc: '紅中帶黃、帶著長梗，初夏只有短短幾週。',
+    { slug: 'cherry', name: '山形櫻桃', en: 'CHERRY', mark: '價格示意・產地依箱印推斷', variety: '推測為日系紅黃色櫻桃；「山形」依箱印推斷', season: '6–7 月', desc: '紅中帶黃、帶著長梗，初夏只有短短幾週。',
       specs: [{ id: '1', label: '單盒', price: 1080 }, { id: '2', label: '雙盒', price: 1980 }],
       storage: '不要洗，冷藏保存，3–4 天內吃完。', eat: '吃之前用冷水快速沖洗，拿著梗直接吃。',
       ripe: '果梗翠綠、果皮有光澤；梗變褐色代表放比較久了。', cut: '直接吃；做甜點時可用吸管從蒂頭推出籽。' },
-    { slug: 'pear', name: '梨', mark: '價格示意・品種推測', variety: '推測為和梨（赤梨系）', season: '8–10 月', desc: '網室棚架下長大的大顆梨，果肉細、汁多。',
+    { slug: 'pear', name: '梨', en: 'JAPANESE PEAR', mark: '價格示意・品種推測', variety: '推測為和梨（赤梨系）', season: '8–10 月', desc: '網室棚架下長大的大顆梨，果肉細、汁多。',
       specs: [{ id: '4', label: '4 入盒', price: 1280 }, { id: '8', label: '8 入箱', price: 2380 }],
       storage: '用紙包好、裝袋冷藏，約可放 1–2 週。', eat: '冰過後削皮切瓣，汁水最多；也可以燉成梨湯。',
       ripe: '果皮轉成均勻的黃褐色、有香氣即可。', cut: '削皮後縱切成瓣，再去掉果芯。' },
-    { slug: 'strawberry', name: '草莓', mark: '價格示意・品種待確認', variety: '品種待確認', season: '12 月–隔年 4 月', desc: '一顆一顆放在軟墊裡的大顆草莓，冬天限定。',
+    { slug: 'strawberry', name: '草莓', en: 'STRAWBERRY', mark: '價格示意・品種待確認', variety: '品種待確認', season: '12 月–隔年 4 月', desc: '一顆一顆放在軟墊裡的大顆草莓，冬天限定。',
       specs: [{ id: '1', label: '單盒（10 入）', price: 980 }, { id: '2', label: '雙盒', price: 1880 }],
       storage: '不要洗，原盒冷藏，2–3 天內吃完最好。', eat: '吃之前帶蒂沖洗再去蒂；也很適合搭配鮮奶油。',
       ripe: '整顆紅到蒂頭、有光澤、香氣甜。', cut: '帶蒂沖洗、擦乾後再去蒂，可以對半切。' },
-    { slug: 'black-grape', name: '黑葡萄', mark: '價格示意・品種推測', variety: '推測為巨峰系黑色大粒葡萄', season: '8–10 月', desc: '果粉飽滿、香氣濃，每串裝袋後套上淡紫色網套。',
+    { slug: 'black-grape', name: '黑葡萄', en: 'BLACK GRAPE', mark: '價格示意・品種推測', variety: '推測為巨峰系黑色大粒葡萄', season: '8–10 月', desc: '果粉飽滿、香氣濃，每串裝袋後套上淡紫色網套。',
       specs: [{ id: '2', label: '雙串禮盒', price: 1580 }, { id: '8', label: '八串整箱', price: 5680 }],
       storage: '果粉是天然的保護，冷藏前不要清洗，約可放 5 天。', eat: '冰鎮後剝皮吃；果皮香氣足，也適合打成果汁。',
       ripe: '果粉越完整越新鮮。', cut: '用剪刀一粒一粒剪下，留一點小梗。' }
@@ -113,57 +113,300 @@
   function toast(text) { clearTimeout(toastTimer); $('#toast').textContent = text; toastTimer = setTimeout(() => { $('#toast').textContent = ''; }, 4000); }
 
   // =====================================================================
-  // HOME — ported from the live fruit/app.js
+  // HOME — behaviour ported from the live fruit/app.js; v6 shop-front stage (storyboard-s0.md)
   // =====================================================================
   const root = $('#fruit-market');
   const H = s => root.querySelector(s);
   const fruits = PRODUCTS;
-  let current = 0, busy = false, lastWheel = 0, wheelSum = 0, dialTurn = 0;
+  let current = 0, busy = false, lastWheel = 0, wheelSum = 0;
   let motion = !matchMedia('(prefers-reduced-motion: reduce)').matches;
   let noticeTimer;
   const notice = text => { clearTimeout(noticeTimer); H('#status').textContent = text; noticeTimer = setTimeout(() => { H('#status').textContent = ''; }, 4000); };
   const homeActive = () => !root.hidden;
   const blocked = () => H('#cart-dialog').open || $('#menu').open;
-
-  function renderWheel() {
-    H('#wheel').innerHTML = fruits.map((f, i) => '<button data-fruit="' + i + '" id="wheel-' + f.slug + '" aria-label="選擇' + esc(f.name) + '"><span class="wheel-image">' + art(f.slug) + '</span><span class="wheel-label"><small>' + pad(i + 1) + '</small><span>' + esc(f.name) + '</span></span></button>').join('');
+  const stage = H('#s0-stage');
+  // A product name's parenthetical ("（綠）") is set small on the stage; the dial and the index use the short form.
+  const shortName = n => String(n).replace(/（[^）]*）/g, '').trim() || String(n);
+  const nameHTML = n => esc(n).replace(/（([^）]*)）/g, '<small>（$1）</small>');
+  // A rolling number: one 0-9 strip per digit, moved by --n (CSS transition); the value is in a screen-reader span.
+  const DIGITS = '<span>' + [...'0123456789'].join('<br>') + '</span>';
+  function odo(el, n, len = 2) {
+    if (!el) return;
+    const s = String(n).padStart(len, '0');
+    if (el.dataset.len !== String(s.length)) { el.dataset.len = s.length; el.innerHTML = '<span class="sr-only"></span>' + [...s].map(() => '<span class="s0-dg" aria-hidden="true">' + DIGITS + '</span>').join(''); }
+    el.firstChild.textContent = s;
+    [...s].forEach((c, i) => el.children[i + 1].firstChild.style.setProperty('--n', c));
   }
+  function setBuy(text, disabled) { H('#buy').disabled = disabled; H('.s0-buy-t').textContent = text; }
+
+  // =====================================================================
+  // S0 v6 shop front「今日選果」(storyboard-s0.md). The scroll / swipe / key behaviour and the hand-over are
+  // ported unchanged from the live fruit/app.js; the stage is rebuilt in the magazine's language:
+  // back (colour wash + outline number), mid (the watercolour), front (blurred neighbours), the arc dial,
+  // the copy column, the index row and the basket. Everything is read from PRODUCTS (later the 1SHOP feed).
+  // One switch is one camera move of ~1.1 s: the old fruit dollies back out of focus, the new one comes in
+  // from the foreground and racks to sharp (0.25 s overlap, never both sharp); neighbours sweep past at
+  // 1.5x; the copy leaves upward before the new copy rises (no overlapping words); numbers roll; the
+  // wash cross-fades; the dial turns; the index line slides. Reduced motion / motion off / no GSAP:
+  // a 0.3 s cross-fade.
+  // =====================================================================
+  const S0 = (() => {
+    const STEP = 18; // degrees between two fruits on the dial (the live dialTurn step)
+    const float = H('.s0-float'), ring = H('.s0-ring'), marks = H('.s0-marks'), washes = $$('.s0-wash', root);
+    const near = { prev: H('.s0-nb.is-prev'), next: H('.s0-nb.is-next') };
+    const FIELDS = [
+      { el: H('#fruit-title .s0-in'), html: f => nameHTML(f.name), name: true },
+      { el: H('#fruit-en'), html: f => esc(f.en || '') },
+      { el: H('#fruit-description'), html: f => esc(f.desc) },
+      { el: H('.s0-price .s0-in'), html: f => '<small>NT$</small><span id="fruit-price">' + num(f.specs[0].price) + '</span>' },
+      { el: H('#catalog-note'), html: f => esc(f.specs[0].label) + '<i>　·　' + esc(f.mark) + '</i>' }
+    ];
+    let heroCur = null, washOn = 0, dialPos = 0, dialTw = null, geo = null, dots = [], labs = [], items = [];
+    const outgoing = new Set();
+    const vwPx = () => innerWidth / 100;
+    const mob = () => innerWidth < 760;
+    const live = () => fullMotion() && libs();
+    // Focus is racked by cross-fading each watercolour with its registered out-of-focus copy (img/art/soft, built by
+    // build_images.py): --f 1 = sharp, 0 = soft. A live CSS blur on a 400-540px layer cost 100-200 ms frames in testing.
+    const softArt = slug => 'img/art/soft/' + slug + '.webp';
+    const neighbours = k => ({ prev: k > 0 ? fruits[k - 1].slug : null, next: k < fruits.length - 1 ? fruits[k + 1].slug : null });
+    function slot(slug) {
+      const s = document.createElement('div'), p = BY_SLUG[slug];
+      s.className = 's0-slot'; s.dataset.slug = slug;
+      s.innerHTML = ART.has(slug) ? '<img class="s0-soft" src="' + softArt(slug) + '" alt="" draggable="false" decoding="async"><img class="s0-sharp" src="img/art/' + esc(slug) + '.webp" alt="' + esc(p ? p.name : slug) + '水彩插畫" draggable="false" decoding="async">' : art(slug);
+      return s;
+    }
+    function nbImg(slug) {
+      if (!slug || !ART.has(slug)) return null;
+      const i = new Image(); i.className = 's0-nbi'; i.alt = ''; i.draggable = false; i.decoding = 'async'; i.src = softArt(slug); // pre-blurred: no live filter
+      return i;
+    }
+    // index row + dial marks (built once from the product list)
+    function build() {
+      const thumb = f => '<span class="s0-thumb" aria-hidden="true">' + (ART.has(f.slug) ? '<img src="img/art/' + esc(f.slug) + '.webp" alt="" loading="lazy" decoding="async" draggable="false">' : sketch(f.slug)) + '</span>';
+      H('#wheel').innerHTML = '<div class="s0-row">' + fruits.map((f, i) => (i ? '<i class="s0-link" aria-hidden="true"></i>' : '') +
+        '<button type="button" class="s0-ix" data-fruit="' + i + '" id="wheel-' + esc(f.slug) + '" aria-label="選擇' + esc(f.name) + '"><b>' + pad(i + 1) + '</b><span>' + esc(shortName(f.name)) + '</span>' + thumb(f) + '</button>').join('') +
+        '<i class="s0-prog" aria-hidden="true"><i></i><b></b></i></div>';
+      marks.innerHTML = fruits.map((f, i) => '<i class="s0-dot"></i><span class="s0-lab" data-pick="' + i + '">' + esc(shortName(f.name)) + '</span>').join('');
+      H('#s0-of').textContent = '/ ' + pad(fruits.length);
+      dots = $$('.s0-dot', marks); labs = $$('.s0-lab', marks); items = $$('.s0-ix', root);
+    }
+    // ----- the dial: the ring turns STEP degrees per fruit; dots and names ride on it, names stay upright -----
+    function measure() { const r = ring.offsetWidth / 2; geo = r > 0 ? { r, cx: ring.offsetLeft + r, cy: ring.offsetTop + r } : null; }
+    function dial(pos) {
+      dialPos = pos;
+      if (!geo) measure();
+      if (!geo) return;
+      ring.style.transform = 'rotate(' + (-pos * STEP).toFixed(3) + 'deg)';
+      for (let i = 0; i < dots.length; i++) {
+        const a = (i - pos) * STEP * Math.PI / 180, x = (geo.cx + geo.r * Math.cos(a)).toFixed(1), y = (geo.cy + geo.r * Math.sin(a)).toFixed(1), d = Math.abs(i - pos);
+        dots[i].style.transform = 'translate(' + x + 'px,' + y + 'px)';
+        dots[i].classList.toggle('is-on', d < .5);
+        const o = Math.max(0, 1 - d * .64);
+        labs[i].style.transform = 'translate(' + x + 'px,' + y + 'px) translate(-100%,-50%)';
+        labs[i].style.opacity = o.toFixed(3);
+        labs[i].style.visibility = o > 0 ? '' : 'hidden';
+        labs[i].classList.toggle('is-on', d < .5);
+      }
+    }
+    // ----- the index row: current item, progress line to its centre -----
+    function index(k) {
+      items.forEach((b, i) => b.setAttribute('aria-current', String(i === k)));
+      const b = items[k], row = b && b.parentElement, prog = row && row.querySelector('.s0-prog');
+      if (!prog || !row.offsetWidth) return;
+      const c = b.offsetLeft + b.offsetWidth / 2;
+      prog.style.setProperty('--p', (c / row.offsetWidth).toFixed(4));
+      prog.style.setProperty('--px', c.toFixed(1) + 'px');
+    }
+    // everything that is a state rather than a camera move (synchronous, all modes)
+    function chrome(k, turn) {
+      const f = fruits[k];
+      index(k);
+      odo(H('#wheel-position'), k + 1);
+      odo(H('#s0-num'), k + 1);
+      if (turn) washOn ^= 1;
+      washes[washOn].style.setProperty('--c', TONE[f.slug] || '#c9a76a');
+      washes.forEach((w, i) => w.classList.toggle('is-on', i === washOn));
+      H('#prev').disabled = k === 0;
+      H('#next').setAttribute('aria-label', k === fruits.length - 1 ? '往下逛：果園與當季水果' : '下一種水果');
+      H('#home-detail-link').href = '#p-' + f.slug;
+      H('#home-detail-link').setAttribute('aria-label', '看' + f.name + '的規格與介紹');
+      if (!busy) setBuy('放入菜籃', false);
+    }
+    // inline styles a camera move left behind (through GSAP when present, so its transform cache is reset too)
+    const unstyle = el => { if (window.gsap) gsap.set(el, { clearProps: 'all' }); else el.removeAttribute('style'); };
+    function clearFx() {
+      if (window.gsap) {
+        if (dialTw) dialTw.kill();
+        FIELDS.forEach(fd => { if (fd.tl) fd.tl.kill(); fd.tl = null; gsap.killTweensOf(fd.el); });
+        gsap.killTweensOf([heroCur, ...outgoing, ...$$('.s0-nbi', root)].filter(Boolean));
+      }
+      dialTw = null;
+      FIELDS.forEach(fd => { if (fd.wa) fd.wa.cancel(); fd.wa = null; unstyle(fd.el); });
+      outgoing.forEach(o => o.remove()); outgoing.clear();
+    }
+    // the current fruit without any camera move (first paint, coming home, settling after a mode change)
+    function paint(k) {
+      clearFx();
+      const f = fruits[k], nb = neighbours(k);
+      if (!heroCur || heroCur.dataset.slug !== f.slug) { float.innerHTML = ''; heroCur = slot(f.slug); float.append(heroCur); }
+      unstyle(heroCur);
+      ['prev', 'next'].forEach(side => { near[side].innerHTML = ''; const i = nbImg(nb[side]); if (i) near[side].append(i); });
+      FIELDS.forEach(fd => { fd.el.innerHTML = fd.html(f); });
+      chrome(k, false);
+      measure(); dial(k);
+    }
+    // ----- one switch, full motion (GSAP) -----
+    function move(k, d) {
+      const f = fruits[k], vw = vwPx(), small = mob();
+      chrome(k, true);
+      // 1. the old fruit dollies back (scale .82, out of focus, 6vw against the move); anything older just goes
+      outgoing.forEach(o => { gsap.killTweensOf(o); gsap.to(o, { opacity: 0, duration: .15, ease: 'none', onComplete: () => { o.remove(); outgoing.delete(o); } }); });
+      const old = heroCur, s = slot(f.slug);
+      heroCur = s; float.append(s);
+      if (old) {
+        gsap.killTweensOf(old); outgoing.add(old);
+        gsap.to(old, { '--f': 0, duration: .4, ease: 'power1.inOut' });
+        gsap.to(old, { x: -d * 6 * vw, scale: .82, opacity: 0, duration: .55, ease: 'power2.in', onComplete: () => { old.remove(); outgoing.delete(old); } });
+      }
+      // 2. the new one comes in from the foreground (scale 1.28, 12px, +8vw) and the focus lands on it; overlap .25 s
+      gsap.timeline({ delay: .3 })
+        .fromTo(s, { x: d * 8 * vw, scale: 1.28 }, { x: 0, scale: 1, duration: .8, ease: EASE }, 0)
+        .fromTo(s, { '--f': 0 }, { '--f': 1, duration: .85, ease: 'power2.out' }, 0)
+        .fromTo(s, { opacity: 0 }, { opacity: 1, duration: .5, ease: 'power1.out' }, 0);
+      // 3. the neighbours in front of the lens are swapped, sweeping past at 1.5x the hero's travel
+      const nb = neighbours(k);
+      ['prev', 'next'].forEach((side, j) => {
+        $$('.s0-nbi', near[side]).forEach(o => { gsap.killTweensOf(o); gsap.to(o, { x: -d * 18 * vw, opacity: 0, duration: .5, ease: 'power2.in', onComplete: () => o.remove() }); });
+        const i = nbImg(nb[side]);
+        if (i) { near[side].append(i); gsap.fromTo(i, { x: d * 18 * vw, opacity: 0 }, { x: 0, opacity: .35, duration: .7, delay: .1 + j * .05, ease: EASE }); }
+      });
+      // 4. copy: the old words leave upward first, then the new ones rise from below (one element per line)
+      FIELDS.forEach((fd, i) => {
+        if (fd.tl) fd.tl.kill();
+        gsap.killTweensOf(fd.el);
+        const tl = gsap.timeline({ delay: i * .035 })
+          .to(fd.el, { yPercent: -105, opacity: 0, duration: .3, ease: 'power2.in' })
+          .call(() => { fd.el.innerHTML = fd.html(f); })
+          .fromTo(fd.el, { yPercent: 105, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .75, ease: EASE, immediateRender: false });
+        // (immediateRender off: inside a timeline a fromTo would otherwise jump to its start state at once)
+        if (fd.name) tl.fromTo(fd.el, { filter: 'blur(' + (small ? 4 : 8) + 'px)' }, { filter: 'blur(0px)', duration: .9, ease: EASE, clearProps: 'filter', immediateRender: false }, '<');
+        fd.tl = tl;
+      });
+      // 5. the dial turns (the wash, the numbers and the index line move by CSS transitions)
+      if (dialTw) dialTw.kill();
+      const p = { v: dialPos };
+      dialTw = gsap.to(p, { v: k, duration: .9, ease: 'power3.inOut', onUpdate: () => dial(p.v) });
+    }
+    // ----- one switch, reduced: a 0.3 s cross-fade (WAAPI, so no library is needed) -----
+    function fade(k) {
+      const f = fruits[k], nb = neighbours(k), can = !!Element.prototype.animate;
+      chrome(k, true);
+      outgoing.forEach(o => o.remove()); outgoing.clear();
+      const old = heroCur, s = slot(f.slug);
+      heroCur = s; float.append(s);
+      if (old) {
+        outgoing.add(old);
+        const end = () => { old.remove(); outgoing.delete(old); };
+        if (can) { const a = old.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, easing: 'linear', fill: 'forwards' }); a.onfinish = end; setTimeout(end, 600); } else end();
+      }
+      if (can) s.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, easing: 'linear' });
+      ['prev', 'next'].forEach(side => {
+        near[side].innerHTML = '';
+        const i = nbImg(nb[side]); if (!i) return;
+        near[side].append(i); if (can) i.animate([{ opacity: 0 }, { opacity: .35 }], { duration: 300, easing: 'linear' });
+      });
+      FIELDS.forEach(fd => {
+        if (fd.wa) fd.wa.cancel();
+        fd.el.innerHTML = fd.html(f);
+        fd.wa = can ? fd.el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, easing: 'linear' }) : null;
+      });
+      dial(k);
+    }
+    function go(from, k, d) {
+      if (!homeActive() || !heroCur) return paint(k);
+      if (live()) move(k, d); else fade(k);
+    }
+    // ----- first arrival at home: the stage racks into focus -----
+    function enter() {
+      if (!live() || !heroCur) return;
+      const ui = $$('.s0-kicker,.s0-no,.s0-en,.s0-desc,.s0-price,.s0-spec,.s0-cta', root), small = mob();
+      const nameEl = FIELDS[0].el, rule = H('.s0-rule');
+      const tl = gsap.timeline();
+      tl.fromTo(H('.s0-washes'), { opacity: 0 }, { opacity: 1, duration: 2, ease: 'power1.out' }, 0)
+        .fromTo(heroCur, { scale: 1.14, '--f': 0, opacity: 0 }, { scale: 1, '--f': 1, opacity: 1, duration: 1.6, ease: EASE }, .05)
+        .fromTo(H('.s0-num'), { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1.8, ease: EASE }, .1)
+        .fromTo($$('.s0-nbi', root), { opacity: 0, x: (i, el) => (el.closest('.is-prev') ? -1 : 1) * 10 * vwPx() }, { opacity: .35, x: 0, duration: 1.8, ease: EASE, stagger: .12 }, .25)
+        .fromTo(nameEl, { yPercent: 100, opacity: 0, filter: 'blur(' + (small ? 6 : 10) + 'px)', letterSpacing: '.16em' }, { yPercent: 0, opacity: 1, filter: 'blur(0px)', letterSpacing: '.04em', duration: 1.3, ease: EASE, clearProps: 'filter,letterSpacing' }, .3)
+        .fromTo(ui, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .9, ease: EASE, stagger: .07 }, .45)
+        .fromTo(rule, { scaleX: 0 }, { scaleX: 1, duration: 1.2, ease: EASE }, .6)
+        .fromTo($$('.s0-ring,.s0-arrows', root), { opacity: 0 }, { opacity: 1, duration: 1.2, ease: 'power1.out', stagger: .2 }, .2)
+        .fromTo($$('.s0-ix,.s0-link', root), { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: .7, ease: EASE, stagger: .03 }, .7)
+        .fromTo($$('.s0-foot-top,.s0-basket', root), { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 1, ease: EASE, stagger: .1 }, .9);
+      const p = { v: current - 1.6 };
+      tl.fromTo(H('.s0-marks'), { opacity: 0 }, { opacity: 1, duration: 1, ease: 'power1.out' }, .25)
+        .to(p, { v: current, duration: 1.7, ease: 'power3.out', onUpdate: () => dial(p.v) }, .2);
+      return tl;
+    }
+    // ----- add to basket: a copy of the hero flies on an arc into the basket (or the header count on phones) -----
+    async function fly() {
+      const src = heroImg(), small = mob(), tgt = small ? H('#cart-open') : H('.s0-bk');
+      if (!fullMotion() || !src || !tgt) return;
+      const a = src.getBoundingClientRect(), b = tgt.getBoundingClientRect();
+      if (!a.width || !b.width) return;
+      const g = new Image(); g.src = src.currentSrc || src.src; g.alt = ''; g.className = 'fx-ghost s0-fly';
+      Object.assign(g.style, { width: a.width + 'px', height: a.height + 'px' });
+      document.body.append(g);
+      const s = [a.left + a.width / 2, a.top + a.height / 2], e = [b.left + b.width / 2, b.top + b.height * (small ? .5 : .52)];
+      const c = [s[0] + (e[0] - s[0]) * .4, Math.min(s[1], e[1]) - Math.min(240, innerHeight * .24)];
+      const k = small ? (b.height * 1.6) / a.height : .25, w = a.width, h = a.height; // storyboard: shrinks to .25 on the way
+      const at = t => {
+        const u = 1 - t, x = u * u * s[0] + 2 * u * t * c[0] + t * t * e[0], y = u * u * s[1] + 2 * u * t * c[1] + t * t * e[1];
+        g.style.transform = 'translate(' + (x - w / 2).toFixed(1) + 'px,' + (y - h / 2).toFixed(1) + 'px) scale(' + (1 - (1 - k) * t).toFixed(4) + ') rotate(' + (t * 24).toFixed(2) + 'deg)';
+        g.style.filter = 'blur(' + (Math.sin(Math.PI * Math.min(1, t * 1.15)) * 2).toFixed(2) + 'px)';
+        g.style.opacity = t > .86 ? ((1 - t) / .14).toFixed(3) : '1';
+      };
+      at(0);
+      try {
+        await Promise.race([new Promise(res => {
+          if (window.gsap) { const st = { t: 0 }; gsap.to(st, { t: 1, duration: .95, ease: 'power1.inOut', onUpdate: () => at(st.t), onComplete: res }); }
+          else { const t0 = performance.now(); const f = n => { const t = Math.min(1, (n - t0) / 950); at(INOUT(t)); if (t < 1) requestAnimationFrame(f); else res(); }; requestAnimationFrame(f); }
+        }), new Promise(r => setTimeout(r, 1300))]);
+      } finally { g.remove(); }
+    }
+    // the basket takes the weight: it sinks 4px and settles (S8's landing)
+    function land() {
+      if (!fullMotion()) return;
+      const bk = mob() ? H('#cart-open b') : H('.s0-bk');
+      if (!bk) return;
+      if (window.gsap) gsap.timeline().to(bk, { y: 4, duration: .14, ease: 'power2.out' }).to(bk, { y: 0, duration: .55, ease: 'power2.inOut' });
+      else if (bk.animate) bk.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(4px)', offset: .2 }, { transform: 'translateY(0)' }], { duration: 690, easing: 'ease-out' });
+    }
+    function heroImg() { return heroCur && (heroCur.querySelector('.s0-sharp') || heroCur.querySelector('img')); } // (a selector list would return the soft copy: it comes first)
+    function relayout() { measure(); dial(dialTw ? dialPos : current); index(current); }
+    function settle() { if (heroCur) paint(current); }
+    // preload the watercolours once the page is idle, so a switch never waits on a download
+    // (decode() as well: the first switch to a fruit otherwise stalls a frame or two on the image decode)
+    const idle = window.requestIdleCallback || (fn => setTimeout(fn, 1200)), warm = [];
+    idle(() => fruits.forEach(f => { if (!ART.has(f.slug)) return; [f.slug, 'soft/' + f.slug].forEach(stem => { const i = new Image(); i.src = 'img/art/' + stem + '.webp'; warm.push(i); if (i.decode) i.decode().catch(() => {}); }); }));
+    return { build, paint, go, enter, fly, land, heroImg, relayout, settle, softArt };
+  })();
+
   function centerStrip(smooth) {
-    if (!matchMedia('(max-width:999px)').matches) return;
-    requestAnimationFrame(() => { const active = H('#wheel [aria-current=true]'); if (active) H('#wheel').scrollTo({ left: active.offsetLeft - (H('#wheel').clientWidth - active.offsetWidth) / 2, behavior: smooth && motion ? 'smooth' : 'instant' }); });
+    if (!matchMedia('(max-width:759px)').matches) return;
+    requestAnimationFrame(() => { const w = H('#wheel'), a = H('#wheel [aria-current=true]'); if (a) w.scrollTo({ left: a.offsetLeft + a.offsetWidth / 2 - w.clientWidth / 2, behavior: smooth && fullMotion() ? 'smooth' : 'instant' }); });
   }
   function select(index, direction = 1, quiet = false) {
-    // v4: no endless loop - the wheel stops at both ends and hands over to the page.
-    const nextIndex = Math.max(0, Math.min(fruits.length - 1, index));
-    if (nextIndex !== current) dialTurn += direction * 18;
+    // v4: no endless loop - the picker stops at both ends and hands over to the page.
+    const nextIndex = Math.max(0, Math.min(fruits.length - 1, index)), from = current;
     current = nextIndex;
-    H('.dial-ticks').style.setProperty('--dial-turn', dialTurn + 'deg');
-    const f = fruits[current], spec = f.specs[0];
-    H('#fruit-stage').innerHTML = art(f.slug, 'stage');
+    const f = fruits[current];
     syncCoverHero(f.slug);
-    H('#fruit-title').textContent = f.name;
-    H('#fruit-en').textContent = f.mark;
-    H('#fruit-description').textContent = f.desc;
-    H('#fruit-price').textContent = money(spec.price);
-    H('#buy').disabled = busy;
-    H('#buy').textContent = '放入菜籃 ＋';
-    H('#catalog-note').innerHTML = esc(spec.label) + '・<a href="#p-' + f.slug + '" id="home-detail-link">看規格與介紹 ↗</a>';
-    H('#prev').disabled = current === 0;
-    H('#next').setAttribute('aria-label', current === fruits.length - 1 ? '往下逛：果園與當季水果' : '下一種水果');
-    H('#progress').textContent = pad(current + 1) + ' / ' + pad(fruits.length);
-    H('#wheel-position').textContent = pad(current + 1) + ' / ' + pad(fruits.length);
-    $$('[data-fruit]', root).forEach((b, i) => {
-      b.setAttribute('aria-current', String(i === current));
-      const d = i - current;
-      b.hidden = Math.abs(d) > 2; b.tabIndex = b.hidden ? -1 : 0;
-      b.style.setProperty('--wheel-x', (62 - Math.abs(d) * 25) + 'px');
-      b.style.setProperty('--wheel-y', (158 + d * 82) + 'px');
-      b.style.order = String(d + 2);
-    });
-    centerStrip(true);
-    if (motion && !quiet) H('#fruit-stage').animate([{ opacity: 0, transform: 'translateX(' + direction * 60 + 'px)' }, { opacity: 1, transform: 'translateX(0)' }], { duration: 420, easing: 'cubic-bezier(.16,1,.3,1)' });
+    if (quiet || nextIndex === from) S0.paint(current); else S0.go(from, current, direction);
+    centerStrip(!quiet);
   }
-  H('#wheel').onclick = e => { const b = e.target.closest('[data-fruit]'); if (b) select(Number(b.dataset.fruit)); };
+  H('#wheel').onclick = e => { const b = e.target.closest('[data-fruit]'); if (!b) return; const i = Number(b.dataset.fruit); if (i !== current) select(i, Math.sign(i - current)); };
+  H('.s0-marks').onclick = e => { const b = e.target.closest('[data-pick]'); if (!b) return; const i = Number(b.dataset.pick); if (i !== current) select(i, Math.sign(i - current)); };
   H('#prev').onclick = () => { if (current > 0) select(current - 1, -1); };
   H('#next').onclick = () => step(1);
   // ---------- v4: wheel <-> page hand-over ----------
@@ -206,7 +449,8 @@
     if (Math.abs(wheelSum) > 45) { const d = Math.sign(wheelSum); wheelSum = 0; lastWheel = Date.now(); step(d); }
   }, { passive: false, capture: true });
   // Arriving back at the top re-arms the throttle so trailing inertia does not flip fruits.
-  window.addEventListener('scroll', () => { const t = atTop(); if (t && !wasTop) { lastWheel = Date.now(); wheelSum = 0; } wasTop = t; }, { passive: true });
+  // v6: at the top the stage owns vertical swipes (touch-action pan-x); below it, the page scrolls natively.
+  window.addEventListener('scroll', () => { const t = atTop(); if (t && !wasTop) { lastWheel = Date.now(); wheelSum = 0; } if (t !== wasTop) stage.classList.toggle('is-top', t); wasTop = t; }, { passive: true });
   // Live listens for ArrowLeft/Right on the market root; the mockup also accepts Up/Down.
   // Keys only drive the picker while the page sits at the top; at either end they stay native.
   document.addEventListener('keydown', e => {
@@ -216,47 +460,40 @@
     if (!d || (d > 0 && current === LAST()) || (d < 0 && current === 0)) return;
     e.preventDefault(); select(current + d, d);
   });
-  window.addEventListener('resize', () => { if (homeActive()) centerStrip(false); });
+  window.addEventListener('resize', () => { if (homeActive()) { S0.relayout(); centerStrip(false); } });
+  if (document.fonts) document.fonts.ready.then(() => { if (homeActive()) S0.relayout(); });
   // Touch gestures follow the same direction as page scrolling: finger up = next.
   function bindMarketGestures(surface, onStep, isBlocked) {
     let gesture = null, suppressClick = false;
     surface.addEventListener('touchstart', e => { gesture = null; suppressClick = false; if (e.touches.length !== 1 || isBlocked() || e.target.closest('#buy,a,input,select,textarea')) return; const t = e.touches[0]; gesture = { x: t.clientX, y: t.clientY, done: false, inWheel: !!e.target.closest('#wheel') }; }, { passive: true });
     surface.addEventListener('touchmove', e => { if (e.touches.length !== 1 || isBlocked()) { gesture = null; return; } if (!gesture) return; const t = e.touches[0], dx = t.clientX - gesture.x, dy = t.clientY - gesture.y; if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 10) { if (e.cancelable) e.preventDefault(); if (!gesture.done && Math.abs(dy) > 48) { gesture.done = true; suppressClick = true; onStep(dy < 0 ? 1 : -1); } } }, { passive: false });
-    surface.addEventListener('touchend', e => { if (!gesture || isBlocked()) { gesture = null; return; } const t = e.changedTouches[0], dx = t.clientX - gesture.x, dy = t.clientY - gesture.y; if (!gesture.done && !gesture.inWheel && Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy)) { suppressClick = true; onStep(dx < 0 ? 1 : -1); } gesture = null; }, { passive: true });
+    surface.addEventListener('touchend', e => { if (!gesture || isBlocked()) { gesture = null; return; } const t = e.changedTouches[0], dx = t.clientX - gesture.x, dy = t.clientY - gesture.y; if (!gesture.done && !gesture.inWheel && Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy)) { suppressClick = true; onStep(dx < 0 ? 1 : -1); } gesture = null; if (suppressClick) setTimeout(() => { suppressClick = false; }, 400); }, { passive: true });
     surface.addEventListener('touchcancel', () => { gesture = null; suppressClick = false; }, { passive: true });
     surface.addEventListener('click', e => { if (suppressClick) { e.preventDefault(); e.stopImmediatePropagation(); suppressClick = false; } }, true);
   }
-  // v4: only the picker strip takes vertical swipes; everything else scrolls normally.
-  bindMarketGestures(H('.selection'), step, blocked);
+  // v6: the whole stage takes vertical swipes while the page sits at the top (storyboard-s0: 在舞台上滑換下一個).
+  bindMarketGestures(stage, step, () => blocked() || !atTop());
   // v4.1: Lenis must ignore the picker's own touches, otherwise its touchmove/touchend handling
   // (syncTouch off) cancels the hand-over glide that a swipe on the last fruit starts.
-  ['touchstart', 'touchmove', 'touchend'].forEach(t => H('.selection').addEventListener(t, e => { e.lenisStopPropagation = true; }, { passive: true }));
+  ['touchstart', 'touchmove', 'touchend'].forEach(t => stage.addEventListener(t, e => { if (atTop() || handing) e.lenisStopPropagation = true; }, { passive: true }));
   H('#skip-wheel').onclick = handOff;
 
-  async function fly(slug) {
-    if (!motion) return;
-    const source = H('#fruit-stage').getBoundingClientRect(), target = H('#basket').getBoundingClientRect(), el = document.createElement('div');
-    el.className = 'fly'; el.innerHTML = art(slug);
-    el.style.left = (source.x + source.width / 2 - 80) + 'px'; el.style.top = (source.y + source.height / 2 - 80) + 'px';
-    root.append(el);
-    const dx = target.x + target.width / 2 - (source.x + source.width / 2), dy = target.y + target.height * .48 - (source.y + source.height / 2);
-    const anim = el.animate([{ transform: 'translate(0,0) rotate(8deg) scale(1)', opacity: 1 }, { transform: 'translate(' + dx * .5 + 'px,' + (Math.min(dy, 0) - 120) + 'px) rotate(-25deg) scale(.8)', offset: .5, opacity: 1 }, { transform: 'translate(' + dx + 'px,' + dy + 'px) rotate(-50deg) scale(.35)', opacity: 0 }], { duration: 720, easing: 'cubic-bezier(.4,0,.7,1)' }).finished;
-    // Hidden tabs pause animations; never let the basket update wait on one.
-    try { await Promise.race([anim, new Promise(r => setTimeout(r, 1000))]); } finally { el.remove(); }
-  }
   H('#buy').onclick = async () => {
     if (busy) return;
-    busy = true; H('#buy').disabled = true; H('#buy').textContent = '放入中…';
+    busy = true; setBuy('放入中…', true);
     const f = fruits[current], spec = f.specs[0];
-    try { await fly(f.slug); addToBasket(f.slug, spec.id, 1); notice('已將一份' + f.name + '（' + spec.label + '）放入菜籃。'); }
-    finally { busy = false; H('#buy').disabled = false; H('#buy').textContent = '放入菜籃 ＋'; }
+    try { await S0.fly(); addToBasket(f.slug, spec.id, 1); S0.land(); notice('已將一份' + f.name + '（' + spec.label + '）放入菜籃。'); }
+    finally { busy = false; setBuy('放入菜籃', false); }
   };
 
   function renderBasket() {
     const count = basketCount();
     H('#count').textContent = String(count);
     $('#head-count').textContent = String(count);
-    H('#basket-caption').textContent = count ? '你的菜籃裡，有 ' + count + ' 份小美好。' : '菜籃空空，等你挑一點甜。';
+    const cap = H('#basket-caption');
+    if (!cap.firstChild) cap.innerHTML = '菜籃 · <span class="s0-odo"></span> 份';
+    odo(cap.querySelector('.s0-odo'), count, 1);
+    H('#basket').setAttribute('aria-label', '打開我的菜籃（' + count + ' 份）');
     H('#basket-fruit').innerHTML = basket.slice(-6).map((l, i) => '<span style="position:absolute;inset:0;transform:translate(' + (i % 3 * 23 - 10) + '%,' + (Math.floor(i / 3) * -14) + '%) rotate(' + (i * 9 - 18) + 'deg)">' + art(l.slug) + '</span>').join('');
     H('#cart-items').innerHTML = basket.length ? basket.map(l => { const p = BY_SLUG[l.slug], s = specOf(l); return '<div class="cart-row"><div><strong>' + esc(p.name) + '</strong><small>' + esc(s.label) + '・價格示意</small><span>' + money(s.price * l.qty) + ' · ' + l.qty + ' 份</span></div><button data-remove="' + esc(l.slug + '|' + l.spec) + '" aria-label="移除' + esc(p.name + s.label) + '">移除</button></div>'; }).join('') : '<p>還沒有水果，先挑一樣喜歡的吧。</p>';
     H('#cart-total').textContent = basket.length ? '商品小計 ' + money(basketTotal()) : '';
@@ -270,7 +507,7 @@
   H('#checkout-link').onclick = () => H('#cart-dialog').close();
   function motionLabel() { root.dataset.motion = motion ? 'on' : 'off'; H('#motion').textContent = '動畫：' + (motion ? '開啟' : '關閉'); H('#motion').setAttribute('aria-pressed', String(motion)); }
   H('#motion').onclick = () => { motion = !motion; motionLabel(); Fx.apply(); HomeMotion.build(); };
-  renderWheel(); motionLabel();
+  S0.build(); motionLabel();
 
   // =====================================================================
   // HOME v4.1 — "a fruit quarterly that moves" (十月號). Spec: storyboard.md (S1–S8).
@@ -896,25 +1133,33 @@
     const onCleanup = fn => cleanups.push(fn);
     const W = () => innerWidth, Hh = () => innerHeight;
 
-    // ---------- S0 -> S1: the picked watercolour grows, fades and lands on the S1 hero ----------
+    // ---------- S0 -> S1: the picked watercolour grows, goes soft mid-flight and lands on the S1 hero ----------
+    // (v6: the stage's own copy is hidden for the flight, so the fruit is never on screen twice; the rest of
+    // the stage fades with the scroll - sceneShop)
     let heroFade = { v: 1 }, renderCover = null;
     function bridge() {
       if (mode !== 'full') return;
-      const src = H('#fruit-stage img'), hero = $('#s1 .s1-fruit.is-hero', more);
+      const src = S0.heroImg(), hero = $('#s1 .s1-fruit.is-hero', more);
       if (!src || !hero) return;
       const r = src.getBoundingClientRect(); if (!r.width) return;
-      const g = new Image(); g.src = src.src; g.alt = ''; g.className = 'fx-ghost';
+      const g = document.createElement('div'), slug = src.closest('.s0-slot') ? src.closest('.s0-slot').dataset.slug : '';
+      g.className = 'fx-ghost s0-ghost';
+      g.innerHTML = (slug ? '<img class="s0-soft" src="' + S0.softArt(slug) + '" alt="">' : '') + '<img class="s0-sharp" src="' + esc(src.currentSrc || src.src) + '" alt="">';
       g.style.width = r.width + 'px'; g.style.height = r.height + 'px';
       document.body.append(g);
       const f = S1_FRUITS[0], mob = W() < 768, k = mob ? 1.9 : 1, z = f.z * (mob ? .62 : 1), sc = 1200 / (1200 - z);
       const w = f.s * k * W() / 100 * sc, cx = W() / 2 + (f.x / 100 * W() - W() / 2) * sc, cy = Hh() / 2 + (f.y / 100 * Hh() - Hh() / 2) * sc;
-      gsap.set(g, { x: r.left, y: r.top, rotation: 8 });
+      const held = src.closest('.s0-hero') || src, show = () => { held.style.visibility = ''; }; // the fruit and its contact shadow
+      held.style.visibility = 'hidden';
+      gsap.set(g, { x: r.left, y: r.top, rotation: 0 });
       heroFade.v = 0; if (renderCover) renderCover();
-      gsap.timeline({ onComplete: () => g.remove() })
+      gsap.timeline({ onComplete: () => { g.remove(); show(); } })
         .to(g, { x: cx - w / 2, y: cy - w / 2, width: w, height: w, rotation: f.r, duration: 1.45, ease: 'expo.inOut' }, 0)
+        .fromTo(g, { '--f': 1 }, { '--f': .12, duration: .6, ease: 'power2.in' }, 0)
+        .to(g, { '--f': 1, duration: .6, ease: 'power2.out' }, .75)
         .to(heroFade, { v: 1, duration: .5, ease: 'none', onUpdate: () => renderCover && renderCover() }, 1.1)
         .to(g, { scale: 1.18, opacity: 0, duration: .5, ease: 'power2.out' }, 1.15);
-      onCleanup(() => g.remove());
+      onCleanup(() => { g.remove(); show(); });
     }
 
     // ---------- shared v5 helpers ----------
@@ -1430,8 +1675,17 @@
       });
     }
 
+    // ---------- S0 shop front: entrance on arrival, and the stage fading off as the page leaves the top ----------
+    function sceneShop() {
+      const first = H('#home-first');
+      if (window.scrollY < 4) S0.enter();
+      const leave = { trigger: first, start: 'top top', end: 'bottom 25%', scrub: .6 };
+      gsap.fromTo(H('.s0-ui'), { opacity: 1, yPercent: 0 }, { opacity: 0, yPercent: -5, ease: 'none', immediateRender: false, scrollTrigger: leave });
+      gsap.fromTo(H('.s0-scene'), { opacity: 1, yPercent: 0 }, { opacity: .2, yPercent: 6, ease: 'none', immediateRender: false, scrollTrigger: { ...leave } }); // the scene lags behind (parallax)
+    }
+
     function full() {
-      sceneCover(); sceneToc(); sceneFeature(); sceneProcess(); sceneJournal(); sceneGift(); sceneCare(); sceneBack(); sceneBreath();
+      sceneShop(); sceneCover(); sceneToc(); sceneFeature(); sceneProcess(); sceneJournal(); sceneGift(); sceneCare(); sceneBack(); sceneBreath();
       // shared: scroll velocity (px per frame) for the skew effects; section visibility gates loops
       vel.y = window.scrollY; vel.t = performance.now(); vel.v = 0;
       Loops.add('vel', t => { const y = window.scrollY, dt = Math.max(1, t - vel.t); const v = (y - vel.y) / dt * 16.67; vel.v += (v - vel.v) * .3; vel.y = y; vel.t = t; });
@@ -1454,6 +1708,7 @@
       onCleanup(() => { io.disconnect(); removeEventListener('scroll', onSc); if (pend) cancelAnimationFrame(pend); els.forEach(el => el.classList.remove('fx-fade', 'is-in')); docEl.classList.remove('fx-lite'); });
     }
     function kill() {
+      S0.settle(); // a switch still in flight lands on its final frame
       cleanups.splice(0).reverse().forEach(fn => { try { fn(); } catch (err) { console.warn(err); } });
       if (ctx) { ctx.revert(); ctx = null; }
       splits.splice(0).forEach(s => s.revert());
@@ -1963,26 +2218,26 @@
       '<section class="section" aria-labelledby="ds-c">' + secHead('ds-c', '色彩') + '<div class="ds-swatches">' +
       sw('紙色 paper', '#f7f2e7', '內頁背景') + sw('首頁紙色', 'oklch(96.5% .015 85)', '首頁背景') + sw('卡片 card', '#fcf8ee', '卡片、資料欄、欄位') + sw('淡底 wash', '#edead8', '商品圖底、頁尾、合計') +
       sw('橄欖墨 ink', '#303b24', '文字、主要按鈕') + sw('次要 muted', '#706f5b', '說明文字') + sw('細線 line', '#c9c4aa', '1px 分隔線、邊框') + sw('陶土紅 mark', '#a35539', '小字標註') +
-      sw('紙盤 dial', 'oklch(91% .035 100)', '輪盤、手機選果帶') + sw('紙籤 label', 'oklch(98% .012 90)', '編號紙籤、方向鈕') + '</div></section>' +
+      sw('水果色暈 tone', '#ef9d86', '店頭與商品頁的水彩色暈（每種水果一色，約 12% 不透明）') + sw('外框數字 stroke', '#303b2433', '店頭、目次的超大外框編號（1px，不填色）') + '</div></section>' +
       '<section class="section" aria-labelledby="ds-grade">' + secHead('ds-grade', '照片調色（.grade）', '第五版') + '<div class="ds-grid2"><div class="ds-grade">' +
       '<figure><div class="ds-ph"><img src="img/home-peach-box11.webp" alt="原圖：十一入整箱的水蜜桃（客戶實拍）" loading="lazy"></div><figcaption>原圖</figcaption></figure>' +
       '<figure><div class="ds-ph">' + pic('home-peach-box11', '調色後：十一入整箱的水蜜桃（客戶實拍）', { noKb: true }) + '</div><figcaption>調色後（.grade）</figcaption></figure></div>' +
       '<ul class="ds-specs"><li><b>濾鏡</b>：saturate(.9) contrast(.93) brightness(1.03) sepia(.07)，讓不同手機拍的照片像同一部片。</li><li><b>暖色漏光</b>：左上角暖杏色 radial-gradient，soft-light 混合，不透明度 .14。</li><li><b>暗角</b>：radial-gradient 由中心透明到邊緣 6% 橄欖墨。</li><li><b>慢推</b>：照片在畫面中時 scale 1 → 1.06，12 秒來回（減少動態時關閉）。</li></ul></div></section>' +
       '<section class="section" aria-labelledby="ds-t">' + secHead('ds-t', '字體與字級', 'Noto Serif TC ＋ Noto Sans TC') + '<div class="ds-type">' +
       ty('字標', '明朝 31px・600・字距 .2em', '<span style="font-family:var(--fm-display);font-size:31px;font-weight:600;letter-spacing:.2em">水果店</span>') +
-      ty('首頁品名', '明朝 25–40px・500・.05em', '<span style="font-family:var(--fm-display);font-size:32px;font-weight:500;letter-spacing:.05em">麝香葡萄（綠）</span>') +
+      ty('店頭品名', '明朝 44–96px・300・.04em（括號內小字）', '<span style="font-family:var(--fm-display);font-size:44px;font-weight:300;letter-spacing:.04em">麝香葡萄<small style="font-size:.32em;color:var(--fm-muted)">（綠）</small></span>') +
       ty('頁面標題', '明朝 28px・400・.1em', '<span style="font-family:var(--fm-display);font-size:28px;letter-spacing:.1em">目前已經選購</span>') +
       ty('卡片品名', '明朝 18px・400', '<span style="font-family:var(--fm-display);font-size:18px">山形櫻桃</span>') +
       ty('正文', '黑體 13–14px・行高 1.9–2・.06em', '<span style="font-size:14px;line-height:2;letter-spacing:.06em">翠綠大粒、皮薄，可以連皮吃。</span>') +
       ty('標註小字', '黑體 12px・陶土紅・.08em', '<span class="mark">價格示意・品種推測</span>') +
       ty('英文小標', '黑體 9px・.3em', '<span class="kicker" style="margin:0">THE FRUIT COLLECTION</span>') +
       ty('價格', '明朝 NT$ 11–14px ＋ 數字 18–26px 700', price(1280, 'price-lg')) + '</div></section>' +
-      '<section class="section" aria-labelledby="ds-l">' + secHead('ds-l', '線條與留白') + '<div class="ds-grid2"><ul class="ds-specs"><li><b>線寬</b>：一律 1px；合計區上緣與規格區用 1px 虛線。</li><li><b>圓角</b>：首頁直角，主要按鈕 2px／10px；內頁卡片與按鈕 3px 12px 4px 10px（手繪紙卡的不規則角）。</li><li><b>陰影</b>：實心位移 2px 3px 0，不模糊。</li></ul><ul class="ds-specs"><li><b>間距</b>：8／16／24／40px；段落之間 64–96px。</li><li><b>版寬</b>：內頁 1110px，左右至少 16px；首頁左右 5vw。</li><li><b>首頁</b>：頁首 110px、頁尾 64px，中間剛好一個畫面高。</li></ul></div></section>' +
+      '<section class="section" aria-labelledby="ds-l">' + secHead('ds-l', '線條與留白') + '<div class="ds-grid2"><ul class="ds-specs"><li><b>線寬</b>：一律 1px；合計區上緣與規格區用 1px 虛線。</li><li><b>圓角</b>：首頁店頭的主要按鈕是 1px 細邊膠囊（高 52px），上一個／下一個是 44px 細線圓鈕；內頁卡片與按鈕 3px 12px 4px 10px（手繪紙卡的不規則角）。</li><li><b>陰影</b>：實心位移 2px 3px 0，不模糊。</li></ul><ul class="ds-specs"><li><b>間距</b>：8／16／24／40px；段落之間 64–96px。</li><li><b>版寬</b>：內頁 1110px，左右至少 16px；首頁左右 5vw。</li><li><b>首頁</b>：頁首 76px（手機 58px），其下整個畫面是店頭舞台；左右邊距 clamp(24px, 5vw, 88px)。</li></ul></div></section>' +
       '<section class="section" aria-labelledby="ds-b">' + secHead('ds-b', '按鈕') + '<div class="ds-demo"><a class="btn" href="#catalog" id="ds-btn-primary">選購</a><button class="btn btn-line" type="button" id="ds-btn-line">繼續挑水果</button><button class="btn" type="button" id="ds-btn-disabled" disabled>售完</button><button class="text-btn" type="button" id="ds-btn-text">查看菜籃 <b class="count-ring">2</b></button>' +
-      '<span style="display:inline-grid;place-items:center;width:42px;height:42px;border-radius:50%;border:1px solid var(--color-dial-edge);background:var(--color-label);font-size:18px" aria-hidden="true">↓</span>' +
-      '<span style="display:inline-flex;align-items:center;background:var(--fm-ink);color:var(--fm-paper);border-radius:2px 10px;padding:16px 26px;font-size:13px;letter-spacing:.08em" aria-hidden="true">放入菜籃 ＋</span></div></section>' +
+      '<span style="display:inline-grid;place-items:center;width:44px;height:44px;border-radius:50%;border:1px solid #303b2459;font-size:15px" aria-hidden="true">↓</span>' +
+      '<span style="display:inline-flex;align-items:center;gap:22px;height:52px;padding:0 26px 0 30px;border:1px solid var(--fm-ink);border-radius:26px;font-size:13px;letter-spacing:.2em" aria-hidden="true">放入菜籃 <span>→</span></span></div></section>' +
       '<section class="section" aria-labelledby="ds-m">' + secHead('ds-m', '標籤小字') + '<div class="ds-grid2"><div><span class="mark">價格示意・品種推測</span><span style="display:block;font-family:var(--fm-display);font-size:24px;letter-spacing:.05em;margin-top:4px">麝香葡萄（綠）</span></div><ul class="ds-specs"><li>照官網測試商品的做法（品名上方的「串接測試・請勿下單」）。</li><li>不用框框、印章、徽章或浮動吊牌。</li><li>頁面最上方一條 26px 細提示列，連到樣稿說明。</li></ul></div></section>' +
-      '<section class="section" aria-labelledby="ds-w">' + secHead('ds-w', '輪盤與菜籃') + '<div class="ds-grid2"><ul class="ds-specs"><li><b>輪盤</b>：只露出紙盤右側弧線、雙層 1px 刻度；同時顯示 5 項，選中項水彩放大 1.38 倍，品名放進編號紙籤（轉 -2°）。每次切換刻度轉 18°。</li><li><b>切換</b>：滾輪累積 45 以上、間隔 650ms；手機上滑換下一個、左右滑切換；↑↓ 按鈕與方向鍵。</li></ul><ul class="ds-specs"><li><b>菜籃</b>：水彩藤籃，前緣再疊一層，放入的水果像落在籃子裡；飛入動畫 720ms。</li><li><b>菜籃彈窗與頁面</b>：品項以 1px 線分隔；合計區淡底、上緣虛線；全寬主要按鈕。</li></ul></div></section>' +
+      '<section class="section" aria-labelledby="ds-w">' + secHead('ds-w', '店頭：選果轉盤與菜籃', '第六版・storyboard-s0.md') + '<div class="ds-grid2"><ul class="ds-specs"><li><b>構圖</b>（寬 760 以上，含 960）：滿畫面舞台分三層——後景是該水果的水彩色暈與超大外框編號，中景是約 60vh 的主角水彩（持續呼吸、下方接觸陰影），前景是前一個／下一個水果，模糊、放大 1.3 倍、0.35 不透明，部分出畫。</li><li><b>選果轉盤</b>：1px 細線圓弧，圓心在畫面左外側；細刻度每 6°、主刻度與圓點每 18°，切換時整圈轉 18°（0.9 秒），目前品名用細明朝體，前後各一個淡出。</li><li><b>索引列</b>：01–08 序號＋品名，細線相連，目前項有底線，下方進度細線滑到目前位置；游標停留時浮出水彩縮圖。寬度 760 以下收起轉盤，索引列改水平滑動、目前項置中。</li></ul><ul class="ds-specs"><li><b>切換運鏡</b>（約 1.1 秒）：舊水果後退（縮到 .82、失焦、反向位移 6vw），新水果從前景進來（1.28 倍、失焦、+8vw）再對焦；重疊 0.25 秒，不會同時清楚。失焦用預先算好的模糊圖交叉淡化（img/art/soft/），不即時套模糊濾鏡。文字先往上退、新字再從下方推上來；編號用數字滾動。減少動態或「動畫：關閉」只做 0.3 秒交叉淡化。</li><li><b>菜籃</b>：右下角水彩籃（130–176px），上方小字「菜籃 · 2 份」；手機收進頁首只顯示數量。放入時主角水果的複本沿弧線飛入（縮到約 .25、轉 24°、2px 運動模糊），籃子下沉 4px 再回穩，數量滾動加 1。</li><li><b>切換方式</b>：滾輪累積 45 以上、間隔 650ms；手機在舞台上滑；↑↓ 圓鈕、方向鍵、點索引或轉盤品名。最後一種再往下就交棒給封面。</li></ul></div></section>' +
       '<section class="section" aria-labelledby="ds-card">' + secHead('ds-card', '商品卡') + '<div class="cards more-row" style="padding:0">' + card(p0, 'ds') + card(BY_SLUG.peach, 'ds') + '</div></section>' +
       '<section class="section" aria-labelledby="ds-f">' + secHead('ds-f', '表單') + '<div class="ds-grid2"><div><div class="field"><label for="ds-input">收件人姓名</label><input id="ds-input" placeholder="例如：王小明"></div><span class="field-title" style="margin-top:0">規格</span><div class="var-tags"><label class="var-tag"><input type="radio" name="ds-spec" id="ds-spec-1" checked><span>單串禮盒</span></label><label class="var-tag"><input type="radio" name="ds-spec" id="ds-spec-2"><span>雙串裝</span></label></div></div><ul class="ds-specs"><li>欄位：卡片底、1px 細線、最小高 42px；聚焦時邊框變墨色。</li><li>規格：選中改墨色底；售完為停用樣式。</li><li>樣稿的表單一律不送出，結帳最後顯示「這是樣稿，不會送出訂單」。</li></ul></div></section>' +
       '<section class="section" aria-labelledby="ds-v5">' + secHead('ds-v5', '第五版加強：景深、運鏡、留白', 'storyboard-v5.md') + '<ul class="notes-list">' + [

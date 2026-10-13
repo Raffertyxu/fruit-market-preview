@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:,">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
 <body>
@@ -11,11 +12,11 @@
 <link rel="icon" href="data:,">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@400;500&display=swap');
-/* ===== Home: live storefront CSS (tokens.css, styles.css, market-v2.css, wheel-v3.css), scoped under #fruit-market ===== */
-/* ---- from live tokens.css ---- */
-:root{--color-paper:oklch(97% .025 92);--color-ink:oklch(31% .065 148);--color-muted:oklch(46% .035 130);--color-accent:oklch(86% .18 95);--color-green:oklch(64% .14 135);--color-leaf:oklch(43% .11 145);--color-grape:oklch(78% .15 119);--color-orange:oklch(76% .17 60);--color-apple:oklch(64% .19 29);--color-pear:oklch(84% .13 94);--color-wood:oklch(72% .105 65);--color-wood-dark:oklch(46% .075 62);--color-line:oklch(81% .045 100);--color-white:oklch(99% .01 90);--color-shadow:oklch(36% .06 110 / .12);--font-display:"Microsoft JhengHei",sans-serif;--font-body:"Segoe UI","Microsoft JhengHei",sans-serif;--space-sm:8px;--space-md:16px;--space-lg:32px;--ease-out:cubic-bezier(.16,1,.3,1);--ease-in:cubic-bezier(.7,0,1,1);--ease-in-out:cubic-bezier(.65,0,.35,1)}
+/* ===== Home base: tokens and the generic rules kept from the live storefront CSS (tokens.css, styles.css,
+   market-v2.css). v6: the v4 picker (paper dial, numbered labels, basket column, product column) was replaced
+   by the S0 shop-front stage - see "S0 v6" near the end of this sheet. ===== */
+:root{--color-paper:oklch(96.5% .015 85);--color-ink:oklch(31% .044 125);--color-muted:oklch(48% .03 95);--color-accent:oklch(86% .06 86);--color-green:oklch(64% .14 135);--color-leaf:oklch(43% .11 145);--color-grape:oklch(78% .15 119);--color-orange:oklch(76% .17 60);--color-apple:oklch(64% .19 29);--color-pear:oklch(84% .13 94);--color-wood:oklch(72% .105 65);--color-wood-dark:oklch(46% .075 62);--color-line:oklch(83% .025 90);--color-white:oklch(99% .01 90);--color-shadow:oklch(36% .06 110 / .12);--color-wash:oklch(91% .035 92);--color-mark:oklch(56% .09 48);--font-display:'Noto Serif TC',serif;--font-body:'Noto Sans TC',sans-serif;--space-sm:8px;--space-md:16px;--space-lg:32px;--ease-out:cubic-bezier(.16,1,.3,1);--ease-in:cubic-bezier(.7,0,1,1);--ease-in-out:cubic-bezier(.65,0,.35,1)}
 :root{--color-dial:oklch(91% .035 100);--color-dial-edge:oklch(73% .045 100);--color-dial-tick:oklch(66% .04 100 / .4);--color-label:oklch(98% .012 90);--color-label-shadow:oklch(40% .04 90 / .09)}
-/* ---- from live styles.css ---- */
 :where(#fruit-market),:where(#fruit-market) *{box-sizing:border-box}
 html.route-home,body.route-home{margin:0;overflow-x:clip}
 body.route-home{background:var(--color-paper);color:var(--color-ink);font-family:var(--font-body);font-size:16px}
@@ -25,235 +26,26 @@ body.route-home{background:var(--color-paper);color:var(--color-ink);font-family
 :where(#fruit-market) button:active{transform:translateY(2px)}
 :where(#fruit-market) button:focus-visible,:where(#fruit-market) a:focus-visible{outline:3px solid var(--color-leaf);outline-offset:5px}
 :where(#fruit-market) button:disabled{opacity:.5;cursor:wait}
-:where(#fruit-market) header{height:112px;display:flex;align-items:center;justify-content:space-between;padding:24px 5vw;border-bottom:1px solid var(--color-line);gap:16px}
-:where(#fruit-market) .brand{text-decoration:none;color:inherit;font-size:32px;font-weight:900;letter-spacing:.1em}
-:where(#fruit-market) .brand span{font-size:12px;display:block;letter-spacing:.15em;font-weight:400;margin-top:4px}
-:where(#fruit-market) .demo,:where(#fruit-market) small{font-size:12px;color:var(--color-muted)}
-:where(#fruit-market) #count{margin-left:12px}
-:where(#fruit-market) .market{display:grid;grid-template-columns:minmax(180px,.85fr) minmax(0,1.05fr) minmax(0,1.35fr);align-items:center;min-height:calc(100svh - 177px);max-width:1600px;margin:auto;padding:36px 5vw;gap:3vw}
-:where(#fruit-market) .selection>p{font-weight:700;letter-spacing:.1em}
-:where(#fruit-market) .wheel{position:relative;height:350px;width:100%;border-left:1px dashed var(--color-line);border-radius:50%;display:flex;flex-direction:column;justify-content:center;gap:8px}
-:where(#fruit-market) .wheel button{display:flex;align-items:center;gap:14px;border:0;text-align:left;transition:transform .35s var(--ease-out);padding:6px 12px;width:max-content;max-width:100%}
-:where(#fruit-market) .wheel button:nth-child(2),:where(#fruit-market) .wheel button:nth-child(3){margin-left:30px}
-:where(#fruit-market) .wheel button[aria-current=true]{background:var(--color-accent);transform:translateX(12px);font-weight:800}
-:where(#fruit-market) .wheel svg{width:44px;height:44px}
-:where(#fruit-market) .arrows{display:flex;gap:12px;margin-bottom:16px}
-:where(#fruit-market) .arrows button{width:48px;padding:8px}
-:where(#fruit-market) .basket-area{text-align:center;align-self:center;padding-top:80px}
-:where(#fruit-market) .basket-note{font-size:19px;transform:rotate(-7deg);margin-bottom:28px}
-:where(#fruit-market) .basket{position:relative;border:0;width:100%;padding:0;max-width:380px;background:none!important}
-:where(#fruit-market) .basket>svg{position:relative;z-index:2;pointer-events:none;width:100%;overflow:visible}
-:where(#fruit-market) .handle{fill:none;stroke:var(--color-wood-dark);stroke-width:14;stroke-linecap:round}
-:where(#fruit-market) .basket-body{fill:var(--color-wood);stroke:var(--color-wood-dark);stroke-width:4}
-:where(#fruit-market) .weave{fill:none;stroke:var(--color-wood-dark);stroke-width:3}
-:where(#fruit-market) .rim{fill:none;stroke:var(--color-wood-dark);stroke-width:12;stroke-linecap:round}
-:where(#fruit-market) #basket-fruit{position:absolute;inset:20% 12% 35%;z-index:1}
-:where(#fruit-market) #basket-fruit svg{position:absolute;width:38%;height:100%}
-:where(#fruit-market) .basket-area>span{display:block;font-size:13px;margin-top:18px;color:var(--color-muted)}
-:where(#fruit-market) .product{min-width:0}
-:where(#fruit-market) .fruit-stage{height:clamp(220px,29vw,410px);position:relative;display:grid;place-items:center}
-:where(#fruit-market) .fruit-stage:before{content:"";position:absolute;width:85%;height:85%;border-radius:48% 52% 57% 43%;background:var(--color-accent);opacity:.24;transform:rotate(-12deg)}
-:where(#fruit-market) .fruit-stage>svg{position:relative;width:85%;height:100%;filter:drop-shadow(9px 12px 0 var(--color-shadow));transform:rotate(8deg)}
-:where(#fruit-market) .product-copy{padding:4px 20px}
-:where(#fruit-market) .english{letter-spacing:.22em;font-size:12px;color:var(--color-muted)}
-:where(#fruit-market) h1{font-family:var(--font-display);font-size:clamp(34px,4.3vw,64px);line-height:1.15;letter-spacing:.08em;margin:10px 0 16px;overflow-wrap:anywhere}
+:where(#fruit-market) small{font-size:12px;color:var(--color-muted)}
 :where(#fruit-market) p{line-height:1.7}
-:where(#fruit-market) .product-copy>p{color:var(--color-muted);margin:0 0 24px}
-:where(#fruit-market) .purchase{display:flex;align-items:center;justify-content:space-between;gap:12px}
-:where(#fruit-market) .purchase>span{font-size:13px}
-:where(#fruit-market) #buy{background:var(--color-ink);color:var(--color-paper);padding:16px 22px;font-weight:700}
-:where(#fruit-market) #buy:hover{background:var(--color-leaf)}
-:where(#fruit-market) #buy span{margin-left:18px}
-:where(#fruit-market) .product-copy small{display:block;margin-top:16px}
-:where(#fruit-market) footer{height:65px;display:flex;justify-content:space-between;align-items:center;padding:8px 5vw;border-top:1px solid var(--color-line);font-size:12px}
-:where(#fruit-market) footer button{border:0;font-size:12px}
-:where(#fruit-market) svg.art{overflow:visible;fill:var(--fruit-color);stroke:var(--color-ink);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
-:where(#fruit-market) .leaf{fill:var(--color-leaf)}
-:where(#fruit-market) .shine{stroke:var(--color-white);opacity:.65;fill:none;stroke-width:5}
-:where(#fruit-market) .fly{position:fixed;z-index:10;pointer-events:none;width:160px;height:160px}
-:where(#fruit-market) .fly svg{width:100%;height:100%}
+:where(#fruit-market) h2{margin:0}
 :where(#fruit-market) dialog{border:1px solid var(--color-ink);background:var(--color-paper);color:var(--color-ink);border-radius:20px;padding:28px;width:min(480px,90vw);max-height:80svh}
 :where(#fruit-market) dialog::backdrop{background:var(--color-shadow)}
 :where(#fruit-market) .dialog-head{display:flex;align-items:center;justify-content:space-between}
-:where(#fruit-market) h2{margin:0}
 :where(#fruit-market) .dialog-head button{border:0;font-size:28px}
 :where(#fruit-market) dialog p{font-size:13px}
 :where(#fruit-market) .cart-row{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--color-line);padding:12px 0;gap:12px}
 :where(#fruit-market) .cart-row button{font-size:12px;padding:8px 12px}
 :where(#fruit-market) #continue{margin-top:24px;background:var(--color-accent)}
 :where(#fruit-market) .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
-@media(min-width:900px) and (min-height:650px){:where(#fruit-market) .market{height:calc(100svh - 177px)}}
-@media(max-width:899px){:where(#fruit-market) header{height:88px;padding:16px 5vw}
-:where(#fruit-market) .brand{font-size:24px}
-:where(#fruit-market) .brand span{font-size:10px}
-:where(#fruit-market) .demo{display:none}
-:where(#fruit-market) .market{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);padding:20px 5vw;gap:20px;min-height:0}
-:where(#fruit-market) .selection{grid-column:1/-1}
-:where(#fruit-market) .selection>p{margin:0 0 12px}
-:where(#fruit-market) .wheel{height:auto;flex-direction:row;justify-content:space-between;border:0;border-radius:0;gap:4px}
-:where(#fruit-market) .wheel button{padding:6px;gap:4px;flex-direction:column;font-size:12px;margin:0!important;transform:none!important;min-width:0;flex:1;border-radius:12px}
-:where(#fruit-market) .wheel svg{width:36px;height:36px}
-:where(#fruit-market) .arrows{display:none}
-:where(#fruit-market) .selection>small{display:block;margin-top:12px}
-:where(#fruit-market) .basket-area{padding-top:0}
-:where(#fruit-market) .basket-note{font-size:13px;margin-bottom:10px}
-:where(#fruit-market) .basket-area>span{font-size:12px}
-:where(#fruit-market) .fruit-stage{height:250px}
-:where(#fruit-market) .product-copy{padding:0}
-:where(#fruit-market) .purchase{align-items:flex-start;flex-direction:column}
-:where(#fruit-market) h1{font-size:32px}
-:where(#fruit-market) .product-copy>p{font-size:14px;margin-bottom:16px}
-:where(#fruit-market) #buy{padding:12px 16px}
-:where(#fruit-market) .product-copy small{font-size:11px}
-:where(#fruit-market) footer{margin-top:20px}
-:where(#fruit-market) .market{touch-action:pan-y}}
-@media(max-width:420px){:where(#fruit-market) .market{gap:16px;padding:16px}
-:where(#fruit-market) .fruit-stage{height:190px}
-:where(#fruit-market) h1{font-size:28px}
-:where(#fruit-market) .basket-note{font-size:11px}
-:where(#fruit-market) .product-copy>p{font-size:13px}
-:where(#fruit-market) .basket-area>span{font-size:11px}
-:where(#fruit-market) .brand span{max-width:150px;letter-spacing:0}
-:where(#fruit-market) header{gap:8px}
-:where(#fruit-market) header button{font-size:13px;padding:8px 12px}
-:where(#fruit-market) footer{padding:8px 16px}
-:where(#fruit-market) .purchase>span{font-size:11px}}
 @media(prefers-reduced-motion:reduce){:where(#fruit-market),:where(#fruit-market) *,:where(#fruit-market) *:before{animation:none!important;transition:none!important}}
-@media(min-width:900px){:where(#fruit-market) .wheel button{position:absolute;top:0;left:0;margin:0!important;transform:translate(var(--wheel-x),var(--wheel-y))!important;transition:transform .5s var(--ease-in-out)}
-:where(#fruit-market) .wheel button[aria-current=true]{background:var(--color-accent)}}
-/* ---- from live market-v2.css ---- */
-:root{--color-paper:oklch(96.5% .015 85);--color-ink:oklch(31% .044 125);--color-muted:oklch(48% .03 95);--color-accent:oklch(86% .06 86);--color-line:oklch(83% .025 90);--font-display:'Noto Serif TC',serif;--font-body:'Noto Sans TC',sans-serif;--color-wash:oklch(91% .035 92);--color-mark:oklch(56% .09 48)}
 #fruit-market{position:relative;isolation:isolate;background:var(--color-paper);min-height:100svh}
-#fruit-market .home-first{position:relative}
-#fruit-market .home-first:before{content:'';position:absolute;inset:0;pointer-events:none;z-index:9;opacity:.045;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='gray' filter='url(%23n)' opacity='.8' d='M0 0h180v180H0z'/%3E%3C/svg%3E")}
-#fruit-market header{height:110px;border:0;margin:0 5%;padding:22px 0;position:relative;z-index:10}
-#fruit-market header:after{content:'';position:absolute;bottom:0;left:0;right:0;border-bottom:1px solid var(--color-line);transform:rotate(-.2deg)}
-#fruit-market .brand{font-family:var(--font-display);font-size:31px;font-weight:600;letter-spacing:.2em}
-#fruit-market .brand span{font:9px var(--font-body);letter-spacing:.2em;margin-top:9px}
-#fruit-market .demo{font-family:var(--font-display);font-size:14px;letter-spacing:.18em}
 #fruit-market button{border-radius:0;font-weight:400;transition:opacity .2s var(--ease-out),transform .3s var(--ease-out)}
 #fruit-market button:hover{background:transparent;opacity:.72}
-#fruit-market header button{border:0;font-size:13px}
-#fruit-market #count{display:inline-grid;place-items:center;border:1px solid var(--color-line);width:26px;height:26px;border-radius:50%;font-weight:400;margin:0 8px}
-#fruit-market .market{grid-template-columns:minmax(190px,.75fr) minmax(0,1fr) minmax(0,1.4fr);gap:2vw;padding:28px 5vw 34px;max-width:1700px;position:relative;min-height:calc(100svh - 174px)}
-#fruit-market .selection{position:relative;align-self:center}
-#fruit-market .selection>p{font:16px var(--font-display);letter-spacing:.15em;padding-left:8px;margin:0 0 20px}
-#fruit-market .wheel{height:345px;width:100%;border:0;border-radius:0;display:block;overflow:visible}
-#fruit-market .wheel:before{content:'';position:absolute;width:340px;height:340px;left:-260px;top:0;border:1px solid var(--color-line);border-radius:50%}
-#fruit-market .wheel button{position:absolute;left:0;top:0;display:flex;align-items:center;margin:0!important;padding:0;gap:10px;background:none!important;transform:translate(var(--wheel-x),var(--wheel-y))!important;transition:transform .7s var(--ease-in-out),opacity .4s var(--ease-out);width:190px;max-width:none;min-height:60px;opacity:.5;text-align:left;font-family:var(--font-display)}
-#fruit-market .wheel button img{width:60px;height:66px;object-fit:contain;transform:rotate(-12deg);transition:transform .6s var(--ease-out)}
-#fruit-market .wheel button[aria-current=true]{opacity:1}
-#fruit-market .wheel button[aria-current=true] img{transform:rotate(0) scale(1.18)}
-#fruit-market .wheel button[aria-current=true]:after{content:'↗';font-family:var(--font-body);margin-left:6px;color:var(--color-mark)}
-#fruit-market .wheel button span{font-size:14px;letter-spacing:.05em}
-#fruit-market .arrows{padding-left:10px;gap:4px;margin-top:0}
-#fruit-market .arrows button{border:0;width:40px;font-size:20px}
-#fruit-market .selection>small{font-size:10px;line-height:2;letter-spacing:.12em;padding-left:12px;display:block}
-#fruit-market .basket-area{padding:36px 0 0;align-self:center;position:relative}
-#fruit-market .basket-note{font:clamp(23px,2.15vw,34px)/1.8 var(--font-display);letter-spacing:.13em;transform:none;text-align:left;margin:0 0 10px 24px}
-#fruit-market .basket{width:115%;max-width:none;margin-left:-8%;position:relative;aspect-ratio:1;border:0;display:block;overflow:visible;padding:0}
-#fruit-market .basket-art{width:100%;height:100%;object-fit:contain;position:relative;z-index:1;pointer-events:none}
-#fruit-market .basket-front{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;clip-path:polygon(0 56%,100% 56%,100% 100%,0 100%);z-index:3;pointer-events:none}
-#fruit-market #basket-fruit{position:absolute;inset:0;z-index:2;pointer-events:none}
-#fruit-market #basket-fruit img{position:absolute;width:28%;height:40%;object-fit:contain;top:30%;left:28%}
-#fruit-market .basket-area>span{font-size:11px;letter-spacing:.04em;margin-top:12px}
-#fruit-market .basket-hint{opacity:.6;margin-top:8px!important}
-#fruit-market .product{position:relative;padding-left:3vw;align-self:center}
-#fruit-market .fruit-stage{height:clamp(265px,34vh,470px);display:grid;place-items:center;position:relative}
-#fruit-market .fruit-stage:before{display:none}
-#fruit-market .fruit-stage>img{height:100%;width:95%;object-fit:contain;transform:rotate(8deg);filter:none;position:relative}
-#fruit-market .product-copy{padding:22px 0 0;position:relative}
-#fruit-market .english{font:10px var(--font-body);letter-spacing:.3em}
-#fruit-market h1{font-size:clamp(34px,3.4vw,54px);font-weight:500;letter-spacing:.15em;margin:10px 0 15px;line-height:1.4}
-#fruit-market .product-copy>p{font-size:13px;line-height:1.9;letter-spacing:.06em;max-width:26em;margin-bottom:22px}
-#fruit-market .purchase{padding-top:18px;border-top:1px solid var(--color-line);gap:12px}
-#fruit-market .purchase>span{font-size:11px}
-#fruit-market #buy{border:0;border-radius:0;background:var(--color-ink);color:var(--color-paper);padding:14px 22px;min-height:48px;font-size:13px;letter-spacing:.08em}
-#fruit-market #buy:hover{background:var(--color-leaf);opacity:1}
-#fruit-market .product-copy small{font-size:10px;letter-spacing:.05em;margin-top:12px}
-#fruit-market footer{height:64px;border:0;border-top:1px solid var(--color-line);margin:0 5%;padding:8px 0;font-size:10px;letter-spacing:.12em}
-#fruit-market footer button{font-size:10px;letter-spacing:.05em;padding:8px}
-#fruit-market footer a{color:var(--color-ink);text-decoration:none}
-:where(#fruit-market) .footer-links{display:flex;align-items:center;gap:24px}
-#fruit-market dialog{border-radius:2px;box-shadow:0 20px 100px var(--color-shadow);font-family:var(--font-body)}
-#fruit-market dialog h2{font-family:var(--font-display);font-weight:500}
-:where(#fruit-market) .fly img{width:100%;height:100%;object-fit:contain}
-@media(min-width:1000px) and (min-height:700px){#fruit-market .market{height:calc(100svh - 174px)}}
-@media(max-width:999px){body.route-home{height:auto;overflow-y:visible}
-#fruit-market header{height:94px}
-#fruit-market .demo{display:none}
-#fruit-market .market{grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);height:auto;min-height:0;padding:24px 6vw 32px;gap:24px}
-#fruit-market .selection{grid-column:1/-1}
-#fruit-market .selection>p{font-size:13px;margin-bottom:18px}
-#fruit-market .wheel{height:88px;display:flex;gap:12px;justify-content:space-between}
-#fruit-market .wheel:before{display:none}
-#fruit-market .wheel button{position:relative;transform:none!important;width:auto;flex:1;max-width:100%;flex-direction:row;min-width:0;gap:10px}
-#fruit-market .wheel button img{width:48px;height:60px}
-#fruit-market .wheel button span{font-size:12px}
-#fruit-market .wheel button[aria-current=true]:after{display:none}
-#fruit-market .arrows,#fruit-market .selection>small{display:none}
-#fruit-market .basket-area{padding:0}
-#fruit-market .basket-note{font-size:23px;margin:0 0 16px 8px}
-#fruit-market .basket{width:110%;margin-left:-5%}
-#fruit-market .fruit-stage{height:300px}
-#fruit-market .product{padding-left:0}
-#fruit-market .product-copy{padding-top:20px}
-#fruit-market h1{font-size:34px}
-#fruit-market .purchase{flex-direction:column;align-items:stretch;gap:16px}
-#fruit-market #buy{width:100%}
-#fruit-market .basket-area>span{font-size:10px}
-#fruit-market footer{margin-top:0}}
-@media(max-width:550px){#fruit-market header{margin:0 6%;height:86px}
-#fruit-market .brand{font-size:25px}
-#fruit-market .brand span{font-size:7px;letter-spacing:.12em}
-#fruit-market header button{font-size:11px;padding:8px 0}
-#fruit-market #count{width:22px;height:22px;margin:0 3px}
-#fruit-market .market{gap:16px;padding:22px 6% 28px;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)}
-#fruit-market .selection>p{margin-bottom:10px}
-#fruit-market .wheel{height:82px;gap:8px;border-bottom:1px solid var(--color-line);padding-bottom:12px}
-#fruit-market .wheel button{flex-direction:column;gap:2px;font-size:11px}
-#fruit-market .wheel button img{width:37px;height:42px}
-#fruit-market .wheel button span{font-size:11px}
-#fruit-market .basket-note{font-size:18px;line-height:1.8;margin:0 0 18px;letter-spacing:.08em}
-#fruit-market .basket{width:125%;margin-left:-15%}
-#fruit-market .basket-area{align-self:center}
-#fruit-market .basket-hint{display:none!important}
-#fruit-market .fruit-stage{height:225px}
-#fruit-market h1{font-size:30px;letter-spacing:.06em}
-#fruit-market .english{font-size:8px;letter-spacing:.12em}
-#fruit-market .product-copy{padding-top:8px}
-#fruit-market .product-copy>p{font-size:11px;line-height:1.8;margin-bottom:16px}
-#fruit-market .purchase>span{font-size:10px}
-#fruit-market #buy{padding:12px 10px;font-size:12px}
-#fruit-market #buy span{margin-left:8px}
-#fruit-market .product-copy small{font-size:9px;line-height:1.8}
-#fruit-market footer{font-size:9px;margin:0 6%}
-:where(#fruit-market) .footer-links{gap:4px}
-#fruit-market footer a{display:none}
-#fruit-market .basket-area>span{font-size:9px;line-height:1.8}}
-#fruit-market .fruit-stage>img{position:absolute;inset:0;width:100%;height:100%;max-height:100%;max-width:100%;object-fit:contain}
-@media(min-width:1000px){#fruit-market .fruit-stage{height:clamp(200px,30vh,380px)}
-#fruit-market .basket{max-width:min(100%,37vh);margin:8px auto 0}
-#fruit-market .basket-area{padding-top:0}
-#fruit-market .basket-note{font-size:clamp(22px,2.4vh,32px);margin-left:20px}
-#fruit-market .product-copy{padding-top:14px}
-#fruit-market .product-copy>p{margin-bottom:15px}
-#fruit-market h1{font-size:clamp(32px,4.5vh,52px);margin:8px 0 10px}
-#fruit-market .market{padding-top:20px;padding-bottom:20px}}
-@media(max-width:550px){#fruit-market .basket-note{font-size:16px;letter-spacing:.02em}
-#fruit-market .product-copy>p{font-size:13px}
-#fruit-market .purchase>span{font-size:12px}
-#fruit-market .product-copy small{font-size:11px}
-#fruit-market .basket-area>span{font-size:11px}
-#fruit-market .wheel button span{font-size:12px}}
+#fruit-market button:focus-visible{outline:2px solid var(--color-leaf);outline-offset:5px}
 #fruit-market [hidden]{display:none!important}
-#fruit-market .wheel button{width:215px}
-#fruit-market .wheel button span{max-width:132px;font-size:12px;line-height:1.65}
-#fruit-market #fruit-price{font:24px var(--font-display);white-space:nowrap}
-#fruit-market h1{font-size:clamp(25px,3.4vh,40px);letter-spacing:.05em}
-#fruit-market .market-status{position:fixed;bottom:68px;left:50%;transform:translateX(-50%);z-index:100;max-width:90vw;margin:0;padding:10px 18px;background:var(--color-ink);color:var(--color-paper);font-size:13px;box-shadow:0 4px 15px #0002}
-#fruit-market .market-status:empty{display:none}
-#fruit-market dialog{width:min(600px,92vw);padding:28px}
+#fruit-market dialog{border-radius:2px;box-shadow:0 20px 100px var(--color-shadow);font-family:var(--font-body);width:min(600px,92vw);padding:28px}
+#fruit-market dialog h2{font-family:var(--font-display);font-weight:500}
 #fruit-market .cart-row strong,#fruit-market .cart-row small,#fruit-market .cart-row span{display:block;line-height:1.8}
 #fruit-market .cart-row strong{font-size:15px;font-weight:500}
 #fruit-market .cart-row span{font-size:13px}
@@ -261,161 +53,9 @@ body.route-home{background:var(--color-paper);color:var(--color-ink);font-family
 #fruit-market #continue{margin:0}
 #fruit-market #checkout-link{display:inline-block;background:var(--color-ink);color:var(--color-paper);padding:14px 20px;text-decoration:none}
 #fruit-market #cart-total{font-size:20px;text-align:right;font-family:var(--font-display)}
-#fruit-market .fruit-placeholder{font-family:var(--font-display);color:var(--color-muted);text-align:center}
-@media(max-width:999px){#fruit-market .wheel{overflow-x:auto;justify-content:center;gap:10px;height:105px}
-#fruit-market .wheel button{flex:0 0 95px;width:95px;flex-direction:column;justify-content:start;gap:3px}
-#fruit-market .wheel button span{font-size:11px;max-width:95px}
-#fruit-market .wheel button img{height:45px;width:45px}
-#fruit-market .arrows{display:flex;justify-content:center;margin:8px 0 0}
-#fruit-market .arrows button{transform:rotate(-90deg)}
-#fruit-market .selection>p{margin-bottom:8px}
-#fruit-market h1{font-size:26px}}
-@media(max-width:550px){#fruit-market .wheel button{flex-basis:76px;width:76px}
-#fruit-market .wheel button span{font-size:10px}
-#fruit-market .wheel{justify-content:flex-start}
-#fruit-market #fruit-price{font-size:21px}
-#fruit-market h1{font-size:24px}
-#fruit-market .cart-actions{gap:10px;font-size:13px}
-#fruit-market dialog{padding:20px}}
-body.route-home>.chat{display:none!important}
-#fruit-market .wheel button{white-space:normal}
-@media(min-width:1000px) and (max-height:749px){#fruit-market .selection>small{display:none}
-#fruit-market .selection>p{margin-bottom:8px}}
-/* ---- from live wheel-v3.css ---- */
-:root{--color-dial:oklch(91% .035 100);--color-dial-edge:oklch(73% .045 100);--color-dial-tick:oklch(66% .04 100 / .4);--color-label:oklch(98% .012 90);--color-label-shadow:oklch(40% .04 90 / .09)}
-#fruit-market .market{grid-template-columns:minmax(280px,.95fr) minmax(0,1fr) minmax(0,1.3fr);gap:3vw}
-#fruit-market .selection{isolation:isolate;align-self:center}
-#fruit-market .selection-heading{position:relative;z-index:2;padding-left:8px;display:grid;grid-template-columns:1fr auto;align-items:end;gap:10px}
-#fruit-market .selection-kicker{grid-column:1/-1;font-size:9px;letter-spacing:.23em;color:var(--color-muted)}
-#fruit-market .selection-heading p{font:30px/1.4 var(--font-display);letter-spacing:.12em;margin:0}
-#fruit-market #wheel-position{font:12px var(--font-display);letter-spacing:.12em;color:var(--color-muted);padding:0 18px 6px 0}
-#fruit-market .wheel-shell{position:relative;margin:16px 0 12px}
-#fruit-market .dial-paper{position:absolute;left:-290px;top:-20px;width:480px;height:480px;background:var(--color-dial);border-radius:48% 51% 49% 50%;border:1px solid var(--color-dial-edge);transform:rotate(-7deg);pointer-events:none;z-index:-1}
-#fruit-market .dial-paper:before,#fruit-market .dial-paper:after{content:'';position:absolute;inset:14px;border:1px solid var(--color-dial-edge);border-radius:50%;opacity:.5}
-#fruit-market .dial-paper:after{inset:43px;border-style:dashed;opacity:.35;transform:rotate(9deg)}
-#fruit-market .dial-ticks{position:absolute;inset:24px;border-radius:50%;background:repeating-conic-gradient(from 0deg,var(--color-dial-tick) 0deg .35deg,transparent .35deg 7.5deg);mask:radial-gradient(transparent 0 67%,var(--color-ink) 67% 71%,transparent 71%)}
-#fruit-market .dial-word{position:absolute;right:106px;top:158px;font:20px/1.9 var(--font-display);letter-spacing:.08em;color:var(--color-muted);transform:rotate(7deg);opacity:.6}
-#fruit-market .wheel{height:400px;margin:0;overflow:visible}
-#fruit-market .wheel:before{display:none}
-#fruit-market .wheel button{width:290px;min-height:84px;gap:12px;align-items:center;opacity:.63;transition:transform .65s var(--ease-in-out),opacity .3s var(--ease-out);border:0;z-index:1}
-#fruit-market .wheel button:hover{opacity:1}
-#fruit-market .wheel button[aria-current=true]{z-index:3;opacity:1}
-#fruit-market .wheel button[aria-current=true]:after{display:none}
-#fruit-market .wheel .wheel-image{display:grid;place-items:center;flex:0 0 86px;width:86px;height:86px;position:relative;max-width:none}
-#fruit-market .wheel .wheel-image:before{content:'';position:absolute;inset:6px;border-radius:50%;border:1px solid transparent;transform:rotate(-12deg);transition:opacity .3s var(--ease-out);opacity:0;background:var(--color-label);box-shadow:0 5px 16px var(--color-label-shadow)}
-#fruit-market .wheel button[aria-current=true] .wheel-image:before{opacity:1;inset:-5px;border-color:var(--color-dial-edge);border-radius:47% 52% 48% 50%}
-#fruit-market .wheel button img{position:relative;width:78px;height:82px;object-fit:contain;transform:rotate(-8deg);transition:transform .65s var(--ease-out)}
-#fruit-market .wheel button[aria-current=true] img{transform:rotate(5deg) scale(1.38)}
-#fruit-market .wheel .wheel-label{display:flex;flex-direction:column;gap:4px;min-width:0;max-width:175px;align-items:flex-start}
-#fruit-market .wheel .wheel-label small{font:10px var(--font-body);letter-spacing:.15em;color:var(--color-mark);margin:0}
-#fruit-market .wheel .wheel-label>span{max-width:175px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;letter-spacing:.03em}
-#fruit-market .wheel button[aria-current=true] .wheel-label{background:var(--color-label);padding:10px 12px;box-shadow:2px 4px 0 var(--color-label-shadow);border-bottom:1px solid var(--color-dial-edge);transform:rotate(-2deg)}
-#fruit-market .wheel button[aria-current=true] .wheel-label>span{font-size:13px;max-width:148px}
-#fruit-market .arrows{gap:12px;margin:0;padding-left:64px}
-#fruit-market .arrows button{border:1px solid var(--color-dial-edge);border-radius:50%;width:42px;height:42px;min-height:42px;padding:0;font-size:18px;background:var(--color-label)}
-#fruit-market .arrows button:hover{background:var(--color-dial);opacity:1;transform:translateY(-2px)}
-#fruit-market .selection>small{padding-left:64px;margin-top:16px;letter-spacing:.06em;font-size:11px;line-height:1.8}
-#fruit-market .selection>small>span{display:block;font-size:8px;letter-spacing:.18em;margin-top:4px;opacity:.65}
-#fruit-market .basket-note{font-size:clamp(22px,2.5vh,34px);letter-spacing:.1em}
-#fruit-market .fruit-stage{height:clamp(210px,31vh,400px)}
-#fruit-market .product-copy .english{color:var(--color-mark);letter-spacing:.14em}
-#fruit-market #buy{border-radius:2px 10px 2px 10px;padding:16px 26px}
-#fruit-market #buy:hover{transform:translateY(-2px)}
-#fruit-market button:focus-visible{outline:2px solid var(--color-leaf);outline-offset:5px}
-@media(min-width:1000px) and (max-height:800px){#fruit-market .selection-heading p{font-size:24px}
-#fruit-market .wheel-shell{margin:4px 0}
-#fruit-market .wheel{height:350px}
-#fruit-market .wheel button{transform:translate(var(--wheel-x),calc(var(--wheel-y) * .86))!important;min-height:76px}
-#fruit-market .dial-paper{width:420px;height:420px;left:-248px;top:-24px}
-#fruit-market .dial-word{right:100px;top:135px;font-size:17px}
-#fruit-market .selection>small{display:none}
-#fruit-market .selection-kicker{font-size:8px}
-#fruit-market .wheel button img{width:68px;height:72px}
-#fruit-market .wheel .wheel-image{width:76px;height:76px;flex-basis:76px}}
-@media(max-width:999px){#fruit-market .market{grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:24px}
-#fruit-market .selection-heading{padding:0;gap:6px}
-#fruit-market .selection-heading p{font-size:24px}
-#fruit-market .selection-kicker{font-size:8px}
-#fruit-market #wheel-position{padding-right:0}
-#fruit-market .wheel-shell{margin:18px 0 8px;border-top:1px solid var(--color-line);border-bottom:1px solid var(--color-line);padding:14px 0;background:var(--color-dial)}
-#fruit-market .dial-paper{display:none}
-#fruit-market .wheel{height:132px;overflow-x:auto;display:flex;gap:12px;justify-content:flex-start;padding:8px 8px 12px;scrollbar-width:thin}
-#fruit-market .wheel button{position:relative;flex:0 0 110px;width:110px;min-width:0;flex-direction:column;gap:8px;transform:none!important;min-height:108px;justify-content:start}
-#fruit-market .wheel .wheel-image{flex:0 0 60px;width:60px;height:60px}
-#fruit-market .wheel button img{width:55px;height:58px}
-#fruit-market .wheel .wheel-label{gap:0;max-width:110px;align-items:center}
-#fruit-market .wheel .wheel-label small{display:none}
-#fruit-market .wheel .wheel-label>span,#fruit-market .wheel button[aria-current=true] .wheel-label>span{max-width:100px;font-size:11px;white-space:nowrap}
-#fruit-market .wheel button[aria-current=true] .wheel-label{padding:5px 7px}
-#fruit-market .arrows{padding:0;justify-content:center;gap:16px}
-#fruit-market .arrows button{height:38px;min-height:38px;width:38px}
-#fruit-market .selection>small{display:none}
-#fruit-market .fruit-stage{height:280px}}
-@media(max-width:550px){#fruit-market .market{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:16px;padding:20px 6% 28px}
-#fruit-market .selection-heading p{font-size:23px}
-#fruit-market .wheel{height:128px;gap:8px}
-#fruit-market .wheel button{flex-basis:96px;width:96px}
-#fruit-market .wheel .wheel-label>span,#fruit-market .wheel button[aria-current=true] .wheel-label>span{max-width:88px;font-size:10px}
-#fruit-market .fruit-stage{height:210px}
-#fruit-market .basket-note{font-size:17px}
-#fruit-market .wheel-shell{margin-top:12px}
-#fruit-market #buy{padding:14px 10px}}
-@media(prefers-reduced-motion:reduce){#fruit-market .wheel button,#fruit-market .wheel button img{transition:opacity .1s linear!important}}
-#fruit-market .dial-word{right:185px}
-#fruit-market .dial-ticks{transform:rotate(var(--dial-turn,0deg));transition:transform .8s var(--ease-in-out)}
-@media(min-width:1000px) and (max-height:800px){#fruit-market .dial-word{right:175px}}
-@media(prefers-reduced-motion:reduce){#fruit-market .dial-ticks{transition:none}}
-@media(max-width:999px){#fruit-market .wheel{overflow-y:hidden}}
-#fruit-market[data-motion=off] .dial-ticks,#fruit-market[data-motion=off] .wheel button,#fruit-market[data-motion=off] .wheel button img{transition:none!important}
-@media(max-width:999px){#fruit-market{height:auto;min-height:0}
-#fruit-market .home-first{height:100dvh;min-height:0;display:flex;flex-direction:column;overflow:clip}
-#fruit-market header{height:64px;min-height:64px;padding:10px 0}
-#fruit-market .market{flex:1;min-height:0;height:auto;width:100%;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);grid-template-rows:auto minmax(0,1fr);gap:10px 16px;padding:10px 6% 12px;touch-action:pan-y pinch-zoom}
-#fruit-market .selection{touch-action:pan-x pinch-zoom}
-#fruit-market .selection{align-self:start}
-#fruit-market .selection-heading{display:flex;justify-content:space-between;align-items:center}
-#fruit-market .selection-kicker{display:none}
-#fruit-market .selection-heading p{font-size:19px}
-#fruit-market #wheel-position{padding:0;font-size:11px}
-#fruit-market .wheel-shell{margin:8px 0 0;padding:5px 0}
-#fruit-market .wheel{height:94px;padding:5px 8px;scrollbar-width:none}
-#fruit-market .wheel::-webkit-scrollbar{display:none}
-#fruit-market .wheel button{min-height:80px;gap:4px}
-#fruit-market .wheel .wheel-image{width:48px;height:48px;flex-basis:48px}
-#fruit-market .wheel button img{width:45px;height:46px}
-#fruit-market .arrows{position:absolute;right:0;top:-4px;display:none}
-#fruit-market .selection>small{display:block;margin:6px 0 0;padding:0;font-size:10px;text-align:center}
-#fruit-market .selection>small>span{display:none}
-#fruit-market .product{align-self:center;min-height:0;padding:0}
-#fruit-market .fruit-stage{height:clamp(90px,22dvh,220px)}
-#fruit-market .product-copy{padding-top:6px}
-#fruit-market h1{font-size:clamp(18px,2.7dvh,26px);line-height:1.4;margin:6px 0;letter-spacing:.02em}
-#fruit-market .english{font-size:8px}
-#fruit-market .product-copy>p{font-size:11px;line-height:1.6;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-#fruit-market .purchase{padding-top:8px;gap:8px}
-#fruit-market #fruit-price{font-size:20px}
-#fruit-market #buy{min-height:44px;padding:10px;font-size:12px}
-#fruit-market #catalog-note{font-size:9px;margin-top:6px}
-#fruit-market .basket-note{font-size:15px;line-height:1.8;letter-spacing:0;margin:0 0 8px}
-#fruit-market .basket{max-height:25dvh}
-#fruit-market .basket-area>span{font-size:10px;line-height:1.5;margin-top:8px}
-#fruit-market .basket-hint{display:none}
-#fruit-market footer{height:34px;min-height:34px;margin:0 6%;padding:0;font-size:9px}
-#fruit-market footer button{min-height:32px;padding:4px}
-#fruit-market dialog{max-height:85dvh;overflow-y:auto;touch-action:pan-y pinch-zoom;overscroll-behavior:contain}}
-@media(max-width:999px) and (max-height:650px){#fruit-market .selection-heading{display:none}
-#fruit-market .wheel-shell{margin-top:0}
-#fruit-market .fruit-stage{height:17dvh}
-#fruit-market .basket-note{font-size:13px}
-#fruit-market #catalog-note{display:none}
-#fruit-market .product-copy>p{display:none}
-#fruit-market header{height:56px;min-height:56px}}
+@media(max-width:999px){#fruit-market dialog{max-height:85dvh;overflow-y:auto;touch-action:pan-y pinch-zoom;overscroll-behavior:contain}}
+@media(max-width:550px){#fruit-market .cart-actions{gap:10px;font-size:13px}#fruit-market dialog{padding:20px}}
 body.route-home{padding-top:0!important}
-@media(min-width:1000px){#fruit-market .dial-paper{clip-path:inset(0 0 0 69%);background:transparent;border-color:transparent}
-#fruit-market .dial-word{display:none}
-#fruit-market .dial-paper:before{background:var(--color-dial)}}
-@media(min-width:1000px){#fruit-market .dial-paper:before{background:none}}
-#fruit-market #basket-fruit .fruit-placeholder{display:none}
 /* =====================================================================
    Site shell + inner pages. Values follow the live theme (site-theme.css
    --fm-* tokens); see design-system.md. Home styles above are the live
@@ -450,32 +90,6 @@ button,input,select,textarea{font-family:inherit}
 .mock-bar a:hover{color:var(--fm-mark)}
 body.route-home .mock-bar{margin:0 5%;padding:0}
 
-/* ---------- home: adjustments for the notice bar + entry points ---------- */
-#fruit-market .head-actions{display:flex;align-items:center;gap:6px}
-#fruit-market #menu-open-home{border:0;font-size:13px;letter-spacing:.06em;padding:10px 0 10px 18px;min-height:44px;position:relative}
-#fruit-market #menu-open-home:before{content:'';position:absolute;left:6px;top:50%;height:12px;margin-top:-6px;border-left:1px solid var(--color-line)}
-#fruit-market #catalog-note a{color:var(--color-muted);text-underline-offset:4px;text-decoration-thickness:1px}
-#fruit-market #catalog-note a:hover{color:var(--color-mark)}
-#fruit-market #basket-fruit .art-ph{position:absolute;width:28%;height:40%;top:30%;left:28%}
-#fruit-market .fly .art-ph{width:100%;height:100%}
-#fruit-market .fruit-stage>.art-ph{position:absolute;inset:0}
-#fruit-market .wheel .art-ph{position:relative;width:78px;height:82px;transform:rotate(-8deg);transition:transform .65s var(--ease-out)}
-#fruit-market .wheel button[aria-current=true] .art-ph{transform:rotate(5deg) scale(1.38)}
-@media(min-width:1000px) and (max-height:800px){#fruit-market .wheel .art-ph{width:68px;height:72px}}
-@media(max-width:999px){#fruit-market .wheel .art-ph{width:45px;height:46px}}
-#fruit-market .market-status,#toast{bottom:68px}
-@media(min-width:900px) and (min-height:650px){#fruit-market .market{height:calc(100svh - 177px - var(--bar))}}
-#fruit-market{min-height:calc(100svh - var(--bar))}
-#fruit-market .market{min-height:calc(100svh - 174px - var(--bar))}
-@media(min-width:1000px) and (min-height:700px){#fruit-market .market{height:calc(100svh - 174px - var(--bar))}}
-@media(max-width:999px){#fruit-market .market{min-height:0}}
-@media(max-width:999px){
-  #fruit-market .home-first{height:calc(100dvh - var(--bar))}
-  #fruit-market #menu-open-home{font-size:11px;padding:8px 0 8px 12px}
-  #fruit-market #menu-open-home:before{left:3px}
-  body.route-home .mock-bar{margin:0 6%}
-}
-@media(max-width:550px){#fruit-market .head-actions{gap:2px}}
 
 /* ---------- placeholder for watercolours still being painted ---------- */
 .art-ph{display:block;color:var(--fm-muted)}
@@ -834,7 +448,6 @@ h2,h3{font-family:var(--fm-display);font-weight:400;font-style:normal;color:var(
 #toast:empty{display:none}
 
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
-#fruit-market .fruit-stage>.art-wip{position:absolute;inset:0}
 .ed-row.ed-last{align-items:start}
 @media(max-width:550px){.mock-bar{font-size:10px;letter-spacing:.16em}}
 
@@ -845,11 +458,6 @@ h2,h3{font-family:var(--fm-display);font-weight:400;font-style:normal;color:var(
      html.fx-live home scenes built (pinned 3D / horizontal / mask scenes)
      html.fx-lite reduced motion or "動畫：關閉": static layout + short fades
    ===================================================================== */
-#fruit-market .foot-mid{display:flex;align-items:center;gap:22px}
-#fruit-market .skip-wheel{border:0;background:none;font-size:10px;letter-spacing:.14em;color:var(--color-muted);padding:8px 2px;min-height:36px;text-decoration:underline;text-decoration-color:var(--color-line);text-underline-offset:5px}
-#fruit-market .skip-wheel:hover{color:var(--color-mark);opacity:1}
-@media(max-width:999px){#fruit-market .foot-mid{gap:10px}#fruit-market .skip-wheel{font-size:9px;letter-spacing:.06em;min-height:32px;padding:4px}}
-@media(max-width:380px){#fruit-market footer>span:first-child{display:none}}
 
 /* ---------- shared magazine parts ---------- */
 .home-more{position:relative;background-color:var(--color-paper);background-image:var(--fm-texture);color:var(--fm-ink);font-family:var(--fm-body);overflow-x:clip}
@@ -1720,6 +1328,208 @@ html:not(.fx-live) .p1-cap{display:none}
 .svc-ship .rules{grid-template-columns:minmax(0,1fr)}
 .svc-ship .rules>div,.svc-ship .rules>div:nth-child(even){padding:22px 0 24px;border-left:0}
 @media(max-width:767px){.svc-ship{grid-template-columns:minmax(0,1fr)}}
+
+/* =====================================================================
+   S0 v6 shop front「今日選果」(storyboard-s0.md). One full-screen stage under the header, three planes:
+   back = the fruit's colour wash + an outline number, mid = the picked watercolour (breathing, contact
+   shadow), front = the previous / next fruit, out of focus at two corners. On top: the arc dial (left),
+   the copy column, the index row (bottom) and the basket (bottom right). >= 760px wide, 960 included,
+   is this desktop composition; below 760 the dial folds away and the basket moves into the header.
+   Every hidden start state is set by app.js, so without GSAP the stage is complete as it is.
+   ===================================================================== */
+#fruit-market .home-first{--g:clamp(24px,5vw,88px);--head:76px;--sh:max(520px,calc(100svh - var(--bar) - var(--head)));--vw:clamp(96px,11vw,170px);position:relative;overflow:hidden;overflow:clip;background-color:var(--fm-paper);background-image:var(--fm-texture);color:var(--fm-ink);font-family:var(--fm-body)}
+#fruit-market .s0 :focus-visible{outline:1px solid var(--fm-mark);outline-offset:5px}
+/* header */
+#fruit-market .s0-head{position:relative;z-index:12;height:var(--head);margin:0 var(--g);display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px}
+#fruit-market .brand{justify-self:start;display:block;text-decoration:none;color:var(--fm-ink);font:500 25px/1 var(--fm-display);letter-spacing:.26em;white-space:nowrap}
+#fruit-market .brand span{display:block;font:8px/1 var(--fm-body);letter-spacing:.34em;color:var(--fm-muted);margin-top:10px}
+#fruit-market .demo{font:12px/1 var(--fm-display);letter-spacing:.34em;color:var(--fm-muted);white-space:nowrap}
+#fruit-market .head-actions{justify-self:end;display:flex;align-items:center;gap:clamp(16px,2.2vw,32px)}
+#fruit-market .s0-hl,#fruit-market #menu-open-home,#fruit-market .s0-hcart{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;gap:8px;min-height:44px;font:11px/1 var(--fm-body);letter-spacing:.2em;color:var(--fm-ink);white-space:nowrap;text-decoration:none;transition:color .3s var(--ease-out)}
+#fruit-market .s0-hl:hover,#fruit-market #menu-open-home:hover,#fruit-market .s0-hcart:hover{color:var(--fm-mark);opacity:1}
+#fruit-market #menu-open-home{padding-left:clamp(16px,2.2vw,32px);border-left:1px solid var(--fm-line);min-height:20px}
+#fruit-market .s0-hcart{display:none}
+#fruit-market .s0-hcart b{display:inline-grid;place-items:center;min-width:24px;height:24px;padding:0 6px;border:1px solid var(--fm-line);border-radius:12px;font:400 12px/1 var(--fm-display);letter-spacing:0}
+/* the stage and its planes */
+#fruit-market .s0-stage{--hs:min(60svh,46vw);--hx:64%;--hy:calc(var(--sh) * .47);position:relative;height:var(--sh);touch-action:pan-y pinch-zoom}
+#fruit-market .s0-stage.is-top{touch-action:pan-x pinch-zoom}
+#fruit-market .s0-scene,#fruit-market .s0-ui{position:absolute;inset:0}
+#fruit-market .s0-ui{z-index:5;pointer-events:none}
+/* both planes fade (and drift) with the scroll as the page leaves the top: own layers, so that is compositing only */
+html.fx-live #fruit-market .s0-scene,html.fx-live #fruit-market .s0-ui{will-change:transform,opacity}
+#fruit-market .s0-ui>*{pointer-events:auto}
+#fruit-market .s0-washes{position:absolute;inset:0;pointer-events:none}
+#fruit-market .s0-wash{--wz:min(150vh,118vw);position:absolute;left:calc(var(--hx) - var(--wz) / 2);top:calc(var(--hy) - var(--wz) / 2);width:var(--wz);aspect-ratio:1;opacity:0;background:radial-gradient(closest-side at 46% 48%,var(--c,#c9a76a) 0%,transparent 100%),radial-gradient(closest-side at 64% 60%,var(--c,#c9a76a) 0%,transparent 100%);background-size:78% 74%,58% 62%;background-position:22% 26%,82% 70%;background-repeat:no-repeat;transition:opacity .9s var(--ease-in-out)}
+#fruit-market .s0-wash.is-on{opacity:.12}
+#fruit-market .s0-num{position:absolute;z-index:1;right:calc(var(--g) * .4);top:calc(var(--sh) * -.03);font:300 clamp(180px,30vw,460px)/1 var(--fm-display);letter-spacing:-.02em;color:transparent;-webkit-text-stroke:1px #303b2433;pointer-events:none;user-select:none}
+#fruit-market .s0-odo{display:inline-flex;vertical-align:top}
+#fruit-market .s0-dg{display:inline-block;height:1em;line-height:1;overflow:clip}
+#fruit-market .s0-dg>span{display:block;transform:translateY(calc(var(--n,0) * -1em));transition:transform .9s var(--ease-in-out)}
+#fruit-market .s0-dg+.s0-dg>span{transition-delay:.06s}
+#fruit-market .s0-hero{position:absolute;z-index:2;width:var(--hs);height:var(--hs);left:calc(var(--hx) - var(--hs) / 2);top:calc(var(--hy) - var(--hs) / 2)}
+#fruit-market .s0-float{position:absolute;inset:0}
+#fruit-market .s0-slot{position:absolute;inset:0;--f:1}
+#fruit-market .s0-slot>.art-ph{display:block;width:100%;height:100%}
+/* focus: the sharp watercolour over its registered soft copy (img/art/soft has a 6.667% margin on every side) */
+.s0-slot>.s0-sharp,.s0-ghost>.s0-sharp{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:var(--f,1)}
+.s0-slot>.s0-soft,.s0-ghost>.s0-soft{position:absolute;left:-6.667%;top:-6.667%;width:113.333%;height:113.333%;max-width:none;object-fit:contain;opacity:clamp(0,calc((1 - var(--f,1)) * 3),1)}
+.s0-ghost{--f:1}
+#fruit-market .s0-shadow{position:absolute;left:20%;right:20%;bottom:-2%;height:8%;border-radius:50%;background:radial-gradient(closest-side,#303b2433,#303b2400)}
+html.fx-on #fruit-market .s0-float{animation:s0-breathe 8s ease-in-out infinite}
+html.fx-on #fruit-market .s0-shadow{animation:s0-shadow 8s ease-in-out infinite}
+@keyframes s0-breathe{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-8px) rotate(1.5deg)}}
+@keyframes s0-shadow{0%,100%{transform:scaleX(1);opacity:1}50%{transform:scaleX(.9);opacity:.72}}
+#fruit-market .s0-near{position:absolute;inset:0;z-index:3;pointer-events:none}
+#fruit-market .s0-nb{position:absolute;width:clamp(200px,23vw,360px);aspect-ratio:1}
+#fruit-market .s0-nb.is-next{right:-6vw;top:calc(var(--sh) * -.1)}
+#fruit-market .s0-nb.is-prev{left:-7vw;bottom:calc(var(--sh) * -.15)}
+#fruit-market .s0-nbi{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:.35;scale:1.46}
+/* the arc dial: a 1px ring whose centre sits off the left edge; ticks turn with it, dots + names ride on it */
+#fruit-market .s0-dial{position:absolute;inset:0;pointer-events:none;--R:calc(var(--sh) * .42)}
+#fruit-market .s0-ring{position:absolute;width:calc(var(--R) * 2);height:calc(var(--R) * 2);left:calc(var(--vw) - var(--R) * 2);top:calc(var(--sh) * .45 - var(--R));border-radius:50%;border:1px solid #303b2447}
+#fruit-market .s0-ring:before{content:'';position:absolute;inset:26px;border-radius:50%;border:1px solid #303b2414}
+#fruit-market .s0-ticks{position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(from 90deg,#303b245c 0deg .3deg,transparent .3deg 6deg);-webkit-mask:radial-gradient(closest-side,transparent calc(100% - 8px),#000 calc(100% - 8px));mask:radial-gradient(closest-side,transparent calc(100% - 8px),#000 calc(100% - 8px))}
+#fruit-market .s0-ticks.is-major{background:repeating-conic-gradient(from 89.8deg,#303b2499 0deg .4deg,transparent .4deg 18deg);-webkit-mask:radial-gradient(closest-side,transparent calc(100% - 15px),#000 calc(100% - 15px));mask:radial-gradient(closest-side,transparent calc(100% - 15px),#000 calc(100% - 15px))}
+#fruit-market .s0-marks{position:absolute;inset:0}
+#fruit-market .s0-dot{position:absolute;left:0;top:0;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;border-radius:50%;border:1px solid #303b2480;background:var(--fm-paper);transition:background .4s,border-color .4s}
+#fruit-market .s0-dot.is-on{background:var(--fm-ink);border-color:var(--fm-ink)}
+#fruit-market .s0-lab{position:absolute;left:0;top:0;padding:8px 18px 8px 4px;font:300 13px/1 var(--fm-display);letter-spacing:.14em;color:var(--fm-ink);white-space:nowrap;cursor:pointer;pointer-events:auto}
+#fruit-market .s0-lab.is-on{font-weight:400;cursor:default}
+#fruit-market .s0-arrows{position:absolute;left:var(--g);bottom:calc(clamp(14px,2.6svh,28px) + 58px);display:flex;gap:10px;pointer-events:auto}
+#fruit-market .s0-arrows button{all:unset;box-sizing:border-box;width:44px;height:44px;border-radius:50%;border:1px solid #303b2459;display:grid;place-items:center;cursor:pointer;color:var(--fm-ink);transition:background .4s var(--ease-out),border-color .4s var(--ease-out),opacity .3s}
+#fruit-market .s0-arrows button:hover{background:#303b240f;border-color:var(--fm-ink);opacity:1}
+#fruit-market .s0-arrows button:disabled{opacity:.28;cursor:default;background:none;border-color:#303b2459}
+#fruit-market .s0-arrows svg,#fruit-market .s0-buy svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:round;stroke-linejoin:round}
+/* copy column */
+#fruit-market .s0-copy{position:absolute;left:calc(var(--vw) + clamp(36px,5vw,96px));width:clamp(260px,32vw,500px);top:0;bottom:clamp(96px,15svh,150px);display:flex;flex-direction:column;justify-content:center}
+#fruit-market .s0-copy p{margin:0}
+#fruit-market .s0-m{display:block;overflow:clip;padding:.1em 0 .16em;margin:-.1em 0 -.16em}
+#fruit-market .s0-in{display:block}
+#fruit-market .s0-kicker{font:9px/1.7 var(--fm-body);letter-spacing:.34em;color:var(--fm-muted);margin-bottom:clamp(10px,1.8svh,18px)}
+#fruit-market .s0-no{display:flex;align-items:baseline;font:300 13px/1 var(--fm-display);letter-spacing:.2em;color:var(--fm-mark);margin-bottom:clamp(8px,1.6svh,16px)}
+#fruit-market .s0-no .s0-odo{margin-left:.25em}
+#fruit-market .s0-of{margin-left:.5em;color:var(--fm-muted);letter-spacing:.14em}
+#fruit-market .s0-name{margin:0;font:300 clamp(44px,6vw,96px)/1.14 var(--fm-display);letter-spacing:.04em;color:var(--fm-ink)}
+#fruit-market .s0-name small{display:inline-block;font-size:.32em;letter-spacing:.1em;color:var(--fm-muted);margin-left:.1em}
+#fruit-market .s0-en{margin-top:clamp(8px,1.4svh,14px)!important;font:10px/1.8 var(--fm-body);letter-spacing:.3em;color:var(--fm-muted)}
+#fruit-market .s0-desc{margin-top:clamp(12px,2.2svh,22px)!important;font-size:13px;line-height:2;letter-spacing:.06em;color:var(--fm-muted);max-width:24em}
+#fruit-market .s0-rule{display:block;width:min(78%,360px);height:1px;background:var(--fm-line);margin:clamp(14px,2.6svh,26px) 0 clamp(14px,2.2svh,22px);transform-origin:0 50%}
+#fruit-market .s0-price .s0-in{font:300 clamp(32px,3.4vw,52px)/1.1 var(--fm-display);letter-spacing:.04em;color:var(--fm-ink)}
+#fruit-market .s0-price small{font:11px/1 var(--fm-body);letter-spacing:.18em;color:var(--fm-muted);margin-right:.7em;vertical-align:.5em}
+#fruit-market .s0-spec{margin-top:8px!important;font-size:11px;line-height:1.8;letter-spacing:.1em;color:var(--fm-muted)}
+#fruit-market .s0-spec i{font-style:normal;color:var(--fm-mark)}
+#fruit-market .s0-cta{display:flex;align-items:center;flex-wrap:wrap;gap:12px 28px;margin-top:clamp(16px,3svh,30px)}
+#fruit-market .s0-buy{all:unset;box-sizing:border-box;position:relative;isolation:isolate;overflow:hidden;display:inline-flex;align-items:center;gap:22px;height:52px;padding:0 26px 0 30px;border:1px solid var(--fm-ink);border-radius:26px;font:400 13px/1 var(--fm-body);letter-spacing:.2em;color:var(--fm-ink);cursor:pointer;white-space:nowrap;transition:color .45s var(--ease-out)}
+#fruit-market .s0-buy:before{content:'';position:absolute;inset:0;z-index:-1;background:var(--fm-ink);transform:scaleX(0);transform-origin:0 50%;transition:transform .6s var(--ease-out)}
+#fruit-market .s0-buy:hover{color:var(--fm-paper);opacity:1}
+#fruit-market .s0-buy:hover:before{transform:scaleX(1)}
+#fruit-market .s0-buy svg{transition:transform .6s var(--ease-out)}
+#fruit-market .s0-buy:hover svg{transform:translateX(4px)}
+#fruit-market .s0-buy:disabled{cursor:wait;opacity:.6}
+#fruit-market .s0-more{position:relative;padding:8px 0 5px;font:12px/1 var(--fm-body);letter-spacing:.2em;color:var(--fm-ink);text-decoration:none;white-space:nowrap}
+#fruit-market .s0-more:before,#fruit-market .s0-more:after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--fm-line)}
+#fruit-market .s0-more:after{background:var(--fm-ink);transform:scaleX(0);transform-origin:0 50%;transition:transform .6s var(--ease-out)}
+#fruit-market .s0-more:hover{color:var(--fm-ink)}
+#fruit-market .s0-more:hover:after{transform:scaleX(1)}
+#fruit-market .s0-note{min-height:1.8em;margin-top:12px!important;font:300 12px/1.8 var(--fm-display);letter-spacing:.1em;color:var(--fm-mark)}
+/* bottom: the index row, skip + motion links */
+#fruit-market .s0-foot{position:absolute;left:var(--g);right:calc(var(--g) + clamp(130px,12vw,176px) + 28px);bottom:clamp(14px,2.6svh,28px);display:flex;flex-direction:column;gap:4px}
+#fruit-market .s0-foot-top{display:flex;justify-content:flex-end;align-items:center;gap:24px}
+#fruit-market .skip-wheel,#fruit-market #motion{all:unset;box-sizing:border-box;cursor:pointer;min-height:32px;display:inline-flex;align-items:center;gap:6px;font:10px/1 var(--fm-body);letter-spacing:.16em;color:var(--fm-muted);white-space:nowrap;transition:color .3s}
+#fruit-market .skip-wheel{text-decoration:underline;text-decoration-color:var(--fm-line);text-underline-offset:6px}
+#fruit-market .skip-wheel:hover,#fruit-market #motion:hover{color:var(--fm-mark);opacity:1}
+#fruit-market .s0-index{position:relative}
+#fruit-market .s0-row{position:relative;display:flex;align-items:center;padding-bottom:12px}
+#fruit-market .s0-ix{all:unset;box-sizing:border-box;position:relative;display:inline-flex;align-items:baseline;gap:7px;padding:10px 0 8px;cursor:pointer;white-space:nowrap;font:11px/1 var(--fm-body);letter-spacing:.1em;color:var(--fm-muted);transition:color .4s var(--ease-out)}
+#fruit-market .s0-ix b{font:400 11px/1 var(--fm-display);letter-spacing:.08em;color:var(--fm-mark)}
+#fruit-market .s0-ix>span:not(.s0-thumb){padding-bottom:5px;border-bottom:1px solid transparent;transition:border-color .4s var(--ease-out)}
+#fruit-market .s0-ix:hover,#fruit-market .s0-ix[aria-current=true]{color:var(--fm-ink)}
+#fruit-market .s0-ix[aria-current=true]>span:not(.s0-thumb){border-bottom-color:var(--fm-ink)}
+#fruit-market .s0-link{flex:1 1 10px;min-width:8px;height:1px;margin:0 10px;background:var(--fm-line)}
+#fruit-market .s0-prog{position:absolute;left:0;right:0;bottom:0;height:1px;background:#c9c4aa80}
+#fruit-market .s0-prog i{position:absolute;inset:0;background:var(--fm-ink);transform-origin:0 50%;transform:scaleX(var(--p,0));transition:transform .9s var(--ease-in-out)}
+#fruit-market .s0-prog b{position:absolute;left:0;top:-2px;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--fm-ink);transform:translateX(var(--px,0px));transition:transform .9s var(--ease-in-out)}
+#fruit-market .s0-thumb{position:absolute;left:50%;bottom:calc(100% + 4px);width:76px;height:76px;margin-left:-38px;opacity:0;transform:translateY(10px) scale(.9);transition:opacity .35s var(--ease-out),transform .55s var(--ease-out);pointer-events:none}
+#fruit-market .s0-thumb img,#fruit-market .s0-thumb .art-ph{width:100%;height:100%;object-fit:contain}
+#fruit-market .s0-ix:hover .s0-thumb,#fruit-market .s0-ix:focus-visible .s0-thumb{opacity:1;transform:none}
+/* basket, bottom right */
+#fruit-market .s0-basket{all:unset;box-sizing:border-box;position:absolute;right:var(--g);bottom:clamp(6px,1.4svh,18px);width:clamp(130px,12vw,176px);display:flex;flex-direction:column;align-items:center;cursor:pointer}
+#fruit-market .s0-bcap{font:10px/1.6 var(--fm-body);letter-spacing:.24em;color:var(--fm-ink);white-space:nowrap;padding-bottom:3px;border-bottom:1px solid transparent;transition:border-color .4s var(--ease-out)}
+#fruit-market .s0-basket:hover .s0-bcap{border-bottom-color:var(--fm-ink)}
+#fruit-market .s0-bcap .s0-odo{font:400 13px/1 var(--fm-display);letter-spacing:0;margin:0 .3em;vertical-align:-1px}
+#fruit-market .s0-bcap .s0-dg>span{transition-duration:.55s}
+#fruit-market .s0-bk{position:relative;display:block;width:100%;aspect-ratio:1;margin-top:-6px}
+#fruit-market .s0-bk>img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none}
+#fruit-market .s0-bk-front{z-index:3;clip-path:polygon(0 56%,100% 56%,100% 100%,0 100%)}
+#fruit-market #basket-fruit{position:absolute;inset:0;z-index:2;pointer-events:none}
+#fruit-market #basket-fruit img,#fruit-market #basket-fruit .art-ph{position:absolute;width:28%;height:40%;object-fit:contain;top:30%;left:28%}
+#fruit-market .s0-fly{z-index:80}
+/* the basket dialog, in the same quiet language (1px lines, Mincho, pill CTA) */
+#fruit-market #cart-dialog{border:1px solid var(--fm-line);background:var(--fm-paper);color:var(--fm-ink);padding:clamp(22px,3vw,40px);box-shadow:0 30px 120px #303b2429}
+#fruit-market #cart-dialog::backdrop{background:#303b2438}
+#fruit-market #cart-dialog h2{font:300 clamp(24px,2.4vw,30px)/1.3 var(--fm-display);letter-spacing:.14em}
+#fruit-market #cart-dialog .dialog-head button{all:unset;cursor:pointer;width:44px;height:44px;display:grid;place-items:center;font:300 26px/1 var(--fm-display);color:var(--fm-ink)}
+#fruit-market #cart-message{font-size:12px;letter-spacing:.08em;color:var(--fm-muted);margin:10px 0 8px}
+#fruit-market #cart-dialog .cart-row{border-bottom-color:var(--fm-line);padding:16px 0}
+#fruit-market #cart-dialog .cart-row strong{font:400 16px/1.7 var(--fm-display);letter-spacing:.08em}
+#fruit-market #cart-dialog .cart-row small{font-size:11px;letter-spacing:.1em;color:var(--fm-muted)}
+#fruit-market #cart-dialog .cart-row button,#fruit-market #continue{all:unset;cursor:pointer;font:11px/1 var(--fm-body);letter-spacing:.16em;color:var(--fm-muted);padding:8px 0 5px;border-bottom:1px solid var(--fm-line);white-space:nowrap}
+#fruit-market #cart-dialog .cart-row button:hover,#fruit-market #continue:hover{color:var(--fm-mark);border-color:var(--fm-mark)}
+#fruit-market #continue{font-size:12px;color:var(--fm-ink)}
+#fruit-market #cart-total{font:300 22px/1.4 var(--fm-display);letter-spacing:.06em;margin:20px 0 0}
+#fruit-market #checkout-link{display:inline-flex;align-items:center;gap:14px;height:50px;padding:0 26px;border-radius:25px;background:var(--fm-ink);color:var(--fm-paper);font-size:13px;letter-spacing:.18em;text-decoration:none}
+#fruit-market #checkout-link:hover{background:var(--fm-leaf)}
+/* motion off: short cross-fades only */
+#fruit-market[data-motion=off] .s0-wash,#fruit-market[data-motion=off] .s0-dg>span,#fruit-market[data-motion=off] .s0-prog i,#fruit-market[data-motion=off] .s0-prog b{transition-duration:.3s;transition-delay:0s}
+/* 760-940: the index row shows the numbers, the current item keeps its name */
+@media(min-width:760px) and (max-width:940px){#fruit-market .s0-ix:not([aria-current=true])>span:not(.s0-thumb){display:none}#fruit-market .s0-link{margin:0 8px}}
+@media(min-width:760px) and (max-width:1099px){#fruit-market .s0-stage{--hx:68%;--hs:min(60svh,44vw)}#fruit-market .demo{display:none}#fruit-market .s0-head{grid-template-columns:minmax(0,1fr) auto}}
+/* short desktop windows */
+@media(min-width:760px) and (max-height:760px){#fruit-market .home-first{--head:64px}#fruit-market .s0-desc{-webkit-line-clamp:1;display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden}#fruit-market .s0-name{font-size:clamp(40px,5vw,80px)}}
+@media(min-width:760px) and (max-height:640px){#fruit-market .s0-desc,#fruit-market .s0-kicker{display:none}}
+/* phones: no dial, the index row scrolls sideways with the current item centred, the basket count is in the header */
+@media(max-width:759px){
+  #fruit-market .home-first{--g:clamp(18px,5.5vw,28px);--head:58px;--sh:max(540px,calc(100svh - var(--bar) - var(--head)))}
+  #fruit-market .s0-head{grid-template-columns:minmax(0,1fr) auto;gap:10px}
+  #fruit-market .brand{font-size:21px;letter-spacing:.22em}
+  #fruit-market .brand span{font-size:7px;letter-spacing:.26em;margin-top:8px}
+  #fruit-market .demo,#fruit-market .s0-hl{display:none}
+  #fruit-market .head-actions{gap:18px}
+  #fruit-market .s0-hcart{display:inline-flex}
+  #fruit-market #menu-open-home{padding-left:18px}
+  #fruit-market .s0-stage{--hs:min(36svh,74vw);--hx:57%;--hy:calc(var(--sh) * .045 + var(--hs) / 2)}
+  #fruit-market .s0-num{right:calc(var(--g) * .5);top:calc(var(--sh) * .015);font-size:clamp(150px,44vw,210px)}
+  #fruit-market .s0-nb{width:46vw}
+  #fruit-market .s0-nb.is-next{right:-21vw;top:calc(var(--sh) * -.03)}
+  #fruit-market .s0-nb.is-prev{left:-24vw;bottom:auto;top:calc(var(--sh) * .27)}
+  #fruit-market .s0-ring,#fruit-market .s0-marks{display:none}
+  #fruit-market .s0-arrows{left:var(--g);right:var(--g);bottom:calc(10px + 36px);justify-content:space-between;pointer-events:none}
+  #fruit-market .s0-arrows button{width:36px;height:36px;pointer-events:auto}
+  #fruit-market .s0-arrows button svg{transform:rotate(-90deg)}
+  #fruit-market .s0-copy{left:var(--g);right:var(--g);width:auto;top:auto;bottom:calc(10px + 36px + 54px);display:block}
+  #fruit-market .s0-kicker{display:inline-block;margin:0 14px 8px 0}
+  #fruit-market .s0-no{display:inline-flex;margin:0}
+  #fruit-market .s0-name{font-size:clamp(36px,11vw,48px)}
+  #fruit-market .s0-en{margin-top:6px!important;font-size:9px;letter-spacing:.26em}
+  #fruit-market .s0-desc{margin-top:10px!important;font-size:12px;line-height:1.85;-webkit-line-clamp:2;display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden}
+  #fruit-market .s0-rule{margin:14px 0 12px}
+  #fruit-market .s0-price .s0-in{font-size:30px}
+  #fruit-market .s0-spec{margin-top:4px!important;font-size:10px}
+  #fruit-market .s0-cta{margin-top:14px;gap:10px 22px}
+  #fruit-market .s0-buy{height:48px;padding:0 22px 0 26px;gap:18px}
+  #fruit-market .s0-note{margin-top:6px!important;min-height:1.6em;font-size:11px}
+  #fruit-market .s0-foot{left:var(--g);right:var(--g);bottom:10px;flex-direction:column-reverse;gap:0}
+  #fruit-market .s0-foot-top{justify-content:space-between}
+  #fruit-market .s0-index{margin:0 46px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;overscroll-behavior-x:contain}
+  #fruit-market .s0-index::-webkit-scrollbar{display:none}
+  #fruit-market .s0-row{width:max-content;padding:0 calc(50% - 40px) 10px}
+  #fruit-market .s0-link{flex:0 0 14px;margin:0 8px}
+  #fruit-market .s0-ix{padding:12px 0 8px}
+  #fruit-market .s0-thumb,#fruit-market .s0-basket{display:none}
+}
+@media(max-width:759px) and (max-height:760px){#fruit-market .s0-stage{--hs:min(30svh,64vw)}#fruit-market .s0-desc{-webkit-line-clamp:1}}
+@media(max-width:759px) and (max-height:640px){#fruit-market .s0-stage{--hs:min(26svh,56vw)}#fruit-market .s0-desc{display:none}#fruit-market .s0-name{font-size:34px}}
+@media(max-width:380px){#fruit-market .s0-kicker{display:none}}
 </style>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <a class="skip" href="#view" id="skip-link">跳到主要內容</a>
@@ -1729,17 +1539,37 @@ html:not(.fx-live) .p1-cap{display:none}
 
 <!-- Home: the live storefront home (index.html + app.js), with static products. -->
 <div id="fruit-market" hidden>
-<div class="home-first" id="home-first">
-<header><a class="brand" href="#home" id="brand-home">水果店<span>THE LITTLE FRUIT MARKET</span></a><span class="demo">把日子，過得新鮮一點。</span><div class="head-actions"><button id="cart-open" class="outline">查看菜籃 <b id="count">0</b><span aria-hidden="true"> ↗</span></button><button id="menu-open-home" aria-haspopup="dialog" aria-controls="menu">選單</button></div></header>
-<main class="market" aria-label="水果挑選區">
-<nav class="selection" aria-label="切換水果"><div class="selection-heading"><span class="selection-kicker">THE FRUIT COLLECTION</span><p>今日・選果</p><span id="wheel-position">—</span></div><div class="wheel-shell"><div class="dial-paper" aria-hidden="true"><div class="dial-ticks"></div><span class="dial-word">果<br>物<br>選<br>集</span></div><div class="wheel" id="wheel"></div></div><div class="arrows"><button id="prev" aria-label="上一種水果">↑</button><button id="next" aria-label="下一種水果">↓</button></div><small>往下捲，挑下一份鮮甜。<span>SCROLL TO DISCOVER</span></small></nav>
-<section class="basket-area" aria-label="菜籃"><div class="basket-note">一籃好果，<br>一點生活的甜。</div><button class="basket" id="basket" aria-label="打開我的菜籃"><img class="basket-art" src="img/art/basket.webp" alt="水彩藤編菜籃"><div id="basket-fruit" aria-hidden="true"></div><img class="basket-front" src="img/art/basket.webp" alt="" aria-hidden="true"></button><span id="basket-caption">菜籃空空，等你挑一點甜。</span><span class="basket-hint">點菜籃，看看今天的收穫 ↗</span></section>
-<section class="product" aria-labelledby="fruit-title"><div class="fruit-stage" id="fruit-stage" data-breathe></div><div class="product-copy"><span id="fruit-en" class="english"></span><h1 id="fruit-title"></h1><p id="fruit-description"></p><div class="purchase"><span id="fruit-price"></span><button id="buy" disabled>載入商品…</button></div><small id="catalog-note"></small></div></section>
-</main><footer><span>新鮮的事，慢慢挑。</span><span class="foot-mid"><span id="progress">01 / 08</span><button type="button" id="skip-wheel" class="skip-wheel">跳過選果，往下逛 <span aria-hidden="true">↓</span></button></span><div class="footer-links"><a href="#catalog" id="foot-catalog">所有商品 ↗</a><button id="motion">動畫：開啟</button></div></footer>
+<div class="home-first s0" id="home-first">
+<header class="s0-head"><a class="brand" href="#home" id="brand-home">水果店<span>THE LITTLE FRUIT MARKET</span></a><span class="demo">把日子，過得新鮮一點。</span><div class="head-actions"><a class="s0-hl" href="#catalog" id="foot-catalog">所有商品 <span aria-hidden="true">↗</span></a><button type="button" class="s0-hcart" id="cart-open" aria-label="查看菜籃">菜籃 <b id="count">0</b></button><button type="button" id="menu-open-home" aria-haspopup="dialog" aria-controls="menu">選單</button></div></header>
+<!-- S0 v6 shop front (storyboard-s0.md): every word and picture on the stage is filled in from the product list by app.js. -->
+<main class="s0-stage is-top" id="s0-stage" aria-label="水果挑選區">
+<div class="s0-scene">
+<div class="s0-washes" aria-hidden="true"><i class="s0-wash"></i><i class="s0-wash"></i></div>
+<span class="s0-num" aria-hidden="true" data-depth=".15"><span class="s0-odo" id="s0-num"></span></span>
+<div class="s0-hero" id="fruit-stage" data-depth=".4"><i class="s0-shadow" aria-hidden="true"></i><div class="s0-float"></div></div>
+<div class="s0-near" aria-hidden="true" data-depth=".8"><span class="s0-nb is-prev"></span><span class="s0-nb is-next"></span></div>
+</div>
+<div class="s0-ui">
+<nav class="s0-dial" aria-label="選果轉盤"><div class="s0-ring" aria-hidden="true"><i class="s0-ticks"></i><i class="s0-ticks is-major"></i></div><div class="s0-marks" aria-hidden="true"></div><div class="s0-arrows"><button type="button" id="prev" aria-label="上一種水果"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 19V5M6.5 10.5 12 5l5.5 5.5"/></svg></button><button type="button" id="next" aria-label="下一種水果"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M6.5 13.5 12 19l5.5-5.5"/></svg></button></div></nav>
+<section class="s0-copy" aria-labelledby="fruit-title" data-depth=".2">
+<p class="s0-kicker">TODAY'S PICK · 今日選果</p>
+<p class="s0-no">No.<span class="s0-odo" id="wheel-position"></span><span class="s0-of" id="s0-of"></span></p>
+<h1 class="s0-name" id="fruit-title"><span class="s0-m"><span class="s0-in"></span></span></h1>
+<p class="s0-en"><span class="s0-m"><span class="s0-in" id="fruit-en"></span></span></p>
+<p class="s0-desc"><span class="s0-m"><span class="s0-in" id="fruit-description"></span></span></p>
+<i class="s0-rule" aria-hidden="true"></i>
+<p class="s0-price"><span class="s0-m"><span class="s0-in"><small>NT$</small><span id="fruit-price"></span></span></span></p>
+<p class="s0-spec"><span class="s0-m"><span class="s0-in" id="catalog-note"></span></span></p>
+<div class="s0-cta"><button type="button" class="s0-buy" id="buy" disabled><span class="s0-buy-t">載入商品…</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13.5 6.5 19 12l-5.5 5.5"/></svg></button><a class="s0-more" href="#catalog" id="home-detail-link">看詳細</a></div>
+<p class="s0-note" id="status" role="status" aria-live="polite"></p>
+</section>
+<div class="s0-foot"><div class="s0-foot-top"><button type="button" id="skip-wheel" class="skip-wheel">跳過選果，往下逛 <span aria-hidden="true">↓</span></button><button type="button" id="motion">動畫：開啟</button></div><div class="s0-index" id="wheel" role="group" aria-label="選果索引"></div></div>
+<button type="button" class="s0-basket" id="basket" aria-label="打開我的菜籃"><span class="s0-bcap" id="basket-caption"></span><span class="s0-bk"><img class="s0-bk-back" src="img/art/basket.webp" alt="" draggable="false"><span id="basket-fruit" aria-hidden="true"></span><img class="s0-bk-front" src="img/art/basket.webp" alt="" draggable="false"></span></button>
+</div>
+</main>
 </div>
 <!-- v4: photo-led sections under the wheel (rendered by app.js; motion via GSAP when available). -->
 <div class="home-more" id="home-more"></div>
-<p id="status" class="market-status" role="status" aria-live="polite"></p>
 <dialog id="cart-dialog" aria-labelledby="cart-dialog-title"><div class="dialog-head"><h2 id="cart-dialog-title">我的菜籃</h2><button id="close" aria-label="關閉菜籃">×</button></div><p id="cart-message">樣稿的菜籃只存在這個瀏覽器分頁，不會成立訂單。</p><div id="cart-items"></div><p id="cart-total"></p><div class="cart-actions"><button id="continue">繼續挑水果</button><a id="checkout-link" href="#cart">前往結帳 ↗</a></div></dialog>
 </div>
 
