@@ -550,7 +550,7 @@
   const MONTH_EN = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
   const qMonth = Number(new URLSearchParams(location.search).get('month')); // ?month= previews other months
   const MONTH = qMonth >= 1 && qMonth <= 12 ? qMonth : new Date().getMonth() + 1;
-  const ISSUE = { zh: MONTH_ZH[MONTH - 1] + '月號', no: 'No.' + pad(MONTH), en: MONTH_EN[MONTH - 1], year: new Date().getFullYear() };
+  const ISSUE = { zh: '水果店', no: 'No.' + pad(MONTH), en: MONTH_EN[MONTH - 1], year: new Date().getFullYear() };
   const SHORT = { muscat: ['麝香葡萄', 'MUSCAT GRAPE'], apple: ['蘋果', 'APPLE'], peach: ['水蜜桃', 'WHITE PEACH'], orange: ['香甜柑橘', 'MANDARIN'], cherry: ['山形櫻桃', 'CHERRY'], pear: ['梨', 'JAPANESE PEAR'], strawberry: ['草莓', 'STRAWBERRY'], 'black-grape': ['黑葡萄', 'BLACK GRAPE'] };
   const SEASON_PHOTO = {
     muscat: ['home-muscat-box', '單串禮盒裡的麝香葡萄'], apple: ['home-apple-tree', '樹上慢慢著色的蘋果'], pear: ['home-pear-hands', '剛採下、比手掌還大的梨', HAND_NOTE],
@@ -2528,7 +2528,7 @@ void main() {
       ['更深、更慢、更美', '全站照片套用同一套電影調色；畫面上多了一層暖色散景光點與「鏡頭前」掠過的模糊水果；滑鼠移動時各層依深度位移；水彩水果會輕輕呼吸。每一鏡的捲動放慢約 1.5 倍，鏡頭之間有只放一條細線的「呼吸頁」，畫面上的小字也減少了。'],
       ['鏡頭不再硬切', '封面俯降到目次、目次的照片放大成特集開場、特集滑動變焦進入「從採收到你家」、最後一張下沉時果園日誌升起、日誌失焦時送禮之書對焦。'],
       ['商品頁也是一部短片', '每種水果的商品頁：水彩從你點的地方飛進主視覺，接著環繞特寫、產地與包裝、風味、選購、保存與吃法、也看看。第一個畫面就有價格與「放入菜籃」，往下捲後底部會出現固定的購買列。'],
-      ['首頁改成一本會動的季刊', '輪盤下方改成《十月號》：封面、目次、特集「十月正好吃」、從採收到你家、果園日誌、送禮之書、安心宅配、封底，共八個鏡頭，每一鏡都有運鏡、前中後景深與特效（招牌是照片像水彩暈開的轉場）。輪盤在最後一種水果時再往下捲，選中的水果會飛進封面。'],
+      ['首頁改成一本會動的季刊', '輪盤下方改成《水果店》：封面、目次、特集「十月正好吃」、從採收到你家、果園日誌、送禮之書、安心宅配、封底，共八個鏡頭，每一鏡都有運鏡、前中後景深與特效（招牌是照片像水彩暈開的轉場）。輪盤在最後一種水果時再往下捲，選中的水果會飛進封面。'],
       ['全站動態', '平滑捲動、頁碼與閱讀進度線、膠片顆粒、游標「看看」、換頁時紙色帷幕由下往上擦過；其他頁的大標改成雜誌式（頁碼、英文小標、大號明朝體）。'],
       ['回到官網的設計', '全站改用已上線官網的設計語言：奶油紙色、橄欖墨色、1px 細線、水彩插畫與大量留白。規格整理在「<a href="#design-system">設計系統</a>」頁。'],
       ['首頁與官網一致', '首頁就是官網首頁（輪盤、菜籃、水果三欄），滾輪、手機上滑、左右滑、上下箭頭的切換方式都和官網相同；只是商品改成靜態資料。'],
@@ -2609,7 +2609,7 @@ void main() {
         ['鏡頭交接', 'S1→S2 俯降（封面上移、縮到 .96，目次帶 rotateX 8° 進來）；S2→S3 推近穿越（目次第一列的照片放大成特集開場照片）；S3→S4 滑動變焦（前景水果縮小、背景照片放大，60vh）；S4→S5 升鏡（最後一張下沉淡出、照片牆三個深度升起）；S5→S6 焦點轉移（照片牆模糊 8px 淡出、書由 8px 對焦）。', ''],
         ['商品頁', 'P0 水彩從點擊處飛到主視覺（FLIP）＋紙色帷幕；P1 單果環繞推近（固定 220vh）；P2 產地與包裝：滑動變焦＋橫移；P3 風味大數字與刻度尺；P4 選購（底線畫出、飛入菜籃）；P5 保存與吃法升鏡；P6 也看看水平帶（漂移、拖曳、慣性、焦點）。捲過主視覺後出現固定購買列。', '']
       ].map(([t, a, m]) => '<li><strong>' + t + '</strong><span>' + a + (m ? '<br><span style="color:var(--fm-muted)">' + m + '</span>' : '') + '</span></li>').join('') + '</ul></section>' +
-      '<section class="section" aria-labelledby="ds-home">' + secHead('ds-home', '首頁分鏡（十月號）', '第四版之一') + '<ul class="notes-list">' + [
+      '<section class="section" aria-labelledby="ds-home">' + secHead('ds-home', '首頁分鏡（水果店）', '第四版之一') + '<ul class="notes-list">' + [
         ['S1 封面', '運鏡：推軌＋焦點轉移。固定畫面 250vh；CSS 3D（perspective 1200px），world 層往鏡頭推 1100（手機 760）。', '景深：後景梨園照片 blur 14 → 0、scale 1.25 → 1、亮度 .85 → 1；中景直書刊頭往鏡頭 translateZ 0 → 400 後淡出；前景 7 顆水彩水果（手機 4 顆）依「與焦平面的距離」計算模糊 0–8px（手機 0–4px）。滑鼠移動時整組鏡頭 ±4° 手持晃動；輪盤交棒時選中的水果放大淡出、落到封面前景。'],
         ['S2 目次', '運鏡：靜止。左側直書「目次」、右側頁碼列；1px 線依序由左往右畫出。', '游標移到列上時，代表照片跟著游標浮出（280px、lerp .1、反向旋轉 ±6°），文字右移 12px；點擊用平滑捲動到該區。'],
         ['S3 特集', '運鏡：橫移。垂直捲動驅動水平軌道（放在固定、溢出隱藏的容器裡）。每種當季水果一個跨頁，中間插入引言頁。', '外框大編號 0.6 倍速、照片框內反向位移、水彩 1.35 倍速＋2px 模糊；捲動速度造成照片 skewX（最多 ±3°）。寬度 900 以下改直向，三層視差保留。'],
