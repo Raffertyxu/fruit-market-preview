@@ -533,7 +533,8 @@
     const [w, h] = PH[stem] || [4, 3], webpOnly = /^(p|ai)-/.test(stem), pos = AI_POS[stem];
     const inner = '<picture>' + (o.tall ? '<source media="(max-width:767px) and (orientation:portrait)" type="image/webp" srcset="img/' + o.tall + '.webp">' : '') +
       (webpOnly ? '' : '<source type="image/webp" srcset="img/' + stem + '.webp">') + '<img src="img/' + stem + (webpOnly ? '.webp' : '.jpg') + '" alt="' + esc(alt) + '" width="' + w + '" height="' + h + '"' + (pos ? ' style="object-position:' + pos + '"' : '') + (o.eager ? ' fetchpriority="high"' : ' loading="lazy"') + ' decoding="async"></picture>';
-    return o.grade === false ? inner : '<span class="grade' + (o.noKb ? ' no-kb' : '') + '">' + inner + '</span>';
+    // v7: .gk carries the picture and the grade's light leak / vignette, and takes the Ken Burns push as one cached layer
+    return o.grade === false ? inner : '<span class="grade' + (o.noKb ? ' no-kb' : '') + '"><span class="gk">' + inner + '</span></span>';
   }
   const blurArt = slug => 'img/art/blur/' + slug + '.webp';
   const fore = (slug, extra = '') => ART.has(slug) ? '<img class="fx-fore" src="' + blurArt(slug) + '" alt="" aria-hidden="true" draggable="false" decoding="async"' + extra + '>' : '';
@@ -612,7 +613,7 @@
     '<div class="s2-side" data-depth=".3"><span class="mg-kicker">CONTENTS · ' + ISSUE.no + ' · ' + ISSUE.en + '</span><h2 class="s2-title v" id="s2-title">目次</h2>' +
     '<p class="s2-note"><b>編輯手記</b>' + MONTH_ZH[MONTH - 1] + '月，梨正甜，蘋果在枝頭慢慢轉紅。這一期，我們從果園一路走到你家門口。<small>文案示意</small></p></div>' +
     '<ol class="s2-list">' + TOC.map(([id, no, t, en, img], i) => '<li><button type="button" class="s2-row" data-goto="' + id + '" data-peek="' + img + '" id="toc-' + id + '"><span class="s2-no">' + no + '</span><span class="s2-name">' + t + '</span><span class="s2-en">' + en + '</span><span class="s2-arr" aria-hidden="true">↘</span>' +
-      (i ? '' : '<span class="s2-thumb" aria-hidden="true"><span class="grade no-kb"><img src="img/' + img + '.webp" alt="" loading="lazy" decoding="async"></span></span>') + '</button></li>').join('') + '</ol></div>' +
+      (i ? '' : '<span class="s2-thumb" aria-hidden="true"><span class="grade no-kb"><span class="gk"><img src="img/' + img + '.webp" alt="" loading="lazy" decoding="async"></span></span></span>') + '</button></li>').join('') + '</ol></div>' +
     artImg('orange', 'mg-art s2-art', ' data-depth=".9" data-breathe') + fore('apple') +
     '<div class="s2-peek" aria-hidden="true">' + TOC.map(t => '<img src="img/' + t[4] + '.webp" alt="" loading="lazy" decoding="async" data-peek="' + t[4] + '">').join('') + '</div></section>';
 
@@ -764,8 +765,11 @@
   // Driven by gsap.ticker when GSAP is present, else by a single requestAnimationFrame chain.
   const Loops = (() => {
     const fns = new Map();
-    let raf = 0, onTicker = false;
-    const run = () => { const t = performance.now(); for (const fn of fns.values()) fn(t); };
+    let raf = 0, onTicker = false, fy = null;
+    // v7: the page's scroll offset is read once per frame and shared (every window.scrollY read that follows style writes
+    // forces a style recalc / layout; three loops used to read it after other loops had written). Lenis hands over
+    // the offset it has just scrolled to.
+    const run = () => { const t = performance.now(); fy = null; for (const fn of fns.values()) fn(t); };
     const frame = () => { raf = 0; if (!fns.size) return; run(); raf = requestAnimationFrame(frame); };
     function start() {
       if (!fns.size) return;
@@ -783,9 +787,14 @@
       has: key => fns.has(key),
       count: () => fns.size,
       keys: () => [...fns.keys()],
-      driven: () => (onTicker ? 1 : 0) + (raf ? 1 : 0)
+      driven: () => (onTicker ? 1 : 0) + (raf ? 1 : 0),
+      y: () => (fy === null ? (fy = window.scrollY) : fy),
+      setY: v => { fy = v; }
     };
   })();
+  // v7: viewport size for the per-frame loops, refreshed on resize (registered before every other resize listener)
+  const VP = { w: innerWidth, h: innerHeight };
+  addEventListener('resize', () => { VP.w = innerWidth; VP.h = innerHeight; });
 
   // =====================================================================
   // Air — v5 site-wide depth layer, all in ONE loop ('air'):
@@ -815,7 +824,7 @@
       .55: 'radial-gradient(closest-side,#fff0d81c 0%,#ffe6c42a 78%,#ffe6c430 90%,#ffe6c400 100%)',
       .25: 'radial-gradient(closest-side,#fff4e0b8 0%,#ffe8c44d 50%,#ffe8c400 100%)'
     };
-    let bo = [], items = [], vis = new Set(), io = null, kio = null, on = false, built = -1;
+    let bo = [], items = [], vis = new Set(), io = null, kio = null, dio = null, on = false, built = -1;
     const m = { x: 0, y: 0, tx: 0, ty: 0 };
     const onPM = e => { if (e.pointerType && e.pointerType !== 'mouse') return; m.tx = e.clientX / innerWidth * 2 - 1; m.ty = e.clientY / innerHeight * 2 - 1; };
     function makeBokeh() {
@@ -829,7 +838,7 @@
     function frame(t) {
       if (fineMQ.matches) { m.x += (m.tx - m.x) * .08; m.y += (m.ty - m.y) * .08; }
       else { m.x = Math.sin(t / 3100) * .35; m.y = Math.cos(t / 3900) * .3; }
-      const W = innerWidth, Hh = innerHeight, sy = window.scrollY;
+      const W = VP.w, Hh = VP.h, sy = Loops.y();
       for (const b of bo) {
         const k = b.d >= 1 ? .34 : b.d > .5 ? .16 : .05, span = Hh + b.s * 2;
         const x = b.x * W + Math.sin(t / b.sp + b.ph) * 46 * b.d - m.x * (6 + 12 * b.d) * 2.2 - b.s / 2;
@@ -846,6 +855,7 @@
     function clear() {
       if (io) { io.disconnect(); io = null; }
       if (kio) { kio.disconnect(); kio = null; }
+      if (dio) { dio.disconnect(); dio = null; }
       items.forEach(it => { it.el.style.translate = ''; it.el.style.rotate = ''; });
       items = []; vis.clear();
     }
@@ -864,6 +874,9 @@
       items.forEach(it => io.observe(it.el));
       kio = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('kb-on', e.isIntersecting)), { rootMargin: '5% 0px' });
       scopes.filter(Boolean).forEach(sc => $$('.grade:not(.no-kb)', sc).forEach(g => kio.observe(g)));
+      // v7: photos are decoded about a screen before they arrive, so the first frame that shows one does not wait on it
+      dio = new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) return; dio.unobserve(e.target); const im = e.target.querySelector('img'); if (im && im.decode) im.decode().catch(() => {}); }), { rootMargin: '120% 0px' });
+      scopes.filter(Boolean).forEach(sc => $$('.grade', sc).forEach(g => dio.observe(g)));
     }
     function start() {
       if (on) return;
@@ -952,9 +965,12 @@
 
     // ----- progress line (cached max scroll; no layout reads per frame) -----
     const measure = () => { maxScroll = Math.max(1, document.documentElement.scrollHeight - innerHeight); maxAt = performance.now(); };
+    // v7: read the offset first, then write (the next scroll listener reuses it instead of forcing a style recalc)
+    let lastY = 0;
     const onScroll = () => {
+      const y = lastY = window.scrollY;
       if (performance.now() - maxAt > 1500) measure();
-      bar.style.transform = 'scaleX(' + clamp(window.scrollY / maxScroll, 0, 1).toFixed(4) + ')';
+      bar.style.transform = 'scaleX(' + clamp(y / maxScroll, 0, 1).toFixed(4) + ')';
     };
     addEventListener('scroll', onScroll, { passive: true });
     addEventListener('resize', measure);
@@ -980,6 +996,7 @@
     function lenisOn() {
       if (lenis || !window.Lenis || !fullMotion()) return;
       try { lenis = new Lenis({ lerp: .08, smoothWheel: true, syncTouch: false, prevent: n => n.nodeName === 'DIALOG' }); } catch { lenis = null; return; }
+      lenis.on('scroll', () => Loops.setY(window.scrollY));
       if (libs()) lenis.on('scroll', ScrollTrigger.update);
       Loops.add('lenis', t => { if (lenis) lenis.raf(t); });
     }
@@ -994,7 +1011,7 @@
     const release = () => { if (lenis && lenis.isStopped) lenis.start(); };
     // Touch and scrollbar drags must never meet a stopped Lenis (it cancels touchmove).
     addEventListener('touchstart', () => { if (!handing) release(); }, { passive: true, capture: true });
-    addEventListener('scroll', () => { if (window.scrollY > 4 && !handing) release(); }, { passive: true });
+    addEventListener('scroll', () => { if (lastY > 4 && !handing) release(); }, { passive: true });
 
     // ----- cursor (fine pointers only): dot, "看看" disc over photos, shrinks on links -----
     const cur = { x: -200, y: -200, tx: -200, ty: -200, on: false, state: '' };
@@ -1121,6 +1138,264 @@
   })();
 
   // =====================================================================
+  // v7: the S4 watercolour bleed on the GPU. The bleed was an SVG <mask> whose content ran two SVG filter chains on
+  // every scroll frame (feTurbulence -> feDisplacementMap -> feGaussianBlur -> feTurbulence + feComposite +
+  // feComponentTransfer for the mask, turbulence -> displacement -> blur for the rim): about 30 ms of GPU time per
+  // frame on an integrated GPU. This is the same chain, primitive by primitive, in a handful of WebGL2 passes:
+  //  · feTurbulence: the spec's reference Perlin noise with the same seeds (the lattice is built from the seed exactly
+  //    like the spec and Skia), sampled where Chrome samples it (device pixel x + 1, y + 1);
+  //  · feDisplacementMap: the 8-bit premultiplied noise is un-premultiplied (R -> x, B -> y) and the circles / ring
+  //    strokes are evaluated at the displaced point;
+  //  · feGaussianBlur: like Skia's GPU blur - a sigma above 4 is blurred at 4/sigma of the size (repeated bilinear
+  //    halvings), keeping one texel of spread, then re-expanded bilinearly;
+  //  · feComposite arithmetic (premultiplied, clamped), feFuncA slope / intercept, the mask's luminance (Rec.709);
+  // every intermediate is rounded to 8 bits like the browser's own render targets. Checked against Chrome's own SVG
+  // output (reference/visual-parity.md): mean error 0.1-0.4 of 255, at most a few levels along the bleed's edge.
+  // The canvas draws the OUTGOING frame with alpha (1 - mask) and the rim on top of it, over the incoming frame (an
+  // ordinary layer) - the same picture as "incoming frame masked over the outgoing one".
+  // =====================================================================
+  function S4BleedGL(canvas, cw, ch, dpr) {
+    const gl = window.WebGL2RenderingContext && canvas.getContext('webgl2', { premultipliedAlpha: true, alpha: true, antialias: false, depth: false, stencil: false, powerPreference: 'high-performance' });
+    if (!gl) return null;
+    const W = Math.max(1, Math.round(cw * dpr)), H = Math.max(1, Math.round(ch * dpr)), BS = 256;
+    canvas.width = W; canvas.height = H;
+    // the feTurbulence lattice for a seed (SVG spec reference code: Park-Miller generator, gradients, selector shuffle)
+    const lattice = seed => {
+      const M = 2147483647, A = 16807, Q = 127773, R = 2836;
+      let s = Math.trunc(seed);
+      if (s <= 0) s = -(s % (M - 1)) + 1;
+      if (s > M - 1) s = M - 1;
+      const rnd = () => { s = A * (s % Q) - R * Math.trunc(s / Q); if (s <= 0) s += M; return s; };
+      const grad = [0, 1, 2, 3].map(() => new Float64Array(BS * 2)), sel = [];
+      for (let k = 0; k < 4; k++) for (let i = 0; i < BS; i++) {
+        for (let j = 0; j < 2; j++) grad[k][i * 2 + j] = ((rnd() % (BS + BS)) - BS) / BS;
+        const n = Math.hypot(grad[k][i * 2], grad[k][i * 2 + 1]);
+        grad[k][i * 2] /= n; grad[k][i * 2 + 1] /= n;
+      }
+      for (let i = 0; i < BS; i++) sel[i] = i;
+      for (let i = BS - 1; i > 0; i--) { const k = sel[i], j = rnd() % BS; sel[i] = sel[j]; sel[j] = k; }
+      return { sel, grad };
+    };
+    const VS = '#version 300 es\nin vec2 aP; void main(){ gl_Position = vec4(aP, 0.0, 1.0); }';
+    const HEAD = `#version 300 es
+precision highp float; precision highp int; precision highp sampler2D;
+uniform sampler2D uGA, uGB; out vec4 o;
+// fractalNoise, one octave, all four channels; uGA / uGB hold the gradient of lattice corner (bx, by) for channels 0-1 / 2-3
+vec4 noise4(vec2 v) {
+  vec2 t = v + 4096.0; vec2 ft = floor(t); ivec2 it = ivec2(ft); vec2 r0 = t - ft, r1 = r0 - 1.0;
+  int bx0 = it.x & 255, bx1 = (bx0 + 1) & 255, by0 = it.y & 255, by1 = (by0 + 1) & 255;
+  vec2 s = r0 * r0 * (3.0 - 2.0 * r0);
+  vec4 a0 = texelFetch(uGA, ivec2(bx0, by0), 0), a1 = texelFetch(uGB, ivec2(bx0, by0), 0);
+  vec4 u00 = vec4(dot(r0, a0.xy), dot(r0, a0.zw), dot(r0, a1.xy), dot(r0, a1.zw));
+  vec2 q = vec2(r1.x, r0.y); a0 = texelFetch(uGA, ivec2(bx1, by0), 0); a1 = texelFetch(uGB, ivec2(bx1, by0), 0);
+  vec4 u10 = vec4(dot(q, a0.xy), dot(q, a0.zw), dot(q, a1.xy), dot(q, a1.zw));
+  q = vec2(r0.x, r1.y); a0 = texelFetch(uGA, ivec2(bx0, by1), 0); a1 = texelFetch(uGB, ivec2(bx0, by1), 0);
+  vec4 u01 = vec4(dot(q, a0.xy), dot(q, a0.zw), dot(q, a1.xy), dot(q, a1.zw));
+  a0 = texelFetch(uGA, ivec2(bx1, by1), 0); a1 = texelFetch(uGB, ivec2(bx1, by1), 0);
+  vec4 u11 = vec4(dot(r1, a0.xy), dot(r1, a0.zw), dot(r1, a1.xy), dot(r1, a1.zw));
+  vec4 a = u00 + s.x * (u10 - u00), b = u01 + s.x * (u11 - u01);
+  return a + s.y * (b - a);
+}
+vec4 q8(vec4 v) { return floor(clamp(v, 0.0, 1.0) * 255.0 + 0.5) / 255.0; }
+float q8(float v) { return floor(clamp(v, 0.0, 1.0) * 255.0 + 0.5) / 255.0; }
+`;
+    // displaced sources (device px, rows top-down): R = the mask's white circles, G = the rim's ring strokes (alpha)
+    const FS_D = HEAD + `
+uniform vec4 uC[5]; uniform float uBf, uSc, uSw; uniform vec4 uReg;
+float disc(vec2 p, vec4 c) { return clamp(c.z - length(p - c.xy) + 0.5, 0.0, 1.0); }
+float ring(vec2 p, vec4 c) { return clamp(uSw * 0.5 - abs(length(p - c.xy) - c.z) + 0.5, 0.0, 1.0); }
+void main() {
+  vec2 p = floor(gl_FragCoord.xy) - 12.0;
+  if (p.x < uReg.x || p.y < uReg.y || p.x >= uReg.z || p.y >= uReg.w) { o = vec4(0.0); return; }
+  vec4 lo = clamp((noise4((p + 1.0) * uBf) + 1.0) * 0.5, 0.0, 1.0);
+  vec4 pm = q8(vec4(lo.rgb * lo.a, lo.a));
+  vec3 un = pm.a > 0.0 ? pm.rgb / pm.a : vec3(0.0);
+  vec2 sp = p + 0.5 + uSc * (vec2(un.r, un.b) - 0.5);
+  float m = 1.0, r = 1.0;
+  for (int k = 0; k < 5; k++) { m *= 1.0 - disc(sp, uC[k]); r *= 1.0 - 0.38 * ring(sp, uC[k]); }
+  o = q8(vec4(1.0 - m, 1.0 - r, 0.0, 0.0));
+}`;
+    // bilinear rescale (clamp) of a source rectangle: target texel centre (i + .5) <- source (i + .5) * uScale
+    const FS_RS = HEAD + `
+uniform sampler2D uSrc; uniform vec2 uOrg, uSrcSize, uScale;
+vec4 at(ivec2 Q) { Q = clamp(Q, ivec2(0), ivec2(uSrcSize) - 1); return texelFetch(uSrc, ivec2(uOrg) + Q, 0); }
+void main() {
+  vec2 t = gl_FragCoord.xy * uScale - 0.5; vec2 f0 = floor(t), fr = t - f0; ivec2 i0 = ivec2(f0);
+  o = q8(mix(mix(at(i0), at(i0 + ivec2(1, 0)), fr.x), mix(at(i0 + ivec2(0, 1)), at(i0 + ivec2(1, 1)), fr.x), fr.y));
+}`;
+    // separable Gaussian (radius <= 12: sigma <= 4 by construction), transparent outside; the output may be uPad
+    // texels larger on each side (the spread Skia keeps for the re-expansion)
+    const FS_BLUR = HEAD + `
+uniform sampler2D uSrc; uniform vec2 uDir, uLim; uniform float uK, uNorm, uR; uniform ivec2 uPad;
+void main() {
+  ivec2 P = ivec2(gl_FragCoord.xy) - uPad, L = ivec2(uLim) - 1, D = ivec2(uDir); vec4 s = vec4(0.0);
+  for (int i = -12; i <= 12; i++) {
+    float fi = float(i);
+    ivec2 Q = P + D * i;
+    float w = abs(fi) <= uR && Q.x >= 0 && Q.y >= 0 && Q.x <= L.x && Q.y <= L.y ? exp(-fi * fi * uK) * uNorm : 0.0;
+    s += texelFetch(uSrc, clamp(Q, ivec2(0), L), 0) * w;
+  }
+  o = q8(s);
+}`;
+    // full-resolution Gaussian (sigma <= 4) over the 12-px zero-padded textures: the centre tap plus six bilinear
+    // pairs per side (the same linear-sampling shortcut Skia's GPU blur uses)
+    const FS_BLURL = HEAD + `
+uniform sampler2D uSrc; uniform vec2 uDir, uTex; uniform vec2 uOff[6]; uniform float uWc, uWp[6];
+void main() {
+  vec2 c = gl_FragCoord.xy; vec4 s = texture(uSrc, c / uTex) * uWc;
+  for (int i = 0; i < 6; i++) { vec2 d = uDir * uOff[i].x; s += (texture(uSrc, (c + d) / uTex) + texture(uSrc, (c - d) / uTex)) * uWp[i]; }
+  o = q8(s);
+}`;
+    // final: mask -> outgoing frame with alpha (1 - mask), rim on top (premultiplied, into the canvas: row 0 = bottom)
+    const FS_F = HEAD + `
+uniform sampler2D uM, uRm, uPhoto; uniform vec2 uMSize, uMUp, uRSize, uRUp, uPhotoSize; uniform int uMLow, uRLow;
+uniform vec4 uReg; uniform float uHf, uDpr, uH; uniform vec3 uRimC, uMat;
+float tap(sampler2D t, vec2 sz, ivec2 Q, int c) { Q = clamp(Q, ivec2(0), ivec2(sz) - 1); vec4 v = texelFetch(t, Q, 0); return c == 0 ? v.r : v.g; }
+float field(sampler2D t, vec2 sz, vec2 up, int low, ivec2 P, int c) {
+  if (low == 0) return tap(t, sz, P + 12, c);
+  vec2 q = (vec2(P) + 0.5 - uReg.xy) / up + 0.5; vec2 f0 = floor(q), fr = q - f0; ivec2 i0 = ivec2(f0);
+  return q8(mix(mix(tap(t, sz, i0, c), tap(t, sz, i0 + ivec2(1, 0), c), fr.x), mix(tap(t, sz, i0 + ivec2(0, 1), c), tap(t, sz, i0 + ivec2(1, 1), c), fr.x), fr.y));
+}
+void main() {
+  ivec2 P = ivec2(int(gl_FragCoord.x), int(uH) - 1 - int(gl_FragCoord.y)); vec2 p = vec2(P);
+  float m = 0.0, ra = 0.0;
+  if (!(p.x < uReg.x || p.y < uReg.y || p.x >= uReg.z || p.y >= uReg.w)) {
+    float soft = field(uM, uMSize, uMUp, uMLow, P, 0);
+    vec4 hi = clamp((noise4((p + 1.0) * uHf) + 1.0) * 0.5, 0.0, 1.0);
+    hi = q8(vec4(hi.rgb * hi.a, hi.a));
+    vec4 g = clamp(vec4(soft) + 0.6 * hi - 0.3, 0.0, 1.0); g.rgb = min(g.rgb, g.a); g = q8(g);
+    float a2 = clamp(3.2 * g.a - 1.1, 0.0, 1.0);
+    vec4 res = q8(vec4((g.a > 0.0 ? g.rgb / g.a : vec3(0.0)) * a2, a2));
+    m = q8(dot(res.rgb, vec3(0.2126, 0.7152, 0.0722)));
+    ra = field(uRm, uRSize, uRUp, uRLow, P, 1);
+  }
+  vec2 u = ((p + 0.5) / uDpr - uMat.yz) / uMat.x;
+  vec3 ph = texture(uPhoto, u / uPhotoSize).rgb;
+  float a = 1.0 - m;
+  o = vec4(uRimC * ra + (1.0 - ra) * ph * a, ra + (1.0 - ra) * a);
+}`;
+    const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s) || 'shader'); return s; };
+    const prog = fs => {
+      const p = gl.createProgram(); gl.attachShader(p, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(p, sh(gl.FRAGMENT_SHADER, fs)); gl.bindAttribLocation(p, 0, 'aP'); gl.linkProgram(p);
+      if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p) || 'link');
+      const u = {}, n = gl.getProgramParameter(p, gl.ACTIVE_UNIFORMS);
+      for (let i = 0; i < n; i++) { const a = gl.getActiveUniform(p, i); u[a.name.replace(/\[0\]$/, '')] = gl.getUniformLocation(p, a.name); }
+      return { p, u };
+    };
+    const P = { D: prog(FS_D), RS: prog(FS_RS), BLUR: prog(FS_BLUR), BLURL: prog(FS_BLURL), F: prog(FS_F) };
+    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer()); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+    gl.disable(gl.BLEND);
+    // gradient of every lattice corner (bx, by) = gradient[sel[sel[bx] + by]] (the spec's b00 lookup), per seed:
+    // GA = channels 0-1, GB = channels 2-3
+    const corners = L => {
+      const ga = new Float32Array(BS * BS * 4), gb = new Float32Array(BS * BS * 4), sel = i => L.sel[i % BS];
+      for (let by = 0; by < BS; by++) for (let bx = 0; bx < BS; bx++) {
+        const g = sel(sel(bx) + by), o = (by * BS + bx) * 4;
+        ga[o] = L.grad[0][g * 2]; ga[o + 1] = L.grad[0][g * 2 + 1]; ga[o + 2] = L.grad[1][g * 2]; ga[o + 3] = L.grad[1][g * 2 + 1];
+        gb[o] = L.grad[2][g * 2]; gb[o + 1] = L.grad[2][g * 2 + 1]; gb[o + 2] = L.grad[3][g * 2]; gb[o + 3] = L.grad[3][g * 2 + 1];
+      }
+      return [ga, gb];
+    };
+    const tex = (w, h, filter, fmt, data) => {
+      const t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, filter); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, filter);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      if (fmt === 'f') gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, w, h, 0, gl.RGBA, gl.FLOAT, data);
+      else if (w) gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+      return t;
+    };
+    const [loA, loB] = corners(lattice(11)).map(d => tex(BS, BS, gl.NEAREST, 'f', d)), [hiA, hiB] = corners(lattice(3)).map(d => tex(BS, BS, gl.NEAREST, 'f', d));
+    const fbo = (w, h, filter) => { const t = tex(w, h, filter || gl.NEAREST); const f = gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER, f); gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, t, 0); return { t, f, w, h }; };
+    // low-res buffers: the first halving step or the final 4/sigma size, whichever is larger, plus the kept spread
+    const lowDims = sigma => [Math.max(Math.ceil(W / 2), Math.floor(W * 4 / sigma)) + 2, Math.max(Math.ceil(H / 2), Math.floor(H * 4 / sigma)) + 2];
+    const [MW, MH] = lowDims(9 * dpr), [RW, RH] = lowDims(Math.max(4.01, 4 * dpr));
+    const PD = 12, DW = W + 2 * PD, DH = H + 2 * PD;
+    const T = { D: fbo(DW, DH, gl.LINEAR), a: fbo(MW, MH), b: fbo(MW, MH), c: 4 * dpr > 4 ? fbo(RW, RH) : null, d: 4 * dpr > 4 ? fbo(RW, RH) : null, fx: null, fy: null };
+    const photos = [];
+    // Gaussian taps exp(-i^2 / 2 sigma^2) over [-r, r], r = ceil(3 sigma) (<= 12 here), normalised to 1
+    const kernel = sigma => { const r = Math.min(12, Math.ceil(sigma * 3)); let s = 0; for (let i = -r; i <= r; i++) s += Math.exp(-i * i / (2 * sigma * sigma)); return { r, k: 1 / (2 * sigma * sigma), norm: 1 / s }; };
+    const use = (pr, t) => { gl.useProgram(pr.p); gl.bindFramebuffer(gl.FRAMEBUFFER, t ? t.f : null); gl.viewport(0, 0, t ? t.w : W, t ? t.h : H); };
+    const noiseTex = (pr, a, b) => { bind(pr, 'uGA', 4, a); bind(pr, 'uGB', 5, b); };
+    const bind = (pr, name, unit, t) => { gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, t); gl.uniform1i(pr.u[name], unit); };
+    const draw = () => gl.drawArrays(gl.TRIANGLES, 0, 3);
+    // separable blur of src (w x h) into b through a; pad > 0 keeps pad texels of spread on each side
+    const blur = (src, w, h, sx, sy, a, b, pad) => {
+      [[src, a, [1, 0], sx, [pad, 0], [w + 2 * pad, h], [w, h]], [a.t, b, [0, 1], sy, [0, pad], [w + 2 * pad, h + 2 * pad], [w + 2 * pad, h]]].forEach(([s, dst, dir, sg, pd, size, lim]) => {
+        const k = kernel(sg);
+        use(P.BLUR, { f: dst.f, w: size[0], h: size[1] }); bind(P.BLUR, 'uSrc', 1, s);
+        gl.uniform2f(P.BLUR.u.uDir, dir[0], dir[1]); gl.uniform1f(P.BLUR.u.uR, k.r); gl.uniform1f(P.BLUR.u.uK, k.k); gl.uniform1f(P.BLUR.u.uNorm, k.norm); gl.uniform2f(P.BLUR.u.uLim, lim[0], lim[1]); gl.uniform2i(P.BLUR.u.uPad, pd[0], pd[1]);
+        draw();
+      });
+    };
+    // one channel of D blurred with sigma (device px) inside the region -> { t, size, up, low }
+    const blurred = (sigma, reg, bufs) => {
+      const rw = reg[2] - reg[0], rh = reg[3] - reg[1];
+      if (sigma <= 4) {
+        if (!T.fx) { T.fx = fbo(DW, DH, gl.LINEAR); T.fy = fbo(DW, DH, gl.LINEAR); }
+        const r = Math.min(12, Math.ceil(sigma * 3)), w = []; let sum = 0;
+        for (let i = 0; i <= 12; i++) { w[i] = i <= r ? Math.exp(-i * i / (2 * sigma * sigma)) : 0; sum += i ? 2 * w[i] : w[i]; }
+        const off = new Float32Array(12), wp = new Float32Array(6);
+        for (let k = 0; k < 6; k++) { const a = w[2 * k + 1] / sum, b = w[2 * k + 2] / sum; wp[k] = a + b; off[k * 2] = a + b > 0 ? (2 * k + 1) + b / (a + b) : 1; }
+        [[T.D.t, T.fx, [1, 0]], [T.fx.t, T.fy, [0, 1]]].forEach(([src, dst, dir]) => {
+          use(P.BLURL, dst); bind(P.BLURL, 'uSrc', 1, src);
+          gl.uniform2f(P.BLURL.u.uDir, dir[0], dir[1]); gl.uniform2f(P.BLURL.u.uTex, DW, DH); gl.uniform2fv(P.BLURL.u.uOff, off); gl.uniform1f(P.BLURL.u.uWc, w[0] / sum); gl.uniform1fv(P.BLURL.u.uWp, wp);
+          draw();
+        });
+        return { t: T.fy.t, size: [DW, DH], up: [1, 1], low: 0 };
+      }
+      const fw = Math.max(1, Math.floor(rw * 4 / sigma)), fh = Math.max(1, Math.floor(rh * 4 / sigma));
+      let src = T.D.t, org = [reg[0] + PD, reg[1] + PD], sw = rw, shh = rh, k = 0;
+      while (sw !== fw || shh !== fh) {
+        const nw = sw > fw * 2 ? Math.max(Math.ceil(sw / 2), fw) : fw, nh = shh > fh * 2 ? Math.max(Math.ceil(shh / 2), fh) : fh, dst = bufs[k++ % 2];
+        use(P.RS, { f: dst.f, w: nw, h: nh }); bind(P.RS, 'uSrc', 1, src);
+        gl.uniform2f(P.RS.u.uOrg, org[0], org[1]); gl.uniform2f(P.RS.u.uSrcSize, sw, shh); gl.uniform2f(P.RS.u.uScale, sw / nw, shh / nh);
+        draw(); src = dst.t; org = [0, 0]; sw = nw; shh = nh;
+        if (k > 12) break;
+      }
+      const into = k % 2 ? [bufs[1], bufs[0]] : [bufs[0], bufs[1]]; // never blur in place
+      blur(src, fw, fh, sigma * fw / rw, sigma * fh / rh, into[0], into[1], 1);
+      return { t: into[1].t, size: [fw + 2, fh + 2], up: [rw / fw, rh / fh], low: 1 };
+    };
+    let lost = false;
+    canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); lost = true; });
+    return {
+      ok: () => !lost,
+      has: i => !!photos[i],
+      // upload frame i's bitmap once (decoded <img>); linear filtering like the compositor's own layer
+      setPhoto(i, img) {
+        if (lost || !img || !img.naturalWidth) return;
+        const t = photos[i] ? photos[i].t : tex(0, 0, gl.LINEAR);
+        gl.bindTexture(gl.TEXTURE_2D, t);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, gl.RGBA, gl.UNSIGNED_BYTE, img);
+        photos[i] = { t, size: [img.naturalWidth, img.naturalHeight] };
+      },
+      // st: circles [[cx, cy, r] x5], sc, bf, reg [x0, y0, x1, y1] (user px, rounded like the SVG attributes),
+      // photo index + its matrix [k, tx, ty] (user px)
+      draw(st) {
+        if (lost) return false;
+        const ph = photos[st.photo]; if (!ph) return false;
+        const reg = st.reg.map(v => Math.round(v * dpr)), c = new Float32Array(20);
+        st.circles.forEach((q, i) => { c[i * 4] = q[0] * dpr; c[i * 4 + 1] = q[1] * dpr; c[i * 4 + 2] = q[2] * dpr; });
+        use(P.D, T.D); noiseTex(P.D, loA, loB);
+        gl.uniform4fv(P.D.u.uC, c); gl.uniform1f(P.D.u.uBf, st.bf / dpr); gl.uniform1f(P.D.u.uSc, st.sc * dpr); gl.uniform1f(P.D.u.uSw, 7 * dpr);
+        gl.uniform4f(P.D.u.uReg, reg[0], reg[1], reg[2], reg[3]);
+        draw();
+        const M = blurred(9 * dpr, reg, [T.a, T.b]), RM = blurred(4 * dpr, reg, [T.c, T.d]);
+        use(P.F, null); noiseTex(P.F, hiA, hiB);
+        bind(P.F, 'uM', 1, M.t); bind(P.F, 'uRm', 2, RM.t); bind(P.F, 'uPhoto', 3, ph.t);
+        gl.uniform2f(P.F.u.uMSize, M.size[0], M.size[1]); gl.uniform2f(P.F.u.uMUp, M.up[0], M.up[1]); gl.uniform1i(P.F.u.uMLow, M.low);
+        gl.uniform2f(P.F.u.uRSize, RM.size[0], RM.size[1]); gl.uniform2f(P.F.u.uRUp, RM.up[0], RM.up[1]); gl.uniform1i(P.F.u.uRLow, RM.low);
+        gl.uniform4f(P.F.u.uReg, reg[0], reg[1], reg[2], reg[3]); gl.uniform1f(P.F.u.uHf, .09 / dpr); gl.uniform1f(P.F.u.uDpr, dpr); gl.uniform1f(P.F.u.uH, H);
+        gl.uniform3f(P.F.u.uRimC, 122 / 255, 90 / 255, 54 / 255); gl.uniform3f(P.F.u.uMat, st.mat[0], st.mat[1], st.mat[2]); gl.uniform2f(P.F.u.uPhotoSize, ph.size[0], ph.size[1]);
+        draw();
+        return true;
+      },
+      destroy() { const x = gl.getExtension('WEBGL_lose_context'); if (x) x.loseContext(); }
+    };
+  }
+
+  // =====================================================================
   // HomeMotion — the eight shots. Built inside gsap.context(); kill() reverts everything
   // (ScrollTriggers, pins, splits, inline styles, loops, listeners).
   // =====================================================================
@@ -1131,7 +1406,7 @@
     let vio = null;
     const visible = el => isVisible.get(el) === true;
     const onCleanup = fn => cleanups.push(fn);
-    const W = () => innerWidth, Hh = () => innerHeight;
+    const W = () => VP.w, Hh = () => VP.h; // v7: cached viewport (no layout read per frame)
 
     // ---------- S0 -> S1: the picked watercolour grows, goes soft mid-flight and lands on the S1 hero ----------
     // (v6: the stage's own copy is hidden for the flight, so the fruit is never on screen twice; the rest of
@@ -1272,9 +1547,10 @@
       gsap.fromTo(lis, { '--line': 0 }, { '--line': 1, duration: 1.6, ease: EASE, stagger: .16, scrollTrigger: { trigger: list, start: 'top 80%', once: true } });
       gsap.fromTo($$('.s2-row>*:not(.s2-thumb)', list), { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 1.1, ease: EASE, stagger: .04, clearProps: 'transform,opacity', scrollTrigger: { trigger: list, start: 'top 80%', once: true } });
       gsap.fromTo($('.s2-thumb', list), { opacity: 0, scale: .9 }, { opacity: 1, scale: 1, duration: 1.2, ease: EASE, delay: .3, clearProps: 'transform', scrollTrigger: { trigger: list, start: 'top 80%', once: true } });
-      gsap.fromTo($('.s2-num', sec), { yPercent: -12 }, { yPercent: 22, ease: 'none', scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: .6 } });
-      const art = $('.s2-art', sec);
-      if (art) gsap.fromTo(art, { y: 160, rotation: -10 }, { y: -180, rotation: 12, ease: 'none', scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: .6 } });
+      // v7: layers that share one scroll range share one ScrollTrigger (same scrub, same progress for each tween)
+      const art = $('.s2-art', sec), par = gsap.timeline({ scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: .6 } });
+      par.fromTo($('.s2-num', sec), { yPercent: -12 }, { yPercent: 22, ease: 'none', duration: 1 }, 0);
+      if (art) par.fromTo(art, { y: 160, rotation: -10 }, { y: -180, rotation: 12, ease: 'none', duration: 1 }, 0);
       forePass($(':scope > .fx-fore', sec), sec, { start: 'top 20%', x0: .04, x1: -.1, r0: -10, r1: 16 });
       if (!fineMQ.matches) return;
       const peek = $('.s2-peek', sec), imgs = $$('img', peek);
@@ -1316,15 +1592,19 @@
         layer($('.grade', open), { xPercent: 0 }, { xPercent: 24 }, intro, [() => 'left ' + (-HOLD * 100) + '%', 'right left']);
         panels.forEach(panel => {
           const D = () => W() + panel.offsetWidth;
-          layer($('.s3-wash', panel), { x: () => -.3 * D() }, { x: () => .3 * D() }, panel);                                   // colour wash: 0.4x
+          // v7: every layer that runs over the panel's whole pass ('left right' -> 'right left', scrub true) sits in one
+          // timeline with one ScrollTrigger (it was one ScrollTrigger per layer)
+          const pass = gsap.timeline({ scrollTrigger: { trigger: panel, containerAnimation: hTween, start: 'left right', end: 'right left', scrub: true, invalidateOnRefresh: true } });
+          const lay = (el, from, to) => el && pass.fromTo(el, from, { ...to, ease: 'none', duration: 1 }, 0);
+          lay($('.s3-wash', panel), { x: () => -.3 * D() }, { x: () => .3 * D() });                                   // colour wash: 0.4x
           // outline number: 0.6x, faded at both ends so neighbouring numbers never meet across the 40vw gaps
           const num = panel !== intro && $('.s3-num', panel);
-          if (num) gsap.timeline({ scrollTrigger: { trigger: panel, containerAnimation: hTween, start: 'left right', end: 'right left', scrub: true, invalidateOnRefresh: true } })
-            .fromTo(num, { x: () => -.2 * D() }, { x: () => .2 * D(), ease: 'none', duration: 1 }, 0)
+          if (num) pass.fromTo(num, { x: () => -.2 * D() }, { x: () => .2 * D(), ease: 'none', duration: 1 }, 0)
             .fromTo(num, { opacity: 0 }, { opacity: 1, ease: 'none', duration: .28 }, 0).to(num, { opacity: 0, ease: 'none', duration: .24 }, .76);
-          layer($('.s3-photo-in', panel), { xPercent: -8 }, { xPercent: 8 }, panel);                                          // in-frame counter move
-          layer($('.s3-art', panel), { x: () => .175 * D(), rotation: -8 }, { x: () => -.175 * D(), rotation: 9 }, panel);    // watercolour: 1.35x
-          layer($('.fx-fore', panel), { x: () => .5 * D(), y: () => Hh() * .08, rotation: -18, opacity: 1 }, { x: () => -.5 * D(), y: () => -Hh() * .34, rotation: 16, opacity: 1 }, panel); // extreme foreground: 2x
+          lay($('.s3-photo-in', panel), { xPercent: -8 }, { xPercent: 8 });                                          // in-frame counter move
+          lay($('.s3-art', panel), { x: () => .175 * D(), rotation: -8 }, { x: () => -.175 * D(), rotation: 9 });    // watercolour: 1.35x
+          lay($('.fx-fore', panel), { x: () => .5 * D(), y: () => Hh() * .08, rotation: -18, opacity: 1 }, { x: () => -.5 * D(), y: () => -Hh() * .34, rotation: 16, opacity: 1 }); // extreme foreground: 2x
+          if (!pass.getChildren().length) pass.scrollTrigger.kill();
           const name = $('.s3-name', panel);
           if (name) {
             blurIn(name, { scrollTrigger: { trigger: panel, containerAnimation: hTween, start: 'left 62%', toggleActions: 'play none none reverse' } }, { stagger: .08 });
@@ -1337,10 +1617,13 @@
         panels.forEach(panel => {
           const sc = { trigger: panel, start: 'top bottom', end: 'bottom top', scrub: .6 };
           const num = $('.s3-num', panel), inner = $('.s3-photo-in', panel), art = $('.s3-art', panel), wash = $('.s3-wash', panel);
-          if (num && panel !== intro) gsap.fromTo(num, { y: -60 }, { y: 90, ease: 'none', scrollTrigger: sc });
-          if (wash) gsap.fromTo(wash, { yPercent: -18 }, { yPercent: 18, ease: 'none', scrollTrigger: sc });
-          if (inner) gsap.fromTo(inner, { yPercent: -6 }, { yPercent: 6, ease: 'none', scrollTrigger: sc });
-          if (art) gsap.fromTo(art, { y: 140, rotation: -8 }, { y: -140, rotation: 8, ease: 'none', scrollTrigger: sc });
+          // v7: the panel's parallax layers share one ScrollTrigger (same range, same scrub)
+          const pass = gsap.timeline({ scrollTrigger: sc });
+          if (num && panel !== intro) pass.fromTo(num, { y: -60 }, { y: 90, ease: 'none', duration: 1 }, 0);
+          if (wash) pass.fromTo(wash, { yPercent: -18 }, { yPercent: 18, ease: 'none', duration: 1 }, 0);
+          if (inner) pass.fromTo(inner, { yPercent: -6 }, { yPercent: 6, ease: 'none', duration: 1 }, 0);
+          if (art) pass.fromTo(art, { y: 140, rotation: -8 }, { y: -140, rotation: 8, ease: 'none', duration: 1 }, 0);
+          if (!pass.getChildren().length) pass.scrollTrigger.kill();
           forePass($('.fx-fore', panel), panel, { start: 'top 60%', span: 1.1, x0: .3, x1: .1 });
           const name = $('.s3-name', panel);
           if (name) blurIn(name, { scrollTrigger: { trigger: panel, start: 'top 70%', toggleActions: 'play none none reverse' } }, { stagger: .08 });
@@ -1354,7 +1637,7 @@
       if (thumb && open) {
         const flip = document.createElement('div');
         flip.className = 'fx-flip'; flip.setAttribute('aria-hidden', 'true');
-        flip.innerHTML = '<span class="grade"><img src="img/' + S3_OPEN + '.webp" alt="" decoding="async"></span><i class="fx-flip-shade"></i>';
+        flip.innerHTML = '<span class="grade"><span class="gk"><img src="img/' + S3_OPEN + '.webp" alt="" decoding="async"></span></span><i class="fx-flip-shade"></i>';
         document.body.append(flip);
         onCleanup(() => flip.remove());
         const tImg = $('img', thumb), shade = $('.fx-flip-shade', flip), G = {};
@@ -1369,7 +1652,7 @@
         measure();
         let active = false;
         Loops.add('s3-flip', () => {
-          const sy = window.scrollY, p = (sy - G.s0) / (G.s1 - G.s0);
+          const sy = Loops.y(), p = (sy - G.s0) / (G.s1 - G.s0);
           // while the ghost travels, the real thumbnail and the real opening frame stay hidden (no double image)
           if (p <= 0 || p >= 1) { if (active) { active = false; flip.style.visibility = 'hidden'; tImg.style.opacity = ''; open.style.visibility = ''; } return; }
           if (!active) { active = true; flip.style.visibility = 'visible'; tImg.style.opacity = '0'; open.style.visibility = 'hidden'; }
@@ -1410,23 +1693,30 @@
         '<feGaussianBlur in="d" stdDeviation="' + blur + '" result="soft"/>' +
         (fine ? '<feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="1" seed="3" result="hi"/><feComposite in="soft" in2="hi" operator="arithmetic" k1="0" k2="1" k3="0.6" k4="-0.3" result="g"/><feComponentTransfer in="g"><feFuncA type="linear" slope="3.2" intercept="-1.1"/></feComponentTransfer>' : '') + '</filter>';
       const circles = cls => lobes.map(() => '<circle class="' + cls + '" r="0"/>').join('');
+      // v7: every frame of the stage is its own composited layer instead of one big SVG that was re-rastered on every
+      // scroll frame (photos + mask + rim). A photo is an <img> sized exactly like <image preserveAspectRatio="xMidYMid
+      // slice"> (cover, centred) whose push/pan is a compositor transform (will-change: no re-raster while it moves);
+      // the bleeding frame's wrapper references the very same SVG <mask> (CSS mask), so only the mask layer is
+      // re-rastered while a bleed runs. The rim keeps its own filtered SVG on top. Same pixels, far less raster work.
+      const vbox = '<svg viewBox="0 0 ' + cw + ' ' + ch + '" aria-hidden="true" focusable="false">';
       const layer = (s, i) => {
         if (!s[4]) {
           const fw = cw * .88, fh = ch * .8, ix = cw * .06, iy = ch * .1, sc = Math.min(cw, ch) / 520;
-          return '<g class="s4-l" data-k="' + i + '"><rect width="' + cw + '" height="' + ch + '" fill="#303b24"/><rect x="' + ix + '" y="' + iy + '" width="' + fw + '" height="' + fh + '" fill="none" stroke="#f7f2e7" stroke-opacity=".45"/>' +
+          return '<div class="s4-l" data-k="' + i + '" style="display:none">' + vbox + '<rect width="' + cw + '" height="' + ch + '" fill="#303b24"/><rect x="' + ix + '" y="' + iy + '" width="' + fw + '" height="' + fh + '" fill="none" stroke="#f7f2e7" stroke-opacity=".45"/>' +
             '<g transform="translate(' + (cw * (mob ? .5 : .32) - 32 * sc * 1.6) + ' ' + (ch * (mob ? .3 : .42) - 32 * sc * 1.6) + ') scale(' + (sc * 1.6) + ')" fill="none" stroke="#f7f2e7" stroke-width="' + (1 / (sc * 1.6)) + '" stroke-linecap="round" stroke-linejoin="round">' + ICON.truck.replace(/^<svg[^>]*>|<\/svg>$/g, '') + '</g>' +
-            '<text x="' + cw * (mob ? .5 : .32) + '" y="' + (ch * (mob ? .3 : .42) + 90 * sc) + '" text-anchor="middle" fill="#e9b49c" font-size="' + Math.round(12 * Math.max(1, sc * .8)) + '" letter-spacing="4" font-family="Noto Sans TC, sans-serif">照片待客戶提供</text></g>';
+            '<text x="' + cw * (mob ? .5 : .32) + '" y="' + (ch * (mob ? .3 : .42) + 90 * sc) + '" text-anchor="middle" fill="#e9b49c" font-size="' + Math.round(12 * Math.max(1, sc * .8)) + '" letter-spacing="4" font-family="Noto Sans TC, sans-serif">照片待客戶提供</text></svg></div>';
         }
         // v5: graded bitmaps (build_images.py bakes the .grade look in; a CSS grade here would cost a pass per frame)
         const href = 'img/' + (portrait ? 's4gp-' : 's4g-') + s[4].slice(3) + '.webp';
-        return '<g class="s4-l" data-k="' + i + '"><image href="' + href + '" width="' + cw + '" height="' + ch + '" preserveAspectRatio="xMidYMid slice"/></g>';
+        // v7: the stage bitmaps are fetched when the section comes near (first load no longer carries ~1 MB of them)
+        return '<div class="s4-l" data-k="' + i + '" style="display:none"><img class="s4-im" data-src="' + href + '" alt="" draggable="false" decoding="async"></div>';
       };
       const FG = ['cherry', 'apple', 'muscat', 'peach', 'orange'];
       const openCredit = '開場　' + S4_OPEN[2] + '・' + AI_LABEL;
-      scene.innerHTML = '<div class="s4-media"><svg viewBox="0 0 ' + cw + ' ' + ch + '" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><defs>' + filt('s4wc', 9, true) + filt('s4wr', 4, false) +
+      scene.innerHTML = '<div class="s4-media"><svg class="s4-defs" width="0" height="0" aria-hidden="true" focusable="false"><defs>' + filt('s4wc', 9, true) + filt('s4wr', 4, false) +
         '<mask id="s4m" maskUnits="userSpaceOnUse" x="0" y="0" width="' + cw + '" height="' + ch + '"><g filter="url(#s4wc)" fill="#fff">' + circles('s4-lb') + '</g></mask>' +
-        '<clipPath id="s4c"><polygon class="s4-poly" points="0,0"/></clipPath></defs><g class="s4-cam">' + LAY.map(layer).join('') +
-        '<g class="s4-rim" filter="url(#s4wr)" fill="none" stroke="#7a5a36" stroke-opacity=".38" stroke-width="7" style="display:none">' + circles('s4-rk') + '</g></g></svg><div class="s4-shade"></div><div class="s4-veil"></div>' + aiTag('s4-ai') + '</div>' +
+        '<clipPath id="s4c"><polygon class="s4-poly" points="0,0"/></clipPath></defs></svg><div class="s4-vb" style="width:' + cw + 'px;height:' + ch + 'px">' + LAY.map(layer).join('') +
+        '<canvas class="s4-gl" aria-hidden="true"></canvas><div class="s4-rimbox">' + vbox + '<g class="s4-rim" filter="url(#s4wr)" fill="none" stroke="#7a5a36" stroke-opacity=".38" stroke-width="7" style="display:none">' + circles('s4-rk') + '</g></svg></div></div><div class="s4-shade"></div><div class="s4-veil"></div>' + aiTag('s4-ai') + '</div>' +
         '<div class="s4-stepbox" data-depth=".45">' + STEPS.map(([t, en, d1, d2, , , , mk], i) => '<div class="s4-step" data-k="' + i + '"><span class="s4-no" aria-hidden="true">' + pad(i + 1) + '</span><h3 class="v">' + t + '<span class="sr-only"> ' + en + '</span></h3><p><span class="fx-ln"><span>' + d1 + '</span></span><span class="fx-ln"><span>' + d2 + '</span></span>' + (mk ? '<small>' + mk + '</small>' : '') + '</p></div>').join('') + '</div>' +
         '<div class="s4-dots" aria-hidden="true">' + STEPS.map(() => '<i></i>').join('') + '<span>' + openCredit + '</span></div><span class="s4-cap" aria-hidden="true"></span>' +
         '<img class="s4-fly" src="img/art/peach.webp" alt="" draggable="false" data-depth=".95">' +
@@ -1437,6 +1727,59 @@
       const tbs = $$('.s4-tb', scene), dps = $$('.s4-dp', scene), frs = $$('.s4-fr', scene);
       const stepbox = $('.s4-stepbox', scene), steps = $$('.s4-step', scene), dotsBox = $('.s4-dots', scene), dots = $$('.s4-dots i', scene), counter = $('.s4-dots span', scene), cap = $('.s4-cap', scene), fly = $('.s4-fly', scene);
       const colL = $('.s4-col-l', sec), fgs = $$('.s4-fore', scene), aiEl = $('.s4-ai', scene);
+      // the old root <svg viewBox="0 0 cw ch" preserveAspectRatio="xMidYMid slice"> filled .s4-media: the frame box
+      // .s4-vb (cw x ch) gets the same uniform scale and centring (identity whenever the stage is the viewport size)
+      const vb = $('.s4-vb', scene);
+      const fitBox = () => {
+        const mw = media.clientWidth || cw, mh = media.clientHeight || ch, k = Math.max(mw / cw, mh / ch);
+        const x = (mw - cw * k) / 2, y = (mh - ch * k) / 2;
+        vb.style.transform = Math.abs(k - 1) < 1e-4 && Math.abs(x) < .01 && Math.abs(y) < .01 ? '' : 'translate(' + x.toFixed(2) + 'px,' + y.toFixed(2) + 'px) scale(' + k.toFixed(5) + ')';
+      };
+      fitBox();
+      ScrollTrigger.addEventListener('refresh', fitBox);
+      onCleanup(() => ScrollTrigger.removeEventListener('refresh', fitBox));
+      // photo frames: the <img> keeps its natural pixel size at (0,0) and one matrix maps it the way the old
+      // <image width=cw height=ch preserveAspectRatio="xMidYMid slice" transform="translate(..) scale(s) translate(..)">
+      // did (cover scale c and centring x0/y0, then the push/pan) - no fractional layout box, so nothing is snapped
+      const ims = layers.map(l => $('.s4-im', l));
+      const cover = im => {
+        const nw = im.naturalWidth, nh = im.naturalHeight; if (!nw || !nh) return;
+        const c = Math.max(cw / nw, ch / nh);
+        im._cv = { c, x0: (cw - nw * c) / 2, y0: (ch - nh * c) / 2 };
+        im.style.width = nw + 'px'; im.style.height = nh + 'px';
+        if (im._last) setIm(im, ...im._last);
+      };
+      const setIm = (im, s, px, py) => {
+        im._last = [s, px, py];
+        const v = im._cv; if (!v) return;
+        const S = +s.toFixed(4), A = +(cw / 2 + px).toFixed(1), B = +(ch / 2 + py).toFixed(1);
+        const tf = 'matrix(' + (S * v.c).toFixed(6) + ',0,0,' + (S * v.c).toFixed(6) + ',' + (A + S * (v.x0 - cw / 2)).toFixed(3) + ',' + (B + S * (v.y0 - ch / 2)).toFixed(3) + ')';
+        if (im._tf !== tf) { im._tf = tf; im.style.transform = tf; }
+      };
+      ims.forEach(im => { if (!im) return; if (im.complete && im.naturalWidth) cover(im); else im.addEventListener('load', () => cover(im), { once: true }); });
+      // decode every frame of the stage before the section arrives (a first bleed must not wait on a decode)
+      // v7: the bleed runs on the GPU when WebGL2 is there (S4BleedGL); otherwise the CSS mask / clip-path paths below
+      const glc = $('.s4-gl', scene);
+      let glb = null;
+      if (bleedMode === 'svg' && glc) { try { glb = S4BleedGL(glc, cw, ch, devicePixelRatio || 1); } catch (err) { glb = null; } }
+      onCleanup(() => { if (glb) glb.destroy(); glb = null; });
+      // the outgoing frames (0..NL-2) are textures for the GPU bleed: uploaded one per idle slot after decoding
+      const idle = window.requestIdleCallback ? fn => requestIdleCallback(fn, { timeout: 250 }) : fn => setTimeout(fn, 60);
+      let upQ = [], upT = 0;
+      const pump = () => { upT = 0; const j = upQ.shift(); if (j === undefined || !glb) return; glb.setPhoto(j, ims[j]); if (upQ.length) upT = idle(pump); };
+      onCleanup(() => { upQ = []; if (upT && window.cancelIdleCallback) cancelIdleCallback(upT); });
+      const dio = new IntersectionObserver(es => {
+        if (!es.some(e => e.isIntersecting)) return;
+        dio.disconnect();
+        ims.forEach((im, j) => {
+          if (!im) return;
+          if (!im.getAttribute('src')) im.src = im.dataset.src;
+          if (!im.decode) return;
+          im.decode().then(() => { if (glb && j < NL - 1) { upQ.push(j); if (!upT) upT = idle(pump); } }).catch(() => {});
+        });
+      }, { rootMargin: '200% 0px' });
+      dio.observe(sec);
+      onCleanup(() => dio.disconnect());
       // step texts: chars per name (blur-to-sharp), lines per description
       const stepChars = steps.map(s => splitChars($('h3', s), false));
       const stepNos = $$('.s4-no', scene), stepH = steps.map(s => $('h3', s));
@@ -1461,21 +1804,35 @@
       }
       // bleed renderers (unchanged from v4.1)
       const R = j => { const [ox, oy] = origins[j]; return Math.hypot(Math.max(ox, 1 - ox) * cw, Math.max(oy, 1 - oy) * ch) + 140; };
-      let masked = -1, slow = 0, lastT = 0;
+      let masked = -1, slow = 0, lastT = 0, glShown = false;
+      // the GPU path can take bleed j when frame j - 1 (the outgoing one) is uploaded
+      const gpuFor = j => !!(glb && bleedMode === 'svg' && glb.ok() && glb.has(j - 1) && ims[j - 1] && ims[j - 1]._cv);
+      function showGl(on) { if (on !== glShown) { glShown = on; glc.style.display = on ? 'block' : ''; } }
       function setBleed(j, f) {
-        const [ox, oy] = origins[j], cx = ox * cw, cy = oy * ch, r = R(j) * f;
-        if (masked !== j) { clearBleed(); masked = j; layers[j].setAttribute(bleedMode === 'svg' ? 'mask' : 'clip-path', bleedMode === 'svg' ? 'url(#s4m)' : 'url(#s4c)'); if (bleedMode === 'svg') rim.style.display = ''; }
+        const [ox, oy] = origins[j], cx = ox * cw, cy = oy * ch, r = R(j) * f, gpu = gpuFor(j);
+        if (masked !== j || (gpu ? masked >= 0 && !glShown : glShown)) {
+          clearBleed(); masked = j;
+          if (gpu) showGl(true);
+          else if (bleedMode === 'svg') { layers[j].style.mask = 'url(#s4m)'; rim.style.display = ''; } else layers[j].style.clipPath = 'url(#s4c)';
+        }
         if (bleedMode === 'svg') {
-          lobes.forEach(([dx, dy, k], i) => {
-            const x = (cx + dx * r * .75).toFixed(1), y = (cy + dy * r * .75).toFixed(1), rr = Math.max(0, r * k * (i ? .9 + .1 * Math.sin(f * 6 + i + j) : 1)).toFixed(1);
-            lb[i].setAttribute('cx', x); lb[i].setAttribute('cy', y); lb[i].setAttribute('r', rr);
-            rk[i].setAttribute('cx', x); rk[i].setAttribute('cy', y); rk[i].setAttribute('r', rr);
-          });
+          // the same rounded values the SVG attributes always carried feed both renderers
+          const cs = lobes.map(([dx, dy, k], i) => [(cx + dx * r * .75).toFixed(1), (cy + dy * r * .75).toFixed(1), Math.max(0, r * k * (i ? .9 + .1 * Math.sin(f * 6 + i + j) : 1)).toFixed(1)]);
           const sc = Math.min(150, 40 + r * .2).toFixed(1), bf = (.0055 + .0015 * Math.sin(f * Math.PI * 2 + j)).toFixed(4);
-          dps.forEach(d => d.setAttribute('scale', sc)); tbs.forEach(t => t.setAttribute('baseFrequency', bf));
           const m = r * 1.35 + 90, x0 = Math.max(0, cx - m), y0 = Math.max(0, cy - m), x1 = Math.min(cw, cx + m), y1 = Math.min(ch, cy + m);
-          frs.forEach(fl => { fl.setAttribute('x', x0.toFixed(0)); fl.setAttribute('y', y0.toFixed(0)); fl.setAttribute('width', Math.max(1, x1 - x0).toFixed(0)); fl.setAttribute('height', Math.max(1, y1 - y0).toFixed(0)); });
-          // frame-time guard: if the filter cannot keep up here, switch to the clip-path fallback
+          const rx = x0.toFixed(0), ry = y0.toFixed(0), rwd = Math.max(1, x1 - x0).toFixed(0), rht = Math.max(1, y1 - y0).toFixed(0);
+          if (gpu) {
+            const v = ims[j - 1]._cv, [s0, px, py] = ims[j - 1]._last, S = +s0.toFixed(4), A = +(cw / 2 + px).toFixed(1), B = +(ch / 2 + py).toFixed(1);
+            glb.draw({ circles: cs.map(q => q.map(Number)), sc: +sc, bf: +bf, reg: [+rx, +ry, +rx + +rwd, +ry + +rht], photo: j - 1, mat: [S * v.c, A + S * (v.x0 - cw / 2), B + S * (v.y0 - ch / 2)] });
+          } else {
+            cs.forEach(([x, y, rr], i) => {
+              lb[i].setAttribute('cx', x); lb[i].setAttribute('cy', y); lb[i].setAttribute('r', rr);
+              rk[i].setAttribute('cx', x); rk[i].setAttribute('cy', y); rk[i].setAttribute('r', rr);
+            });
+            dps.forEach(d => d.setAttribute('scale', sc)); tbs.forEach(t => t.setAttribute('baseFrequency', bf));
+            frs.forEach(fl => { fl.setAttribute('x', rx); fl.setAttribute('y', ry); fl.setAttribute('width', rwd); fl.setAttribute('height', rht); });
+          }
+          // frame-time guard: if the bleed cannot keep up here, switch to the clip-path fallback
           const now = performance.now(), dt = now - lastT; lastT = now;
           if (dt > 45 && dt < 400) { if (++slow > 8) { bleedMode = 'clip'; const keep = masked; clearBleed(); masked = -1; setBleed(keep, f); } } else slow = Math.max(0, slow - 1);
         } else {
@@ -1488,8 +1845,9 @@
         }
       }
       function clearBleed() {
-        if (masked >= 0 && layers[masked]) { layers[masked].removeAttribute('mask'); layers[masked].removeAttribute('clip-path'); }
-        masked = -1; rim.style.display = 'none';
+        if (masked >= 0 && layers[masked]) { layers[masked].style.mask = ''; layers[masked].style.clipPath = ''; }
+        if (masked >= 0 || glShown) { rim.style.display = 'none'; showGl(false); }
+        masked = -1;
       }
       // timeline in screen heights (desktop): dolly .6 + hold .3 + 5 x (bleed 1.2 + hold .3) + sink .6 = 9
       // (v5.1: one more bleed - the opening orchard now has its own frame before step 1; phones keep the .88 ratio)
@@ -1497,7 +1855,7 @@
       const bleedAt = j => DZ + HOLD + (j - 1) * (BL + GAP);
       const CORNER = [[1, 1], [0, 0], [0, 1], [1, 0], [1, 1]];
       const T = { open: 0, k: 0, sink: 0, t: 0 };
-      let lastVis = '';
+      let lastVis = '', lastShow = '';
       const draw = () => {
         const o = T.open, eo = INOUT(o), k = T.k, es = INOUT(T.sink), tt = T.t;
         // dolly zoom: the orchard grows while the foreground fruit shrinks - the space stretches
@@ -1509,23 +1867,24 @@
         shade.style.opacity = (.62 + .38 * eo).toFixed(3);
         veil.style.opacity = (1 - eo).toFixed(3); // a left-hand veil keeps the opening title legible
         // layers: i fully in, i+1 bleeding in with progress f
-        const i = Math.min(NL - 1, Math.floor(k + 1e-6)), f = k - i;
+        const i = Math.min(NL - 1, Math.floor(k + 1e-6)), f = k - i, bleeding = f > .001 && i + 1 < NL;
         const vis = layers.map((l, j) => (j === i || (j === i + 1 && f > .001) ? '1' : '0')).join('');
-        if (vis !== lastVis) {
-          layers.forEach((l, j) => { l.style.display = vis[j] === '1' ? '' : 'none'; }); lastVis = vis;
-          // v5.1: the AI label stays on whenever any AI picture is on screen, including half-way through a bleed
-          aiEl.classList.toggle('is-on', AIL.some((a, j) => a && vis[j] === '1'));
-        }
-        if (f > .001 && i + 1 < NL) setBleed(i + 1, f); else clearBleed();
+        // v5.1: the AI label stays on whenever any AI picture is on screen, including half-way through a bleed
+        if (vis !== lastVis) { aiEl.classList.toggle('is-on', AIL.some((a, j) => a && vis[j] === '1')); lastVis = vis; }
         // each photo: slow push (Ken Burns) + the camera pans across it (alternating direction)
         layers.forEach((l, j) => {
-          if (vis[j] !== '1') return;
-          const im = l.firstChild; if (im.nodeName !== 'image') return;
+          const im = ims[j];
+          if (vis[j] !== '1' || !im) return;
           const life = clamp((k - j + 1) / 2, 0, 1), dir = j % 2 ? -1 : 1;
           const s = j === 0 ? 1 + .26 * eo + .06 * clamp(k / 1.5, 0, 1) : 1.08 + .06 * life;
           const px = dir * (life - .5) * .05 * cw * (j === 0 ? Math.min(1, k * 2) : 1), py = (life - .5) * .02 * ch;
-          im.setAttribute('transform', 'translate(' + (cw / 2 + px).toFixed(1) + ' ' + (ch / 2 + py).toFixed(1) + ') scale(' + s.toFixed(4) + ') translate(' + -cw / 2 + ' ' + -ch / 2 + ')');
+          setIm(im, s, px, py);
         });
+        // v7: during a GPU bleed the canvas paints the outgoing frame, so only the incoming one stays a layer
+        const gpu = bleeding && gpuFor(i + 1);
+        const show = layers.map((l, j) => (gpu ? j === i + 1 : vis[j] === '1') ? '1' : '0').join('');
+        if (show !== lastShow) { layers.forEach((l, j) => { l.style.display = show[j] === '1' ? '' : 'none'; }); lastShow = show; }
+        if (bleeding) setBleed(i + 1, f); else clearBleed();
         showStep(o < .98 ? -1 : es > .45 ? -2 : Math.max(-1, Math.min(N - 1, Math.floor(k + .62) - 1)));
         // a blurred watercolour sweeps past one corner for every step (2x: across in half a screen)
         const F = cw * (mob ? .34 : .42);
@@ -1567,8 +1926,9 @@
         gsap.fromTo(it, { y: () => (sp - 1) * D() / 2 }, { y: () => -(sp - 1) * D() / 2, ease: 'none', scrollTrigger: { trigger: it, start: 'top bottom', end: 'bottom top', scrub: .6, invalidateOnRefresh: true } });
         gsap.fromTo($('picture', it), { scale: 1.16 }, { scale: 1, duration: 1.8, ease: EASE, scrollTrigger: { trigger: it, start: 'top 92%', once: true } });
       });
-      gsap.fromTo($('.s5-ghost', sec), { yPercent: -10, scale: 1.08 }, { yPercent: 30, scale: 1, ease: 'none', scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: .6 } });
-      $$('.s5-art', sec).forEach((a, i) => gsap.fromTo(a, { y: 220, rotation: i ? 14 : -14 }, { y: -260, rotation: i ? -10 : 10, ease: 'none', scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: .6 } }));
+      const par = gsap.timeline({ scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: .6 } }); // v7: one trigger, same range
+      par.fromTo($('.s5-ghost', sec), { yPercent: -10, scale: 1.08 }, { yPercent: 30, scale: 1, ease: 'none', duration: 1 }, 0);
+      $$('.s5-art', sec).forEach((a, i) => par.fromTo(a, { y: 220, rotation: i ? 14 : -14 }, { y: -260, rotation: i ? -10 : 10, ease: 'none', duration: 1 }, 0));
       forePass($(':scope > .fx-fore', sec), sec, { start: 'top 40%', span: 1.4, x0: -.02, x1: .1, r0: 10, r1: -16 });
       const phs = $$('.s5-ph', sec);
       let k = 0;
@@ -1608,8 +1968,9 @@
         .fromTo($$('.s6-card', sec), { opacity: 0, y: 22, rotation: (i) => [-3, 2, -1][i] }, { opacity: 1, y: 0, rotation: 0, duration: .16, stagger: .06, ease: 'power2.out' }, .66)
         .fromTo($$('.s6-right .hm-link,.s6-page .mark', sec), { opacity: 0 }, { opacity: 1, duration: .1 }, .84)
         .to({}, { duration: .14 });
-      gsap.fromTo($('.s6-ghost', sec), { yPercent: -16 }, { yPercent: 24, ease: 'none', scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: .6 } });
-      $$('.s6-art', sec).forEach((a, i) => gsap.fromTo(a, { y: 180, x: i ? 40 : -40, rotation: i ? 18 : -12 }, { y: -220, x: i ? -30 : 30, rotation: i ? -8 : 10, ease: 'none', scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: .6 } }));
+      const par = gsap.timeline({ scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: .6 } }); // v7: one trigger, same range
+      par.fromTo($('.s6-ghost', sec), { yPercent: -16 }, { yPercent: 24, ease: 'none', duration: 1 }, 0);
+      $$('.s6-art', sec).forEach((a, i) => par.fromTo(a, { y: 180, x: i ? 40 : -40, rotation: i ? 18 : -12 }, { y: -220, x: i ? -30 : 30, rotation: i ? -8 : 10, ease: 'none', duration: 1 }, 0));
       forePass($(':scope .s6-pin > .fx-fore', sec), sec, { start: 'top 115%', span: 1.1, x0: .02, x1: -.06 }); // done before the pin locks
       // S5 -> S6 "focus pull": the journal racks out to 8px and fades while the book racks in from 8px
       const s5 = $('#s5', more), grid5 = s5 && $('.s5-grid', s5), FB = mob ? 6 : 8, fx = { a: 0, b: 1 };
@@ -1634,9 +1995,9 @@
           .fromTo($$('h3,p:not(.s7-big),.s7-unit', li), { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 1, ease: EASE, stagger: .08 }, .25);
       });
       gsap.fromTo($$('.hm-qa', sec), { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: .9, ease: EASE, stagger: .08, scrollTrigger: { trigger: $('.hm-faq-list', sec), start: 'top 84%', once: true } });
-      gsap.fromTo($('.s7-ghost', sec), { yPercent: -10 }, { yPercent: 26, ease: 'none', scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: .6 } });
-      const art = $('.s7-art', sec);
-      if (art) gsap.fromTo(art, { y: 160, rotation: -12 }, { y: -200, rotation: 10, ease: 'none', scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: .6 } });
+      const art = $('.s7-art', sec), par = gsap.timeline({ scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: .6 } }); // v7: one trigger
+      par.fromTo($('.s7-ghost', sec), { yPercent: -10 }, { yPercent: 26, ease: 'none', duration: 1 }, 0);
+      if (art) par.fromTo(art, { y: 160, rotation: -12 }, { y: -200, rotation: 10, ease: 'none', duration: 1 }, 0);
       forePass($(':scope > .fx-fore', sec), sec, { start: 'top 55%', span: 1.3, x0: -.06, x1: .06, r0: 12, r1: -14 });
     }
 
@@ -1646,9 +2007,10 @@
       const line = $('.s8-line', sec), basket = $('.s8-basket', sec), bk = $('.s8-bk', sec), drops = $$('.s8-drop img', sec);
       blurIn(line, { scrollTrigger: { trigger: line, start: 'top 80%', toggleActions: 'play none none reverse' } }, { stagger: .06 });
       const crane = { trigger: sec, start: 'top bottom', end: 'top 0%', scrub: .8 };
-      gsap.fromTo(line, { y: () => -Hh() * .18 }, { y: 0, ease: 'none', scrollTrigger: { ...crane, invalidateOnRefresh: true } });
-      gsap.fromTo(basket, { y: () => Hh() * .28 }, { y: 0, ease: 'none', scrollTrigger: { ...crane, invalidateOnRefresh: true } });
-      gsap.fromTo($('.s8-ghost', sec), { y: () => -Hh() * .34, scale: 1.22 }, { y: 0, scale: 1, ease: 'none', scrollTrigger: { ...crane, invalidateOnRefresh: true } });
+      gsap.timeline({ scrollTrigger: { ...crane, invalidateOnRefresh: true } }) // v7: the three crane layers share one trigger
+        .fromTo(line, { y: () => -Hh() * .18 }, { y: 0, ease: 'none', duration: 1 }, 0)
+        .fromTo(basket, { y: () => Hh() * .28 }, { y: 0, ease: 'none', duration: 1 }, 0)
+        .fromTo($('.s8-ghost', sec), { y: () => -Hh() * .34, scale: 1.22 }, { y: 0, scale: 1, ease: 'none', duration: 1 }, 0);
       gsap.set(drops, { y: () => -Hh() * .75, opacity: 0 });
       const tl = gsap.timeline({ scrollTrigger: { trigger: basket, start: 'top 78%', once: true } });
       drops.forEach((d, i) => {
@@ -1688,7 +2050,7 @@
       sceneShop(); sceneCover(); sceneToc(); sceneFeature(); sceneProcess(); sceneJournal(); sceneGift(); sceneCare(); sceneBack(); sceneBreath();
       // shared: scroll velocity (px per frame) for the skew effects; section visibility gates loops
       vel.y = window.scrollY; vel.t = performance.now(); vel.v = 0;
-      Loops.add('vel', t => { const y = window.scrollY, dt = Math.max(1, t - vel.t); const v = (y - vel.y) / dt * 16.67; vel.v += (v - vel.v) * .3; vel.y = y; vel.t = t; });
+      Loops.add('vel', t => { const y = Loops.y(), dt = Math.max(1, t - vel.t); const v = (y - vel.y) / dt * 16.67; vel.v += (v - vel.v) * .3; vel.y = y; vel.t = t; });
       vio = new IntersectionObserver(es => es.forEach(e => isVisible.set(e.target, e.isIntersecting)), { rootMargin: '10% 0px' });
       $$('.mg', more).forEach(s => vio.observe(s));
       onCleanup(() => { vio.disconnect(); vio = null; });

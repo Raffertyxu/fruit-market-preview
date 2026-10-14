@@ -669,6 +669,12 @@ html.fx-live .s4-fig{visibility:hidden}
 html.fx-live .s4-scene{display:block;position:absolute;inset:0;z-index:1}
 .s4-media{position:absolute;inset:0;overflow:hidden;background:var(--color-paper);isolation:isolate;contain:paint;will-change:transform}
 .s4-media svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+/* v7: the stage's frames as separate layers (app.js sceneProcess): the defs SVG holds the bleed mask / filters only */
+.s4-media svg.s4-defs{width:0;height:0;overflow:hidden}
+.s4-vb{position:absolute;left:0;top:0;transform-origin:0 0}
+.s4-l,.s4-rimbox{position:absolute;inset:0}
+.s4-gl{position:absolute;left:0;top:0;width:100%;height:100%;display:none;pointer-events:none}
+.s4-im{position:absolute;left:0;top:0;max-width:none;display:block;transform-origin:0 0;will-change:transform;user-select:none}
 .s4-shade{position:absolute;inset:0;background:linear-gradient(270deg,#1f2616c7 0%,#1f26167a 26%,#1f261600 52%),linear-gradient(0deg,#1f261699 0%,#1f261600 30%);pointer-events:none;opacity:0}
 .s4-veil{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,#1f2616c0 0%,#1f261670 34%,#1f261600 62%)}
 @media(max-width:767px){.s4-veil{background:linear-gradient(180deg,#1f2616c0 0%,#1f261670 30%,#1f261600 58%)}}
@@ -894,7 +900,7 @@ html.fx-lite .fx-fade.is-in{opacity:1}
    Site-wide chrome: folio, progress line, film grain, cursor, curtain
    ===================================================================== */
 .fx-progress{position:fixed;left:0;right:0;top:0;height:1px;z-index:60;pointer-events:none}
-.fx-progress i{position:absolute;inset:0;background:var(--fm-mark);transform-origin:0 50%;transform:scaleX(0)}
+.fx-progress i{position:absolute;inset:0;background:var(--fm-mark);transform-origin:0 50%;transform:scaleX(0);will-change:transform}
 .fx-folio,.fx-issue{position:fixed;bottom:12px;z-index:60;pointer-events:none;font:10px/1 var(--fm-body);letter-spacing:.24em;color:var(--fm-muted);transition:opacity .5s var(--ease-out),color .5s var(--ease-out);display:flex;gap:12px;align-items:baseline}
 .fx-folio{left:max(12px,1.6vw)}
 .fx-issue{right:max(12px,1.6vw)}
@@ -944,12 +950,16 @@ html.fx-cursor-on [data-cursor]{cursor:none}
 /* ---------- 1. the grade: one film look for every client photo ---------- */
 .grade{position:relative;display:block;width:100%;height:100%;overflow:hidden;isolation:isolate}
 .grade img,img.grade-img{filter:var(--grade)}
-.grade:before,.grade:after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none}
-.grade:before{background:radial-gradient(110% 85% at 16% 8%,#f6b98a 0%,#f6b98a00 64%);mix-blend-mode:soft-light;opacity:.14}
-.grade:after{background:radial-gradient(ellipse farthest-corner at 50% 50%,#303b2400 48%,#303b240f 100%)}
-html.fx-on .grade.kb-on img{animation:fx-kb 12s cubic-bezier(.45,0,.55,1) infinite alternate}
+/* v7: the picture, the warm leak and the vignette sit in one inner box (.gk); the Ken Burns push scales that box, so
+   the whole graded photo is one cached layer the compositor scales (before: the pushed <img> was its own layer and the
+   blend above it was re-composited in extra render passes on every frame). .grade still clips at the original box. */
+.gk{display:block;position:relative;width:100%;height:100%}
+.gk:before,.gk:after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none}
+.gk:before{background:radial-gradient(110% 85% at 16% 8%,#f6b98a 0%,#f6b98a00 64%);mix-blend-mode:soft-light;opacity:.14}
+.gk:after{background:radial-gradient(ellipse farthest-corner at 50% 50%,#303b2400 48%,#303b240f 100%)}
+html.fx-on .grade.kb-on>.gk{animation:fx-kb 12s cubic-bezier(.45,0,.55,1) infinite alternate}
 @keyframes fx-kb{from{scale:1}to{scale:1.06}}
-.ed-figure .grade{height:auto}
+.ed-figure .grade,.ed-figure .gk{height:auto}
 .ds-grade{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(12px,2vw,24px)}
 .ds-grade figure{margin:0}
 .ds-grade .ds-ph{aspect-ratio:4/5;position:relative;overflow:hidden}
@@ -988,6 +998,9 @@ html:not(.fx-live) .fx-fore{display:none}
 .mg .s1-soft img{width:100%;height:100%;object-fit:cover}
 .s1-dim{position:absolute;inset:0;z-index:1;background:#11160c;opacity:0;pointer-events:none}
 .s1-bg:after{z-index:2}
+/* v7: the cover's smooth layers (pre-blurred soft frame, dark veil, the gradient overlays of the photo) ride the
+   dolly as cached textures instead of being re-rastered at every new scale (they hold no fine detail) */
+html.fx-live .s1-soft,html.fx-live .s1-dim,html.fx-live .s1-bg:after{will-change:transform}
 html:not(.fx-live) .s1-soft,html:not(.fx-live) .s1-dim{display:none}
 .s1-leak{position:absolute;top:-30%;left:-12%;width:56%;height:160%;z-index:4;pointer-events:none;background:radial-gradient(closest-side,#ffd9ad66 0%,#ffc4882e 46%,#ffc48800 100%);opacity:0;transform:translate3d(-120%,0,0) rotate(14deg)}
 html.fx-on .s1-leak{animation:fx-leak 12s cubic-bezier(.45,0,.55,1) infinite}
@@ -1307,7 +1320,7 @@ html:not(.fx-live) .p1-cap{display:none}
 .s4-fig .s4-ph,.s4-item-ph,.p2-frame{overflow:hidden;overflow:clip}
 .ai-credit{color:var(--fm-mark)}
 .s4-ph,.ed-ph{position:relative}
-.ed-ph .grade,.ed-ph picture{display:block;height:auto}
+.ed-ph .grade,.ed-ph .gk,.ed-ph picture{display:block;height:auto}
 .ed-after{width:62%;margin:clamp(24px,4vw,48px) 0 0}
 .ed-row.ed-cont{border-top:0;padding-top:0}
 @media(max-width:767px){.ed-after{width:80%}}
