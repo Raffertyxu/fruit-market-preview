@@ -550,7 +550,7 @@
   const MONTH_EN = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
   const qMonth = Number(new URLSearchParams(location.search).get('month')); // ?month= previews other months
   const MONTH = qMonth >= 1 && qMonth <= 12 ? qMonth : new Date().getMonth() + 1;
-  const ISSUE = { zh: '水果店', no: 'No.' + pad(MONTH), en: MONTH_EN[MONTH - 1], year: new Date().getFullYear() };
+  const ISSUE = { zh: '幸', mark: '幸 SHIAWASE', kana: 'しあわせ', no: 'No.' + pad(MONTH), en: MONTH_EN[MONTH - 1], year: new Date().getFullYear() };
   const SHORT = { muscat: ['麝香葡萄', 'MUSCAT GRAPE'], apple: ['蘋果', 'APPLE'], peach: ['水蜜桃', 'WHITE PEACH'], orange: ['香甜柑橘', 'MANDARIN'], cherry: ['山形櫻桃', 'CHERRY'], pear: ['梨', 'JAPANESE PEAR'], strawberry: ['草莓', 'STRAWBERRY'], 'black-grape': ['黑葡萄', 'BLACK GRAPE'] };
   const SEASON_PHOTO = {
     muscat: ['home-muscat-box', '單串禮盒裡的麝香葡萄'], apple: ['home-apple-tree', '樹上慢慢著色的蘋果'], pear: ['home-pear-hands', '剛採下、比手掌還大的梨', HAND_NOTE],
@@ -588,8 +588,9 @@
     return '<section class="mg mg-cover" id="s1" data-folio="01" data-sec="封面" data-tone="dark" aria-labelledby="s1-title"><div class="s1-stage"><div class="s1-cam">' +
       '<div class="s1-bg" data-depth="0">' + pic('home-hero-pear', '網室棚架下結實纍纍的梨園（客戶實拍）', { eager: true, tall: 'home-hero-pear-tall' }) +
       '<picture class="s1-soft" aria-hidden="true"><source media="(max-width:767px) and (orientation:portrait)" srcset="img/home-hero-pear-tall-soft.webp"><img src="img/home-hero-pear-soft.webp" alt="" decoding="async"></picture><i class="s1-dim" aria-hidden="true"></i></div>' +
-      '<div class="s1-mast" data-depth=".45"><p class="s1-masthead v">' + ISSUE.zh + '</p>' +
-      '<p class="s1-meta">THE LITTLE FRUIT MARKET<b>' + ISSUE.no + '</b>' + ISSUE.en + ' ' + ISSUE.year + '</p></div>' +
+      '<div class="s1-mast" data-depth=".45"><p class="s1-masthead s1-logo"><img src="img/brand/shiawase-logo-paper.svg" alt="幸 SHIAWASE しあわせ" width="529" height="1068" decoding="async" fetchpriority="high"></p>' +
+      '<p class="s1-meta">SHIAWASE<span class="kana s1-kana">しあわせ</span><b>' + ISSUE.no + '</b>' + ISSUE.en + ' ' + ISSUE.year +
+      '<span class="s1-tokushu"><i class="tk">特集</i>' + MONTH_ZH[MONTH - 1] + '月<span class="kana">の</span>果物</span></p></div>' +
       '<div class="s1-world" aria-hidden="true">' + S1_FRUITS.map((f, i) => '<img class="s1-fruit' + (f.wide ? ' is-wide' : '') + (i ? '' : ' is-hero') + '" src="img/art/' + slugs[i] + '.webp" alt="" draggable="false" data-slug="' + slugs[i] + '" data-depth="' + (f.z > 200 ? 1 : f.z > -300 ? .7 : .35) + '" data-breathe style="--x:' + f.x + ';--y:' + f.y + ';--z:' + f.z + ';--s:' + f.s + ';--r:' + f.r + '">').join('') +
       S1_BOKEH.map(b => '<i class="s1-bokeh" style="--x:' + b.x + ';--y:' + b.y + ';--z:' + b.z + ';--s:' + b.s + '"></i>').join('') + '</div></div>' +
       '<i class="s1-leak" aria-hidden="true"></i>' + fore('peach') +
@@ -610,9 +611,9 @@
     ['s5', 'P.18', '果園日誌', 'ORCHARD JOURNAL', 'home-grape-vine'], ['s6', 'P.24', '送禮之書', 'THE GIFT BOOK', 'home-peach-giftbox'], ['s7', 'P.30', '安心宅配', 'DELIVERY PROMISE', 'home-grape-box8']];
   const s2HTML = () => '<section class="mg mg-toc" id="s2" data-folio="03" data-sec="目次" aria-labelledby="s2-title">' +
     '<span class="s2-num mg-outline" aria-hidden="true" data-depth=".1">' + pad(MONTH) + '</span><div class="mg-wrap s2-grid">' +
-    '<div class="s2-side" data-depth=".3"><span class="mg-kicker">CONTENTS · ' + ISSUE.no + ' · ' + ISSUE.en + '</span><h2 class="s2-title v" id="s2-title">目次</h2>' +
+    '<div class="s2-side" data-depth=".3"><span class="mg-kicker">CONTENTS · ' + ISSUE.no + ' · ' + ISSUE.en + '<span class="kana mg-kana">もくじ</span></span><h2 class="s2-title v" id="s2-title">目次</h2>' +
     '<p class="s2-note"><b>編輯手記</b>' + MONTH_ZH[MONTH - 1] + '月，梨正甜，蘋果在枝頭慢慢轉紅。這一期，我們從果園一路走到你家門口。<small>文案示意</small></p></div>' +
-    '<ol class="s2-list">' + TOC.map(([id, no, t, en, img], i) => '<li><button type="button" class="s2-row" data-goto="' + id + '" data-peek="' + img + '" id="toc-' + id + '"><span class="s2-no">' + no + '</span><span class="s2-name">' + t + '</span><span class="s2-en">' + en + '</span><span class="s2-arr" aria-hidden="true">↘</span>' +
+    '<ol class="s2-list">' + TOC.map(([id, no, t, en, img], i) => '<li><button type="button" class="s2-row" data-goto="' + id + '" data-peek="' + img + '" id="toc-' + id + '"><span class="s2-name">' + (i ? '' : '<i class="tk">特集</i>') + t + '</span><span class="s2-lead" aria-hidden="true"></span><span class="s2-no"><span class="sr-only">第 </span>' + no.slice(2) + '<span class="sr-only"> 頁</span></span><span class="s2-en">' + en + '</span><span class="s2-arr" aria-hidden="true">↘</span>' +
       (i ? '' : '<span class="s2-thumb" aria-hidden="true"><span class="grade no-kb"><span class="gk"><img src="img/' + img + '.webp" alt="" loading="lazy" decoding="async"></span></span></span>') + '</button></li>').join('') + '</ol></div>' +
     artImg('orange', 'mg-art s2-art', ' data-depth=".9" data-breathe') + fore('apple') +
     '<div class="s2-peek" aria-hidden="true">' + TOC.map(t => '<img src="img/' + t[4] + '.webp" alt="" loading="lazy" decoding="async" data-peek="' + t[4] + '">').join('') + '</div></section>';
@@ -642,7 +643,7 @@
       SEASON.upcoming.map(p => '<li>' + artImg(p.slug) + '<b>' + esc((SHORT[p.slug] || [p.name])[0]) + '</b><span>' + span(p)[0] + ' 月開賣</span></li>').join('') + '</ul><span class="mark" style="margin-top:14px">產季為示意，需客戶確認</span></div>' : '';
     return '<section class="mg mg-feature" id="s3" data-folio="06" data-sec="' + SEASON.title + '" aria-labelledby="s3-title"><div class="s3-pin"><div class="s3-track">' +
       '<div class="s3-panel s3-intro"><span class="s3-open" aria-hidden="true">' + pic(S3_OPEN, '', { noKb: true }) + '</span>' +
-      '<span class="s3-num mg-outline" aria-hidden="true" data-depth=".15">06</span><span class="mg-kicker">' + (SEASON.soon ? 'COMING SOON' : 'IN SEASON') + ' · ' + ISSUE.en + ' · 特集</span>' +
+      '<span class="s3-num mg-outline" aria-hidden="true" data-depth=".15">06</span><span class="mg-kicker">' + (SEASON.soon ? 'COMING SOON' : 'IN SEASON') + ' · ' + ISSUE.en + '<span class="kana mg-kana">きせつのくだもの</span></span><p class="mg-tokushu"><i class="tk">特集</i>' + MONTH_ZH[MONTH - 1] + '月<span class="kana">の</span>果物</p>' +
       '<h2 class="mg-h s3-h" id="s3-title">' + SEASON.title.replace('月', '月<br>') + '</h2><p>現在正好吃的水果，各自一個跨頁。</p><span class="mark" style="margin-top:12px">產季為示意・需客戶確認</span></div>' +
       body + soon + '</div></div></section>';
   }
@@ -666,7 +667,7 @@
     care: '<svg class="hm-icon" viewBox="0 0 64 64" aria-hidden="true"><path pathLength="100" d="M8 20l24-11 24 11v25L32 56 8 45z"/><path pathLength="100" d="M8 20l24 11 24-11"/><path pathLength="100" d="M32 31v25"/><path pathLength="100" d="M40 36c3-3 8-1 8 3 0 4-8 9-8 9s-8-5-8-9c0-4 5-6 8-3z"/></svg>'
   };
   const s4HTML = () => '<section class="mg mg-process" id="s4" data-folio="12" data-sec="從採收到你家" data-tone="dark" aria-labelledby="s4-title"><div class="s4-pin">' +
-    '<div class="s4-open"><div class="s4-col s4-col-l" data-depth=".4"><span class="mg-kicker">FROM HARVEST TO YOUR DOOR · P.12</span><h2 class="s4-title" id="s4-title">從採收，<br>到你家</h2></div>' +
+    '<div class="s4-open"><div class="s4-col s4-col-l" data-depth=".4"><span class="mg-kicker">FROM HARVEST TO YOUR DOOR · P.12<span class="kana mg-kana">とどくまで</span></span><h2 class="s4-title" id="s4-title">從採收，<br>到你家</h2></div>' +
     '<figure class="s4-fig"><div class="s4-ph">' + pic(S4_OPEN[1], altOf(S4_OPEN[1], S4_OPEN[2])) + aiTag() + '</div><figcaption>開場・' + S4_OPEN[2] + '（' + AI_LABEL + '）</figcaption></figure>' +
     '<div class="s4-col s4-col-r"><p>在產地等果實熟成才採，選果、套網、裝箱，再一路冷藏送到你家。五個步驟，一步一個畫面。</p><ol class="s4-toc">' + STEPS.map((s, i) => '<li><b>' + pad(i + 1) + '</b>' + s[0] + '</li>').join('') + '</ol><span class="mark">流程依照片整理・需客戶確認</span></div></div>' +
     '<div class="s4-scene"></div></div>' +
@@ -679,19 +680,19 @@
     ['home-peach-box15', '十五顆排好的水蜜桃，等著出貨', 1.25, 'near'], ['home-grape-box8', '八串黑葡萄，排好等出貨', .7, 'far'], ['home-peach-pink-box', '整箱粉紅色的水蜜桃', 1, 'mid']];
   const PLANE_DEPTH = { far: .15, mid: .45, near: .8 };
   const s5HTML = () => '<section class="mg mg-journal" id="s5" data-folio="18" data-sec="果園日誌" aria-labelledby="s5-title"><span class="s5-ghost mg-outline" aria-hidden="true">JOURNAL</span><div class="mg-wrap s5-grid">' +
-    '<header class="s5-head"><h2 class="s5-title v" id="s5-title">果園日誌</h2><p class="s5-stamp">' + ISSUE.year + '.' + pad(MONTH) + ' · 梨園（示意）</p><p class="s5-lead">店家在產地與出貨現場隨手拍下的日常。</p><a class="hm-link" href="#origin" id="hm-journal-more">看產地故事 ↗</a></header>' +
+    '<header class="s5-head"><h2 class="s5-title v" id="s5-title">果園日誌</h2><p class="s5-stamp">' + ISSUE.year + '.' + pad(MONTH) + ' · 梨園（示意）</p><p class="kana mg-kana s5-kana">季節のたより</p><p class="s5-lead">店家在產地與出貨現場隨手拍下的日常。</p><a class="hm-link" href="#origin" id="hm-journal-more">看產地故事 ↗</a></header>' +
     JOURNAL.map(([img, cap, sp, plane, note], i) => '<figure class="s5-item j' + (i + 1) + '" data-speed="' + sp + '" data-plane="' + plane + '" data-depth="' + PLANE_DEPTH[plane] + '" data-cursor="看看"><div class="s5-ph">' + pic(img, cap + '（客戶實拍）') + '</div><figcaption><span>' + esc(cap) + (note ? '<span class="mark" style="display:block;font-size:10px">' + note + '</span>' : '') + '</span><span>客戶實拍・P.' + (18 + i) + '</span></figcaption></figure>').join('') +
     '</div>' + artImg('cherry', 'mg-art s5-art a1', ' data-depth="1" data-breathe') + artImg('apple', 'mg-art s5-art a2', ' data-depth=".9" data-breathe') + fore('pear') + '</section>';
 
   // ---------- S6 the gift book ----------
   const OCC = [['1–2 月', '年節', '蘋果、草莓正當季，紅通通的最討喜。'], ['5 月', '母親節', '預購初夏的櫻桃，或挑一盒草莓收尾。'], ['9 月', '中秋', '葡萄與梨的季節，8 月開放預購。']];
   const s6HTML = () => '<section class="mg mg-gift" id="s6" data-folio="24" data-sec="送禮之書" aria-labelledby="s6-title"><div class="s6-pin"><span class="s6-ghost mg-outline" aria-hidden="true" data-depth=".1">GIFT</span>' +
-    '<div class="s6-head"><span class="mg-kicker">THE GIFT BOOK · P.24</span><h2 id="s6-title">送禮之書</h2></div>' +
+    '<div class="s6-head"><span class="mg-kicker">THE GIFT BOOK · P.24<span class="kana mg-kana">おくりもの</span></span><h2 id="s6-title">送禮之書</h2></div>' +
     '<div class="s6-desk"><div class="s6-book">' +
     '<div class="s6-page s6-left"><span class="mg-kicker">OCCASIONS</span><h3>依季節，送一份甜</h3><ul class="s6-occ">' + OCC.map(([w, t, d], i) => '<li><span class="when">' + w + '</span><b>' + t + '</b><p>' + d + '</p></li>').join('') + '</ul><span class="mark" style="margin-top:12px">檔期為示意</span><span class="s6-pno">P.25</span><i class="s6-light"></i></div>' +
     '<div class="s6-page s6-right"><span class="mg-kicker">RECOMMENDED</span><h3>禮盒推薦</h3><div class="s6-cards">' + ['peach', 'muscat', 'apple'].map(s => '<a class="s6-card" href="#p-' + s + '" id="s6-card-' + s + '">' + artImg(s) + '<b>' + esc((SHORT[s] || [s])[0]) + '</b><span>NT$ ' + num(minPrice(BY_SLUG[s])) + ' 起</span></a>').join('') + '</div>' +
     '<a class="hm-link" href="#gift" id="hm-gift-more">看送禮專區 ↗</a><span class="mark" style="display:block;margin-top:12px">禮盒內容與價格皆為示意</span><span class="s6-pno">P.26</span><i class="s6-light"></i></div>' +
-    '<div class="s6-cover"><div class="s6-front">' + pic('home-peach-giftbox', '六入水蜜桃禮盒，每顆套著白網套（客戶實拍）') + '<div class="s6-frame"><span>THE LITTLE FRUIT MARKET</span><strong>送禮之書</strong><em>GIFT BOOK · ' + ISSUE.no + '</em></div></div>' +
+    '<div class="s6-cover"><div class="s6-front">' + pic('home-peach-giftbox', '六入水蜜桃禮盒，每顆套著白網套（客戶實拍）') + '<div class="s6-frame"><span>SHIAWASE ・ <span class="kana">しあわせ</span></span><strong>送禮之書</strong><em>GIFT BOOK · ' + ISSUE.no + '</em></div></div>' +
     '<div class="s6-back"></div></div>' +
     '<div class="s6-shadow" aria-hidden="true"></div></div></div>' + artImg('peach', 'mg-art s6-art a1', ' data-depth=".9" data-breathe') + artImg('cherry', 'mg-art s6-art a2', ' data-depth="1" data-breathe') + fore('strawberry', ' data-mob="0"') + '</div></section>';
 
@@ -703,7 +704,7 @@
     ['收到後要怎麼保存？', '請立即開箱，依各水果的保存方式冷藏或常溫放置；每種水果的做法整理在「吃法與保存」。']
   ];
   const s7HTML = () => '<section class="mg mg-care" id="s7" data-folio="30" data-sec="安心宅配" aria-labelledby="s7-title"><span class="s7-ghost mg-outline" aria-hidden="true" data-depth=".1">30</span><div class="mg-wrap" data-depth=".3">' +
-    '<div class="mg-head"><div><span class="mg-kicker">DELIVERY PROMISE · P.30</span><h2 id="s7-title">安心宅配</h2></div><span class="mark">以下規則與數字皆為示意・需客戶確認</span></div>' +
+    '<div class="mg-head"><div><span class="mg-kicker">DELIVERY PROMISE · P.30<span class="kana mg-kana">あんしんして</span></span><h2 id="s7-title">安心宅配</h2></div><span class="mark">以下規則與數字皆為示意・需客戶確認</span></div>' +
     '<ul class="s7-cols">' + [['cold', '5', '°C 以下', '全程冷藏', '低溫宅配，水果離開產地後一路保持冷藏。'], ['date', '3–5', '個工作天', '指定到貨日', '付款後出貨；結帳時可選擇到貨日期，方便安排收件與送禮。'], ['care', '24', '小時內', '破損理賠', '到貨 24 小時內拍照回報，確認後補寄或部分退款。']]
       .map(([k, n, u, t, d]) => '<li>' + ICON[k] + '<p class="s7-big"><span class="s7-num">' + n + '</span><span class="s7-unit">' + u + '</span></p><h3>' + t + '</h3><p>' + d + '</p><span class="mark">示意</span></li>').join('') + '</ul>' +
     '<div class="hm-faq"><div><span class="mg-kicker">FAQ</span><h3 class="faq-h">常見問題</h3><p style="margin:18px 0 0"><a class="hm-link" href="#service" id="hm-faq-more">配送與售後 ↗</a></p></div>' +
@@ -714,12 +715,16 @@
   const s8HTML = () => '<section class="mg mg-back" id="s8" data-folio="36" data-sec="封底" aria-labelledby="s8-line"><span class="s8-ghost mg-outline" aria-hidden="true">' + ISSUE.no + '</span><div class="mg-wrap">' +
     '<p class="s8-line" id="s8-line">挑一籃，<br>今天的新鮮。</p>' +
     '<div class="s8-basket" aria-hidden="true">' + [[-30, 18, 120], [86, 4, 180], [62, 64, 90]].map(([x, y, s]) => '<i class="s8-bokeh" style="left:' + x + '%;top:' + y + '%;width:' + s + 'px;height:' + s + 'px"></i>').join('') + fore('cherry') + '<div class="s8-bk"><img src="img/art/basket.webp" alt="" loading="lazy" decoding="async"><div class="s8-drop">' + ['peach', 'apple', 'muscat', 'cherry', 'pear'].filter(s => ART.has(s)).map(s => '<img src="img/art/' + s + '.webp" alt="" loading="lazy" decoding="async">').join('') + '</div><img class="s8-front" src="img/art/basket.webp" alt="" loading="lazy" decoding="async"></div></div>' +
-    '<button type="button" class="hm-back" id="hm-back">回到選果 <span aria-hidden="true">↑</span></button><p class="s8-folio">P.36 — ' + ISSUE.zh + ' 完</p>' +
+    '<button type="button" class="hm-back" id="hm-back">回到選果 <span aria-hidden="true">↑</span></button><div class="s8-folio s8-oku"><img class="s8-logo" src="img/brand/shiawase-logo.svg" alt="幸 SHIAWASE" width="529" height="1068" loading="lazy" decoding="async"><dl><div><dt>誌名</dt><dd>幸 SHIAWASE <span class="kana">しあわせ</span></dd></div><div><dt>號數</dt><dd>' + ISSUE.no + '　' + ISSUE.en + ' ' + ISSUE.year + '</dd></div>' +
+    '<div><dt>攝影</dt><dd>客戶實拍・部分為 AI 生成示意圖</dd></div><div><dt>發行</dt><dd>幸 SHIAWASE（網站樣稿）</dd></div></dl><p class="s8-end">P.36 — 完</p><span class="hanko" aria-hidden="true">幸</span></div>' +
     '<div class="hm-foot"><span>新鮮的事，慢慢挑。・網站樣稿，內容為示意</span><nav aria-label="首頁頁尾連結"><a href="#catalog" id="hm-f-catalog">所有商品</a><a href="#origin" id="hm-f-origin">產地故事</a><a href="#about-mockup" id="hm-f-about">樣稿說明</a><a href="#design-system" id="hm-f-ds">設計系統</a></nav></div></div></section>';
 
   // v5: a breathing page between shots - a 1px line that draws itself slowly, and a folio.
   const breath = no => '<div class="mg-breath" aria-hidden="true"><i></i><span>P.' + no + '</span></div>';
   more.innerHTML = s1HTML() + breath('02') + s2HTML() + breath('05') + s3HTML() + breath('11') + s4HTML() + breath('17') + s5HTML() + breath('23') + s6HTML() + breath('29') + s7HTML() + breath('35') + s8HTML();
+  // v8: running head (hashira) at the top of each spread + a vertical English label in the margin
+  const EDGE = { s2: 'CONTENTS', s3: 'SPECIAL FEATURE', s4: 'FROM HARVEST TO YOUR DOOR', s5: 'ORCHARD JOURNAL', s6: 'THE GIFT BOOK', s7: 'DELIVERY PROMISE', s8: 'COLOPHON' };
+  $$('.mg', more).forEach(sec => { if (sec.id === 's1') return; sec.insertAdjacentHTML('beforeend', '<p class="mg-hashira" aria-hidden="true"><b>幸</b>SHIAWASE<span>' + ISSUE.no + '</span><span>' + esc(sec.dataset.sec || '') + '</span></p>' + (EDGE[sec.id] ? '<span class="mg-edge" aria-hidden="true">' + EDGE[sec.id] + '　' + sec.dataset.folio + '</span>' : '')); });
   H('#home-first').dataset.folio = 'hide';
 
   // FAQ: grid-rows 0fr -> 1fr gives a smooth height transition without measuring.
@@ -961,7 +966,7 @@
     let lenis = null, maxScroll = 1, maxAt = 0, io = null, curtainBusy = false;
     const chrome = $('#fx-chrome'), bar = $('#fx-bar'), fNo = $('#fx-page'), fSec = $('#fx-sec'), fIssue = $('#fx-issue');
     const cursor = $('#fx-cursor'), curtain = $('#fx-curtain'), air = $('#fx-air');
-    fIssue.textContent = ISSUE.zh + ' ' + ISSUE.no;
+    fIssue.textContent = ISSUE.mark + ' ' + ISSUE.no;
 
     // ----- progress line (cached max scroll; no layout reads per frame) -----
     const measure = () => { maxScroll = Math.max(1, document.documentElement.scrollHeight - innerHeight); maxAt = performance.now(); };
@@ -1079,7 +1084,7 @@
       try {
         const key = hash.slice(1), [no, name] = folioOf(key);
         flip = /^p-/.test(key) ? flipStart(from, key) : null;
-        curtain.innerHTML = '<p><small>P.' + no + ' · ' + ISSUE.zh + '</small>' + esc(name) + '</p>';
+        curtain.innerHTML = '<p><small>P.' + no + ' · ' + ISSUE.mark + '</small>' + esc(name) + '<span class="hanko">幸</span></p>';
         if ($('#menu').open) $('#menu').close();
         if (H('#cart-dialog').open) H('#cart-dialog').close();
         curtain.getAnimations().forEach(a => a.cancel());
@@ -1470,7 +1475,7 @@ void main() {
       const S = { p: 0 }, hh = { x: 0, y: 0, tx: 0, ty: 0 };
       let titleOn = false, roll = 0;
       const writeCam = () => { cam.style.transform = 'rotateX(' + hh.y.toFixed(3) + 'deg) rotateY(' + hh.x.toFixed(3) + 'deg) rotateZ(' + roll.toFixed(3) + 'deg)'; };
-      const mChars = splitChars($('.s1-masthead', sec), false);
+      const mLogo = $('.s1-masthead img', sec);
       const titleTl = blurIn($('.s1-title', sec), { paused: true });
       if (titleTl) titleTl.fromTo([$('.s1-sub', sec), $('.s1-cap', sec)], { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .9, ease: EASE, stagger: .1 }, .35);
       const render = () => {
@@ -1516,9 +1521,9 @@ void main() {
       items.forEach(it => { it.el.dataset.css = it.el.style.cssText; });
       gsap.timeline({ scrollTrigger: { trigger: sec, start: 'top top', end: '+=225%', pin: true, scrub: .8 }, onUpdate: render }).to(S, { p: 1, ease: 'none', duration: 1 });
       // masthead racks into focus as the camera arrives
-      if (mChars.length) gsap.timeline({ scrollTrigger: { trigger: sec, start: 'top 55%', toggleActions: 'play none none reverse' } })
+      if (mLogo) gsap.timeline({ scrollTrigger: { trigger: sec, start: 'top 55%', toggleActions: 'play none none reverse' } })
         .fromTo($('.s1-masthead', sec), { filter: 'blur(10px)' }, { filter: 'blur(0px)', duration: 1.6, ease: EASE, onComplete: () => { $('.s1-masthead', sec).style.filter = ''; } }, 0)
-        .fromTo(mChars, { opacity: 0, y: i => i * .12 * (parseFloat(getComputedStyle($('.s1-masthead', sec)).fontSize) || 120) }, { opacity: 1, y: 0, duration: 1.2, ease: EASE, stagger: .1 }, 0);
+        .fromTo(mLogo, { clipPath: 'inset(0% 0% 100% 0%)', y: 18 }, { clipPath: 'inset(0% 0% -2% 0%)', y: 0, duration: 1.5, ease: EASE }, 0); // brush reveal, top to bottom
       gsap.fromTo($$('.s1-meta', sec), { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 1, ease: EASE, delay: .4, scrollTrigger: { trigger: sec, start: 'top 55%', toggleActions: 'play none none reverse' } });
       render();
       // S1 -> S2 "tilt down": once the cover lets go, the whole scene rises and settles back to 0.96
@@ -2524,11 +2529,13 @@ void main() {
   const notes = items => '<ul class="notes-list">' + items.map(([t, d, m]) => '<li><strong>' + t + (m ? '<span class="mark">' + m + '</span>' : '') + '</strong><span>' + d + '</span></li>').join('') + '</ul>';
   pages['about-mockup'] = () => '<div class="wrap">' + crumb(['樣稿說明']) +
     head('ABOUT THIS MOCKUP', '樣稿說明', '這是「網站做出來大概長什麼樣」的樣稿。可以點、可以逛、可以把水果放進菜籃，但不會成立任何訂單。凡是旁邊有陶土紅小字（例如「價格示意」「需客戶確認」）的內容，都是我們先代填的，需要您提供或確認後才會換成正式內容。正式店面仍在 1SHOP 平台上，這份樣稿與它完全分開。') +
-    '<section class="section" aria-labelledby="ver-title">' + secHead('ver-title', '這一版改了什麼', '第五版') + notes([
+    '<section class="section" aria-labelledby="ver-title">' + secHead('ver-title', '這一版改了什麼', '第六版・10 月 16 日') + notes([
+      ['正式店名：幸 SHIAWASE', '店名確定，「店名暫定」的標示已拿掉。頁首、選單、頁尾、封面刊頭與封底都換上客戶提供的毛筆字 logo（向量檔，深色照片上用紙色版）；品牌朱紅 #A32136 取自 logo，是全站唯一的強調色，只用在印章、頁碼、編號與細線重點。'],
+      ['像一本日本生活誌', '首頁每個跨頁上緣加了柱（小字刊名與章節）、邊欄直排英文小標；目次用點線引導到頁碼，特集加上朱紅「特集」標記；各章有一行假名小副標（如「もくじ」「季節のたより」）；封底改成奧付（誌名、號數、攝影、發行）與朱紅落款印章。日文字型只用在假名，漢字仍用思源宋體／黑體繁中。'],
       ['更深、更慢、更美', '全站照片套用同一套電影調色；畫面上多了一層暖色散景光點與「鏡頭前」掠過的模糊水果；滑鼠移動時各層依深度位移；水彩水果會輕輕呼吸。每一鏡的捲動放慢約 1.5 倍，鏡頭之間有只放一條細線的「呼吸頁」，畫面上的小字也減少了。'],
       ['鏡頭不再硬切', '封面俯降到目次、目次的照片放大成特集開場、特集滑動變焦進入「從採收到你家」、最後一張下沉時果園日誌升起、日誌失焦時送禮之書對焦。'],
       ['商品頁也是一部短片', '每種水果的商品頁：水彩從你點的地方飛進主視覺，接著環繞特寫、產地與包裝、風味、選購、保存與吃法、也看看。第一個畫面就有價格與「放入菜籃」，往下捲後底部會出現固定的購買列。'],
-      ['首頁改成一本會動的季刊', '輪盤下方改成《水果店》：封面、目次、特集「十月正好吃」、從採收到你家、果園日誌、送禮之書、安心宅配、封底，共八個鏡頭，每一鏡都有運鏡、前中後景深與特效（招牌是照片像水彩暈開的轉場）。輪盤在最後一種水果時再往下捲，選中的水果會飛進封面。'],
+      ['首頁改成一本會動的季刊', '輪盤下方改成《幸》：封面、目次、特集「十月正好吃」、從採收到你家、果園日誌、送禮之書、安心宅配、封底，共八個鏡頭，每一鏡都有運鏡、前中後景深與特效（招牌是照片像水彩暈開的轉場）。輪盤在最後一種水果時再往下捲，選中的水果會飛進封面。'],
       ['全站動態', '平滑捲動、頁碼與閱讀進度線、膠片顆粒、游標「看看」、換頁時紙色帷幕由下往上擦過；其他頁的大標改成雜誌式（頁碼、英文小標、大號明朝體）。'],
       ['回到官網的設計', '全站改用已上線官網的設計語言：奶油紙色、橄欖墨色、1px 細線、水彩插畫與大量留白。規格整理在「<a href="#design-system">設計系統</a>」頁。'],
       ['首頁與官網一致', '首頁就是官網首頁（輪盤、菜籃、水果三欄），滾輪、手機上滑、左右滑、上下箭頭的切換方式都和官網相同；只是商品改成靜態資料。'],
@@ -2549,7 +2556,7 @@ void main() {
       ['之後新增商品', '新水果請照同一套規格繪製（1254×1254、透明背景、植物寫實水彩），風格才會一致。']
     ]) + '</section>' +
     '<section class="section" aria-labelledby="need-title">' + secHead('need-title', '需要您提供的資料') + notes([
-      ['店名與 logo', '目前沿用「水果店」暫定；照片中也沒有看到自有品牌標示。'],
+      ['店名與 logo', '店名已確定為「幸 SHIAWASE」，網站已換上客戶提供的毛筆字 logo。若有品牌規範（標準色號、最小尺寸、周圍留白）請一併提供。'],
       ['價格與規格', '每項商品的規格（幾入、幾串、重量）、售價、是否有禮盒版本。'],
       ['產地與品種', '每種水果的產地、品種名稱、實際產季月份。'],
       ['配送與理賠規則', '運費、免運門檻、出貨時間、可配送地區、破損理賠流程、客服聯絡方式。'],
@@ -2577,16 +2584,19 @@ void main() {
     const p0 = BY_SLUG.muscat;
     return '<div class="wrap">' + crumb(['設計系統']) +
       head('DESIGN SYSTEM', '設計系統', '把已上線官網的設計語言整理成規格：大量留白、寫實水彩插畫、1px 細線、克制的字距、奶油紙色與橄欖墨色，陶土紅只用在小字。數值來自官網實際樣式，內容與 design-system.md 一致。') +
+      '<section class="section" aria-labelledby="ds-brand">' + secHead('ds-brand', '品牌：幸 SHIAWASE', '第六版') + '<div class="ds-grid2"><div class="ds-logos"><figure><img src="img/brand/shiawase-logo.svg" alt="幸 SHIAWASE logo，朱紅" width="529" height="1068" loading="lazy"><figcaption>朱紅版・紙色底</figcaption></figure><figure class="is-dark"><img src="img/brand/shiawase-logo-paper.svg" alt="幸 SHIAWASE logo，紙色" width="529" height="1068" loading="lazy"><figcaption>紙色版・深色照片上</figcaption></figure><figure><span class="hanko" style="font-size:40px">幸</span><figcaption>落款印章</figcaption></figure></div>' +
+      '<ul class="ds-specs"><li><b>檔案</b>：img/brand/shiawase-logo.svg／.png（朱紅）、shiawase-logo-paper.svg／.png（紙色），透明背景，向量路徑取自客戶原檔。</li><li><b>品牌色</b>：朱紅 #A32136，全站唯一強調色，少量使用。</li><li><b>版面語彙</b>：柱（頁面上緣小字刊名與章節）、頁碼、直書大標、邊欄直排英文、目次點線引導、「特集」朱紅標記、封底奧付與落款印章。</li><li><b>字型</b>：漢字一律 Noto Serif TC／Noto Sans TC；Noto Serif JP 只載入假名（Google Fonts text= 子集），用在「しあわせ」等小副標。</li></ul></div></section>' +
       '<section class="section" aria-labelledby="ds-c">' + secHead('ds-c', '色彩') + '<div class="ds-swatches">' +
       sw('紙色 paper', '#f7f2e7', '內頁背景') + sw('首頁紙色', 'oklch(96.5% .015 85)', '首頁背景') + sw('卡片 card', '#fcf8ee', '卡片、資料欄、欄位') + sw('淡底 wash', '#edead8', '商品圖底、頁尾、合計') +
-      sw('橄欖墨 ink', '#303b24', '文字、主要按鈕') + sw('次要 muted', '#706f5b', '說明文字') + sw('細線 line', '#c9c4aa', '1px 分隔線、邊框') + sw('陶土紅 mark', '#a35539', '小字標註') +
+      sw('橄欖墨 ink', '#303b24', '文字、主要按鈕') + sw('次要 muted', '#706f5b', '說明文字') + sw('細線 line', '#c9c4aa', '1px 分隔線、邊框') + sw('朱紅 shu（品牌色）', '#a32136', '取自 logo；唯一強調色：印章、頁碼、編號、標註小字、細線重點') +
       sw('水果色暈 tone', '#ef9d86', '店頭與商品頁的水彩色暈（每種水果一色，約 12% 不透明）') + sw('外框數字 stroke', '#303b2433', '店頭、目次的超大外框編號（1px，不填色）') + '</div></section>' +
       '<section class="section" aria-labelledby="ds-grade">' + secHead('ds-grade', '照片調色（.grade）', '第五版') + '<div class="ds-grid2"><div class="ds-grade">' +
       '<figure><div class="ds-ph"><img src="img/home-peach-box11.webp" alt="原圖：十一入整箱的水蜜桃（客戶實拍）" loading="lazy"></div><figcaption>原圖</figcaption></figure>' +
       '<figure><div class="ds-ph">' + pic('home-peach-box11', '調色後：十一入整箱的水蜜桃（客戶實拍）', { noKb: true }) + '</div><figcaption>調色後（.grade）</figcaption></figure></div>' +
       '<ul class="ds-specs"><li><b>濾鏡</b>：saturate(.9) contrast(.93) brightness(1.03) sepia(.07)，讓不同手機拍的照片像同一部片。</li><li><b>暖色漏光</b>：左上角暖杏色 radial-gradient，soft-light 混合，不透明度 .14。</li><li><b>暗角</b>：radial-gradient 由中心透明到邊緣 6% 橄欖墨。</li><li><b>慢推</b>：照片在畫面中時 scale 1 → 1.06，12 秒來回（減少動態時關閉）。</li></ul></div></section>' +
       '<section class="section" aria-labelledby="ds-t">' + secHead('ds-t', '字體與字級', 'Noto Serif TC ＋ Noto Sans TC') + '<div class="ds-type">' +
-      ty('字標', '明朝 31px・600・字距 .2em', '<span style="font-family:var(--fm-display);font-size:31px;font-weight:600;letter-spacing:.2em">水果店</span>') +
+      ty('字標', 'logo 圖（SVG）＋ SHIAWASE 9px・.34em', '<span class="brand-demo"><img src="img/brand/shiawase-logo.svg" alt="幸 SHIAWASE" width="27" height="54"><span>SHIAWASE<small class="kana">しあわせ</small></span></span>') +
+      ty('假名副標', 'Noto Serif JP（只載入假名）12px・.4em', '<span class="kana" style="font-size:15px;letter-spacing:.4em">季節のたより</span>') +
       ty('店頭品名', '明朝 44–96px・300・.04em（括號內小字）', '<span style="font-family:var(--fm-display);font-size:44px;font-weight:300;letter-spacing:.04em">麝香葡萄<small style="font-size:.32em;color:var(--fm-muted)">（綠）</small></span>') +
       ty('頁面標題', '明朝 28px・400・.1em', '<span style="font-family:var(--fm-display);font-size:28px;letter-spacing:.1em">目前已經選購</span>') +
       ty('卡片品名', '明朝 18px・400', '<span style="font-family:var(--fm-display);font-size:18px">山形櫻桃</span>') +
@@ -2609,7 +2619,7 @@ void main() {
         ['鏡頭交接', 'S1→S2 俯降（封面上移、縮到 .96，目次帶 rotateX 8° 進來）；S2→S3 推近穿越（目次第一列的照片放大成特集開場照片）；S3→S4 滑動變焦（前景水果縮小、背景照片放大，60vh）；S4→S5 升鏡（最後一張下沉淡出、照片牆三個深度升起）；S5→S6 焦點轉移（照片牆模糊 8px 淡出、書由 8px 對焦）。', ''],
         ['商品頁', 'P0 水彩從點擊處飛到主視覺（FLIP）＋紙色帷幕；P1 單果環繞推近（固定 220vh）；P2 產地與包裝：滑動變焦＋橫移；P3 風味大數字與刻度尺；P4 選購（底線畫出、飛入菜籃）；P5 保存與吃法升鏡；P6 也看看水平帶（漂移、拖曳、慣性、焦點）。捲過主視覺後出現固定購買列。', '']
       ].map(([t, a, m]) => '<li><strong>' + t + '</strong><span>' + a + (m ? '<br><span style="color:var(--fm-muted)">' + m + '</span>' : '') + '</span></li>').join('') + '</ul></section>' +
-      '<section class="section" aria-labelledby="ds-home">' + secHead('ds-home', '首頁分鏡（水果店）', '第四版之一') + '<ul class="notes-list">' + [
+      '<section class="section" aria-labelledby="ds-home">' + secHead('ds-home', '首頁分鏡（幸 SHIAWASE 季刊）', '第四版之一') + '<ul class="notes-list">' + [
         ['S1 封面', '運鏡：推軌＋焦點轉移。固定畫面 250vh；CSS 3D（perspective 1200px），world 層往鏡頭推 1100（手機 760）。', '景深：後景梨園照片 blur 14 → 0、scale 1.25 → 1、亮度 .85 → 1；中景直書刊頭往鏡頭 translateZ 0 → 400 後淡出；前景 7 顆水彩水果（手機 4 顆）依「與焦平面的距離」計算模糊 0–8px（手機 0–4px）。滑鼠移動時整組鏡頭 ±4° 手持晃動；輪盤交棒時選中的水果放大淡出、落到封面前景。'],
         ['S2 目次', '運鏡：靜止。左側直書「目次」、右側頁碼列；1px 線依序由左往右畫出。', '游標移到列上時，代表照片跟著游標浮出（280px、lerp .1、反向旋轉 ±6°），文字右移 12px；點擊用平滑捲動到該區。'],
         ['S3 特集', '運鏡：橫移。垂直捲動驅動水平軌道（放在固定、溢出隱藏的容器裡）。每種當季水果一個跨頁，中間插入引言頁。', '外框大編號 0.6 倍速、照片框內反向位移、水彩 1.35 倍速＋2px 模糊；捲動速度造成照片 skewX（最多 ±3°）。寬度 900 以下改直向，三層視差保留。'],
@@ -2646,7 +2656,7 @@ void main() {
       const wasHidden = root.hidden;
       root.hidden = false; site.hidden = true;
       document.documentElement.classList.add('route-home'); document.body.classList.add('route-home');
-      document.title = '水果店網站樣稿';
+      document.title = '幸 SHIAWASE｜網站樣稿';
       select(current, 1, true); renderBasket();
       if (wasHidden) Fx.jump(0);
       // (re)build home motion after layout; leaving home kills it (see below)
@@ -2656,14 +2666,14 @@ void main() {
     }
     let html;
     pageKey = h;
-    if (prod && BY_SLUG[prod[1]]) { html = productPage(BY_SLUG[prod[1]]); document.title = BY_SLUG[prod[1]].name + '｜水果店網站樣稿'; }
-    else if (pages[h]) { html = pages[h](); document.title = TITLES[h] + '｜水果店網站樣稿'; }
+    if (prod && BY_SLUG[prod[1]]) { html = productPage(BY_SLUG[prod[1]]); document.title = BY_SLUG[prod[1]].name + '｜幸 SHIAWASE'; }
+    else if (pages[h]) { html = pages[h](); document.title = TITLES[h] + '｜幸 SHIAWASE'; }
     else { history.replaceState(null, '', '#home'); return route(); }
     HomeMotion.kill(); // no home ScrollTriggers survive outside home
     root.hidden = true; site.hidden = false;
     document.documentElement.classList.remove('route-home'); document.body.classList.remove('route-home');
     const [fno, fname] = Fx.folioOf(h);
-    view.innerHTML = '<div class="page" data-folio="' + fno + '" data-sec="' + esc(fname) + '"><div class="wrap run-head" aria-hidden="true"><span><b>P.' + fno + '</b>　' + esc(fname) + '</span><span>' + ISSUE.zh + ' ' + ISSUE.no + '</span></div>' + html + '</div>';
+    view.innerHTML = '<div class="page" data-folio="' + fno + '" data-sec="' + esc(fname) + '"><div class="wrap run-head" aria-hidden="true"><span><b>P.' + fno + '</b>　' + esc(fname) + '</span><span>' + ISSUE.mark + ' ' + ISSUE.no + '</span></div>' + html + '</div>';
     const navKey = prod ? 'catalog' : h;
     $$('#site-nav a').forEach(a => { if (a.getAttribute('href') === '#' + navKey) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
     if (prod) {
