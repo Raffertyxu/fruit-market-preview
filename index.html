@@ -13,7 +13,7 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@400;500&display=swap');
 /* Noto Serif JP is subset to kana only (text=); kanji always fall back to Noto Serif TC */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500&display=swap&text=%E3%81%81%E3%81%82%E3%81%83%E3%81%84%E3%81%85%E3%81%86%E3%81%87%E3%81%88%E3%81%89%E3%81%8A%E3%81%8B%E3%81%8C%E3%81%8D%E3%81%8E%E3%81%8F%E3%81%90%E3%81%91%E3%81%92%E3%81%93%E3%81%94%E3%81%95%E3%81%96%E3%81%97%E3%81%98%E3%81%99%E3%81%9A%E3%81%9B%E3%81%9C%E3%81%9D%E3%81%9E%E3%81%9F%E3%81%A0%E3%81%A1%E3%81%A2%E3%81%A3%E3%81%A4%E3%81%A5%E3%81%A6%E3%81%A7%E3%81%A8%E3%81%A9%E3%81%AA%E3%81%AB%E3%81%AC%E3%81%AD%E3%81%AE%E3%81%AF%E3%81%B0%E3%81%B1%E3%81%B2%E3%81%B3%E3%81%B4%E3%81%B5%E3%81%B6%E3%81%B7%E3%81%B8%E3%81%B9%E3%81%BA%E3%81%BB%E3%81%BC%E3%81%BD%E3%81%BE%E3%81%BF%E3%82%80%E3%82%81%E3%82%82%E3%82%83%E3%82%84%E3%82%85%E3%82%86%E3%82%87%E3%82%88%E3%82%89%E3%82%8A%E3%82%8B%E3%82%8C%E3%82%8D%E3%82%8F%E3%82%92%E3%82%93%E3%83%BB');
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&display=swap&text=%E3%81%81%E3%81%82%E3%81%83%E3%81%84%E3%81%85%E3%81%86%E3%81%87%E3%81%88%E3%81%89%E3%81%8A%E3%81%8B%E3%81%8C%E3%81%8D%E3%81%8E%E3%81%8F%E3%81%90%E3%81%91%E3%81%92%E3%81%93%E3%81%94%E3%81%95%E3%81%96%E3%81%97%E3%81%98%E3%81%99%E3%81%9A%E3%81%9B%E3%81%9C%E3%81%9D%E3%81%9E%E3%81%9F%E3%81%A0%E3%81%A1%E3%81%A2%E3%81%A3%E3%81%A4%E3%81%A5%E3%81%A6%E3%81%A7%E3%81%A8%E3%81%A9%E3%81%AA%E3%81%AB%E3%81%AC%E3%81%AD%E3%81%AE%E3%81%AF%E3%81%B0%E3%81%B1%E3%81%B2%E3%81%B3%E3%81%B4%E3%81%B5%E3%81%B6%E3%81%B7%E3%81%B8%E3%81%B9%E3%81%BA%E3%81%BB%E3%81%BC%E3%81%BD%E3%81%BE%E3%81%BF%E3%82%80%E3%82%81%E3%82%82%E3%82%83%E3%82%84%E3%82%85%E3%82%86%E3%82%87%E3%82%88%E3%82%89%E3%82%8A%E3%82%8B%E3%82%8C%E3%82%8D%E3%82%8F%E3%82%92%E3%82%93%E3%83%BB');
 /* ===== Home base: tokens and the generic rules kept from the live storefront CSS (tokens.css, styles.css,
    market-v2.css). v6: the v4 picker (paper dial, numbered labels, basket column, product column) was replaced
    by the S0 shop-front stage - see "S0 v6" near the end of this sheet. ===== */
@@ -1644,6 +1644,70 @@ html.fx-on #fruit-market .s0-shadow{animation:s0-shadow 8s ease-in-out infinite}
 .ds-logos img{height:170px;width:auto}
 .ds-logos figcaption{font-size:11px;color:var(--fm-muted)}
 .ds-logos .is-dark figcaption{color:#f7f2e7cc}
+
+/* =====================================================================
+   v9 — refinement, not subtraction (storyboard-v9.md, reference/japan-benchmarks.md).
+   Every v8 element stays; type, paper, line, seal and photo grading are
+   brought to shinise level: mincho throughout, kana in Shippori Mincho,
+   wider tracking and 2.0 leading, layered ink, washi fibres, a double-ruled
+   seal, a seasonal word (sekki) on the cover and as rakkan on the colophon.
+   ===================================================================== */
+:root{
+  --fm-body:'Noto Serif TC',serif;                   /* mincho for all reading text (Sembikiya / Toraya) */
+  --fm-kana:'Shippori Mincho','Noto Serif TC',serif; /* kana only: the font is loaded with a kana text= subset */
+  --fm-ink:#2c3324;--fm-ink-2:#4a4f3e;--fm-muted:#76735f;--fm-line:#cfc9ae;
+  --fm-shu-deep:#8e1c2e;--fm-gold:#a88a55;
+  --fm-washi:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.012 .28' numOctaves='2' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 .42 0 0 0 0 .38 0 0 0 0 .27 0 0 0 -2.2 1.05'/%3E%3C/filter%3E%3Crect width='420' height='420' filter='url(%23f)' opacity='.09'/%3E%3C/svg%3E");
+}
+/* paper: v8 grain plus long washi fibres */
+body{background-image:var(--fm-washi),var(--fm-texture);letter-spacing:.04em;font-feature-settings:'palt' 0;text-rendering:optimizeLegibility}
+/* type: reading text breathes (2.0 leading, .06–.1em tracking), headings get palt + optical tracking */
+p,li,dd{line-height:1.95}
+.mg-h,.s2-title,.s2-name,.s4-title,.s5-title,.p1-name,#s6-title,#s7-title,.s8-line,#fruit-market .s0-name{font-feature-settings:'palt';font-kerning:normal}
+.mg-h{letter-spacing:.02em}
+.s2-name{letter-spacing:.16em}
+.s4-title{letter-spacing:.08em;line-height:1.22}
+.s5-title{letter-spacing:.16em}
+.p1-name{letter-spacing:.18em}
+#fruit-market .s0-name{letter-spacing:.08em}
+#fruit-market .s0-desc{line-height:2.05;letter-spacing:.08em;color:var(--fm-ink-2)}
+.s3-intro p,.s2-note,.s5-lead{letter-spacing:.1em;line-height:2.1}
+/* small caps-like latin kickers: finer tracking, kana sits under as furigana-sized line */
+.mg-kicker,.pd5 .mg-kicker,#fruit-market .s0-kicker{letter-spacing:.38em;font-feature-settings:'palt'}
+.mg-kana,.s0-kana{font-family:var(--fm-kana);letter-spacing:.56em;font-size:11px;opacity:.9}
+.s0-kana{display:block;margin-top:6px;text-transform:none}
+.kana{font-feature-settings:'palt' 0}
+/* vertical type: upright latin digits, proper punctuation position */
+.v,.s5-kana,.mg-edge,.p1-name{text-orientation:mixed;font-variant-east-asian:proportional-width}
+.mg-edge{letter-spacing:.5em}
+.mg-edge:before{width:1px;height:40px;background:linear-gradient(var(--fm-shu),#a3213600)}
+/* hairlines: lighter, two-tone where a rule closes a block */
+.mg-hashira span:last-child:before{background:linear-gradient(90deg,var(--fm-shu),#a3213633)}
+.s2-lead{background:radial-gradient(circle,var(--fm-muted) .8px,transparent 1.2px) 0 50%/8px 3px repeat-x;opacity:.6}
+.s2-no{font-feature-settings:'lnum';letter-spacing:.08em}
+/* tokushu tag: a printed label, not a sticker — thin inner rule, deeper shu */
+.tk{background:var(--fm-shu-deep);box-shadow:inset 0 0 0 1px #f7f2e766;padding:5px 6px 5px 9px;letter-spacing:.3em;font-family:var(--fm-display);font-weight:400}
+/* seal (hanko): double rule, slightly uneven ink like a real stamp */
+.hanko{font-family:var(--fm-display);font-weight:500;border-radius:2px;box-shadow:inset 0 0 0 1.5px var(--fm-shu),inset 0 0 0 2.5px #f7f2e7cc,inset 0 0 0 3.5px var(--fm-shu);
+  -webkit-mask:radial-gradient(120% 90% at 30% 25%,#000 62%,#000c 80%,#0009 100%);mask:radial-gradient(120% 90% at 30% 25%,#000 62%,#000c 80%,#0009 100%)}
+/* cover: seasonal word (sekki) in vertical mincho under the meta, like a seasonal card */
+.s1-sekki{position:absolute;right:calc(var(--gutter,5vw) + 2px);top:calc(max(28px,6vh) + 236px);z-index:3;margin:0;display:flex;flex-direction:row;align-items:center;gap:12px;writing-mode:vertical-rl;font:400 19px/1 var(--fm-display);letter-spacing:.42em;color:var(--fm-paper);text-shadow:0 0 18px #1d221880}
+.s1-sekki span{display:block;padding:14px 8px 8px;border-inline:1px solid #f7f2e766}
+.s1-sekki i{font-style:normal;font-size:12px;letter-spacing:.36em;opacity:.9}
+.s1-tokushu{border-top:0;background:linear-gradient(90deg,#f7f2e700,#f7f2e780) 100% 0/100% 1px no-repeat}
+/* colophon rakkan: the year and the season, signed beside the seal */
+.s8-rakkan{display:block;margin-top:8px;font:400 10px/1 var(--fm-display);letter-spacing:.42em;color:var(--fm-ink-2)}
+.s8-folio.s8-oku{border-top:1px solid var(--fm-ink);box-shadow:0 -4px 0 -3px var(--fm-line)}
+/* photographs: gentle grade — a touch less saturation and contrast, warm paper cast, soft lift in the blacks */
+.grade img,.s3-photo img,.s1-soft img{filter:saturate(.88) contrast(.95) brightness(1.015) sepia(.05)}
+/* nav: mincho, wider tracking, shu underline for the current page */
+.site-nav a{letter-spacing:.2em}
+.site-nav a[aria-current=page],.site-nav a.is-current{text-decoration-color:var(--fm-shu)}
+.menu-list small{letter-spacing:.32em;opacity:.75}
+@media(max-width:767px){
+  .s1-sekki{top:calc(max(28px,6vh) + 190px);font-size:12px}
+  .mg-kana,.s0-kana{font-size:10px;letter-spacing:.48em}
+}
 </style>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <a class="skip" href="#view" id="skip-link">跳到主要內容</a>
@@ -1666,7 +1730,7 @@ html.fx-on #fruit-market .s0-shadow{animation:s0-shadow 8s ease-in-out infinite}
 <div class="s0-ui">
 <nav class="s0-dial" aria-label="選果轉盤"><div class="s0-ring" aria-hidden="true"><i class="s0-ticks"></i><i class="s0-ticks is-major"></i></div><div class="s0-marks" aria-hidden="true"></div><div class="s0-arrows"><button type="button" id="prev" aria-label="上一種水果"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 19V5M6.5 10.5 12 5l5.5 5.5"/></svg></button><button type="button" id="next" aria-label="下一種水果"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M6.5 13.5 12 19l5.5-5.5"/></svg></button></div></nav>
 <section class="s0-copy" aria-labelledby="fruit-title" data-depth=".2">
-<p class="s0-kicker">TODAY'S PICK · 今日選果</p>
+<p class="s0-kicker">TODAY'S PICK · 今日選果<span class="kana s0-kana">きょうのくだもの</span></p>
 <p class="s0-no">No.<span class="s0-odo" id="wheel-position"></span><span class="s0-of" id="s0-of"></span></p>
 <h1 class="s0-name" id="fruit-title"><span class="s0-m"><span class="s0-in"></span></span></h1>
 <p class="s0-en"><span class="s0-m"><span class="s0-in" id="fruit-en"></span></span></p>
@@ -1732,13 +1796,13 @@ html.fx-on #fruit-market .s0-shadow{animation:s0-shadow 8s ease-in-out infinite}
 <div class="fx-grain" aria-hidden="true"></div>
 <div class="fx-cursor" id="fx-cursor" aria-hidden="true"><i></i><span>看看</span></div>
 <div class="fx-curtain" id="fx-curtain" aria-hidden="true"></div>
-<script src="art-manifest.js?v=1792117493"></script>
-<script src="home-photos.js?v=1792117493"></script>
+<script src="art-manifest.js?v=1792122508"></script>
+<script src="home-photos.js?v=1792122508"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/ScrollTrigger.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/SplitText.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
-<script src="app.js?v=1792117493"></script>
+<script src="app.js?v=1792122508"></script>
 
 </body>
 </html>

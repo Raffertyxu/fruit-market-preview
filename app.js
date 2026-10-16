@@ -551,6 +551,10 @@
   const qMonth = Number(new URLSearchParams(location.search).get('month')); // ?month= previews other months
   const MONTH = qMonth >= 1 && qMonth <= 12 ? qMonth : new Date().getMonth() + 1;
   const ISSUE = { zh: '幸', mark: '幸 SHIAWASE', kana: 'しあわせ', no: 'No.' + pad(MONTH), en: MONTH_EN[MONTH - 1], year: new Date().getFullYear() };
+  // v9: the 24 solar terms (sekki) as a seasonal word on the cover and the colophon, like a shinise's seasonal card.
+  const SEKKI = [[1, 6, '小寒'], [1, 20, '大寒'], [2, 4, '立春'], [2, 19, '雨水'], [3, 5, '驚蟄'], [3, 20, '春分'], [4, 5, '清明'], [4, 20, '穀雨'], [5, 5, '立夏'], [5, 21, '小滿'], [6, 6, '芒種'], [6, 21, '夏至'],
+    [7, 7, '小暑'], [7, 23, '大暑'], [8, 7, '立秋'], [8, 23, '處暑'], [9, 7, '白露'], [9, 23, '秋分'], [10, 8, '寒露'], [10, 23, '霜降'], [11, 7, '立冬'], [11, 22, '小雪'], [12, 7, '大雪'], [12, 21, '冬至']];
+  const SEASON_WORD = (() => { const now = new Date(), d = MONTH === now.getMonth() + 1 ? now.getDate() : 15; let w = '冬至'; SEKKI.forEach(([m, dd, n]) => { if (m < MONTH || (m === MONTH && dd <= d)) w = n; }); return w; })();
   const SHORT = { muscat: ['麝香葡萄', 'MUSCAT GRAPE'], apple: ['蘋果', 'APPLE'], peach: ['水蜜桃', 'WHITE PEACH'], orange: ['香甜柑橘', 'MANDARIN'], cherry: ['山形櫻桃', 'CHERRY'], pear: ['梨', 'JAPANESE PEAR'], strawberry: ['草莓', 'STRAWBERRY'], 'black-grape': ['黑葡萄', 'BLACK GRAPE'] };
   const SEASON_PHOTO = {
     muscat: ['home-muscat-box', '單串禮盒裡的麝香葡萄'], apple: ['home-apple-tree', '樹上慢慢著色的蘋果'], pear: ['home-pear-hands', '剛採下、比手掌還大的梨', HAND_NOTE],
@@ -590,7 +594,7 @@
       '<picture class="s1-soft" aria-hidden="true"><source media="(max-width:767px) and (orientation:portrait)" srcset="img/home-hero-pear-tall-soft.webp"><img src="img/home-hero-pear-soft.webp" alt="" decoding="async"></picture><i class="s1-dim" aria-hidden="true"></i></div>' +
       '<div class="s1-mast" data-depth=".45"><p class="s1-masthead s1-logo"><img src="img/brand/shiawase-logo-paper.svg" alt="幸 SHIAWASE しあわせ" width="529" height="1068" decoding="async" fetchpriority="high"></p>' +
       '<p class="s1-meta">SHIAWASE<span class="kana s1-kana">しあわせ</span><b>' + ISSUE.no + '</b>' + ISSUE.en + ' ' + ISSUE.year +
-      '<span class="s1-tokushu"><i class="tk">特集</i>' + MONTH_ZH[MONTH - 1] + '月<span class="kana">の</span>果物</span></p></div>' +
+      '<span class="s1-tokushu"><i class="tk">特集</i>' + MONTH_ZH[MONTH - 1] + '月<span class="kana">の</span>果物</span></p><p class="s1-sekki" aria-label="節氣 ' + SEASON_WORD + '"><span>' + SEASON_WORD + '</span><i class="kana">の候</i></p></div>' +
       '<div class="s1-world" aria-hidden="true">' + S1_FRUITS.map((f, i) => '<img class="s1-fruit' + (f.wide ? ' is-wide' : '') + (i ? '' : ' is-hero') + '" src="img/art/' + slugs[i] + '.webp" alt="" draggable="false" data-slug="' + slugs[i] + '" data-depth="' + (f.z > 200 ? 1 : f.z > -300 ? .7 : .35) + '" data-breathe style="--x:' + f.x + ';--y:' + f.y + ';--z:' + f.z + ';--s:' + f.s + ';--r:' + f.r + '">').join('') +
       S1_BOKEH.map(b => '<i class="s1-bokeh" style="--x:' + b.x + ';--y:' + b.y + ';--z:' + b.z + ';--s:' + b.s + '"></i>').join('') + '</div></div>' +
       '<i class="s1-leak" aria-hidden="true"></i>' + fore('peach') +
@@ -716,7 +720,7 @@
     '<p class="s8-line" id="s8-line">挑一籃，<br>今天的新鮮。</p>' +
     '<div class="s8-basket" aria-hidden="true">' + [[-30, 18, 120], [86, 4, 180], [62, 64, 90]].map(([x, y, s]) => '<i class="s8-bokeh" style="left:' + x + '%;top:' + y + '%;width:' + s + 'px;height:' + s + 'px"></i>').join('') + fore('cherry') + '<div class="s8-bk"><img src="img/art/basket.webp" alt="" loading="lazy" decoding="async"><div class="s8-drop">' + ['peach', 'apple', 'muscat', 'cherry', 'pear'].filter(s => ART.has(s)).map(s => '<img src="img/art/' + s + '.webp" alt="" loading="lazy" decoding="async">').join('') + '</div><img class="s8-front" src="img/art/basket.webp" alt="" loading="lazy" decoding="async"></div></div>' +
     '<button type="button" class="hm-back" id="hm-back">回到選果 <span aria-hidden="true">↑</span></button><div class="s8-folio s8-oku"><img class="s8-logo" src="img/brand/shiawase-logo.svg" alt="幸 SHIAWASE" width="529" height="1068" loading="lazy" decoding="async"><dl><div><dt>誌名</dt><dd>幸 SHIAWASE <span class="kana">しあわせ</span></dd></div><div><dt>號數</dt><dd>' + ISSUE.no + '　' + ISSUE.en + ' ' + ISSUE.year + '</dd></div>' +
-    '<div><dt>攝影</dt><dd>客戶實拍・部分為 AI 生成示意圖</dd></div><div><dt>發行</dt><dd>幸 SHIAWASE（網站樣稿）</dd></div></dl><p class="s8-end">P.36 — 完</p><span class="hanko" aria-hidden="true">幸</span></div>' +
+    '<div><dt>攝影</dt><dd>客戶實拍・部分為 AI 生成示意圖</dd></div><div><dt>發行</dt><dd>幸 SHIAWASE（網站樣稿）</dd></div></dl><p class="s8-end">P.36 — 完<span class="s8-rakkan">' + ISSUE.year + '年　' + SEASON_WORD + '</span></p><span class="hanko" aria-hidden="true">幸</span></div>' +
     '<div class="hm-foot"><span>新鮮的事，慢慢挑。・網站樣稿，內容為示意</span><nav aria-label="首頁頁尾連結"><a href="#catalog" id="hm-f-catalog">所有商品</a><a href="#origin" id="hm-f-origin">產地故事</a><a href="#about-mockup" id="hm-f-about">樣稿說明</a><a href="#design-system" id="hm-f-ds">設計系統</a></nav></div></div></section>';
 
   // v5: a breathing page between shots - a 1px line that draws itself slowly, and a folio.
